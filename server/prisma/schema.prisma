@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  login        String   @unique
+  img          String
+  name         String?
+  email        String?
+  password     String
+  createdAt    DateTime @default(now())
+  likedPosts   Post[]   @relation("liked posts")
+  createdPosts Post[]   @relation("created posts")
+
+  @@index([login])
+}
+
+model Post {
+  id         String   @id @default(uuid())
+  title      String
+  text       String
+  img        String?
+  viewsCount Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+
+  author    User    @relation("created posts", fields: [authorId], references: [id])
+  authorId  String
+  likedBy   User?   @relation("liked posts", fields: [likedById], references: [id])
+  likedById String?
+  tags      Tag[]
+}
+
+model Tag {
+  id    String @id @default(uuid())
+  name  String @unique
+  posts Post[]
+}
