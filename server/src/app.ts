@@ -1,7 +1,9 @@
 import express from 'express';
 import env from 'dotenv';
 import cors from 'cors';
-import { PrismaClient } from '@prisma/client';
+
+import prisma from '@/db/prisma';
+import routes from '@/routes/index';
 
 env.config();
 
@@ -11,8 +13,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-
-const prisma = new PrismaClient();
+app.use('/api', routes);
 
 const main = async (): Promise<void> => {
   app.listen(PORT, () => {
@@ -22,8 +23,8 @@ const main = async (): Promise<void> => {
 
 main()
   .catch((error) => {
-    if (error instanceof Error) console.log(`[server] error: ${error.message}`);
-    else console.log(`[server] error connection: ${error}`);
+    if (error instanceof Error) console.error(`[server] error: ${error.message}`);
+    else console.error(`[server] error connection: ${error}`);
     process.exit(1);
   })
   .finally(async () => {

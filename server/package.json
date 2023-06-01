@@ -7,7 +7,10 @@
   "scripts": {
     "start": "node src/app.ts",
     "swagger": "tsx src/swagger.ts",
-    "dev": "tsx watch src/app.ts"
+    "dev": "tsx watch src/app.ts",
+    "migrate": "npx prisma migrate dev",
+    "gen": "npx prisma generate",
+    "studio": "npx prisma studio"
   },
   "keywords": [],
   "author": "",
