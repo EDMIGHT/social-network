@@ -7,3 +7,7 @@ export type LoginUser = Pick<User, 'login' | 'password'>;
 export const isRegisterUser = (obj: unknown): obj is RegisterUser => {
   return obj !== null && typeof obj === 'object' && 'password' in obj && 'img' in obj;
 };
+
+export const isLoginUser = (obj: unknown): obj is LoginUser => {
+  return obj !== null && typeof obj === 'object' && 'password' in obj && 'login' in obj;
+};

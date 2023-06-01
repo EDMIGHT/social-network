@@ -1,6 +1,7 @@
+import { ICustomResponse } from '@/types/customResponse.interface';
 import { Response } from 'express';
 
-class CustomResponse {
+class CustomResponse implements ICustomResponse {
   ok(response: Response, data: any): void {
     response.status(200).send(data);
   }
@@ -16,8 +17,9 @@ class CustomResponse {
   serverError(response: Response, data: any): void {
     response.status(500).send(data);
   }
+  unauthorized(response: Response, data: any): void {
+    response.status(401).send(data);
+  }
 }
 
-const customResponse = new CustomResponse();
-
-export default customResponse;
+export default new CustomResponse();

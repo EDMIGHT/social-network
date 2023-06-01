@@ -1,15 +1,11 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
 
-import prisma from '@/db/prisma';
-import { RegisterUser, isRegisterUser } from '@/types/auth.types';
-import { createUser } from '@/models/user.models';
+import { LoginUser, RegisterUser, isLoginUser, isRegisterUser } from '@/types/auth.types';
+import User from '@/models/user.model';
 import customResponse from '@/utils/helpers/customResponse';
-
-const accessKey = process.env.accessKey ?? '';
-const expiresIn = process.env.expiresIn ?? 86400;
+import tokenService from '@/services/token.service';
 
 export const registerUser = async (
   request: Request<RegisterUser>,
@@ -21,49 +17,92 @@ export const registerUser = async (
     if (errors.isEmpty() && isRegisterUser(request.body)) {
       const registeringUser = request.body;
 
-      const user = await prisma.user.findUnique({
-        where: { login: registeringUser.login },
-      });
+      const user = await User.getUserByLogin(registeringUser.login);
 
       if (user) {
-        customResponse.conflict(response, {
+        return customResponse.conflict(response, {
           message: 'User with this login already exists',
         });
       } else {
         const hashedPassword = await bcrypt.hash(registeringUser.password, 10);
-        const user = await createUser({
+        const user = await User.createUser({
           ...registeringUser,
           password: hashedPassword,
         });
 
-        const accessToken = jwt.sign(
-          {
-            login: user.login,
-            id: user.id,
-          },
-          accessKey,
-          {
-            expiresIn,
-          }
-        );
+        const accessToken = tokenService.createAccessToken({
+          login: user.login,
+          id: user.id,
+        });
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { password, ...responseUser } = user;
 
-        customResponse.created(response, {
+        return customResponse.created(response, {
           user: responseUser,
           accessToken,
         });
       }
     } else {
-      customResponse.badRequest(response, {
+      return customResponse.badRequest(response, {
         message: 'Invalid request body',
         details: errors.array(),
       });
     }
   } catch (error) {
-    customResponse.serverError(response, {
+    return customResponse.serverError(response, {
       message: 'an error occurred on the server side while creating the user',
+    });
+  }
+};
+
+export const loginUser = async (
+  request: Request<LoginUser>,
+  response: Response
+): Promise<void> => {
+  try {
+    const errors = validationResult(request);
+
+    if (errors.isEmpty() && isLoginUser(request.body)) {
+      const loggingUser = request.body;
+
+      const user = await User.getUserByLogin(loggingUser.login);
+
+      if (!user) {
+        return customResponse.unauthorized(response, {
+          message: 'User with this login does not exist',
+        });
+      } else {
+        const isPasswordEqual = await bcrypt.compare(loggingUser.password, user.password);
+
+        if (!isPasswordEqual) {
+          return customResponse.unauthorized(response, {
+            message: 'incorrect password',
+          });
+        }
+
+        const accessToken = tokenService.createAccessToken({
+          login: user.login,
+          id: user.id,
+        });
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...responseUser } = user;
+
+        return customResponse.created(response, {
+          user: responseUser,
+          accessToken,
+        });
+      }
+    } else {
+      return customResponse.badRequest(response, {
+        message: 'Invalid request body',
+        details: errors.array(),
+      });
+    }
+  } catch (error) {
+    return customResponse.serverError(response, {
+      message: 'an error occurred while authorizing the user on the server side',
     });
   }
 };
