@@ -18,6 +18,7 @@ dist-ssr
 # prisma
 /prisma/dev.db
 /prisma/dev.db-journal
+/prisma/migrations
 
 # Editor directories and files
 .vscode/*

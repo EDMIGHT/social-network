@@ -13,12 +13,12 @@
       "@/db/*": ["src/db/*"],
       "@/types/*": ["src/types/*"],
       "@/utils/*": ["src/utils/*"],
+      "@/docs/*": ["src/docs/*"],
       "@/services/*": ["src/services/*"],
       "@/routes/*": ["src/routes/*"],
       "@/models/*": ["src/models/*"],
       "@/utils/validators": ["src/utils/validators/*"],
       "@/utils/helpers": ["src/utils/helpers/*"]
-      // "*": ["node_modules/*", "src/types/*"]
     },
     "resolveJsonModule": true,
     "declaration": true,

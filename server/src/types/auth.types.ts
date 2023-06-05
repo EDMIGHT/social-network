@@ -1,6 +1,8 @@
 import { User } from '@prisma/client';
 
-export type RegisterUser = Pick<User, 'img' | 'email' | 'name' | 'login' | 'password'>;
+export type RegisterUser = Pick<User, 'email' | 'name' | 'login' | 'password'> & {
+  img?: User['img'];
+};
 export type LoginUser = Pick<User, 'login' | 'password'>;
 
 // type guards

@@ -1,11 +1,11 @@
-import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
+import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 
-import { LoginUser, RegisterUser, isLoginUser, isRegisterUser } from '@/types/auth.types';
 import User from '@/models/user.model';
-import customResponse from '@/utils/helpers/customResponse';
 import tokenService from '@/services/token.service';
+import { isLoginUser, isRegisterUser, LoginUser, RegisterUser } from '@/types/auth.types';
+import customResponse from '@/utils/helpers/customResponse';
 
 export const registerUser = async (
   request: Request<RegisterUser>,
