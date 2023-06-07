@@ -13,7 +13,7 @@ import isTokenInvalid from '@/utils/helpers/isTokenInvalid';
 export const registerUser = async (
   request: Request<RegisterUser>,
   response: Response
-): Promise<void> => {
+): Promise<Response> => {
   try {
     const errors = validationResult(request);
 
@@ -66,7 +66,7 @@ export const registerUser = async (
 export const loginUser = async (
   request: Request<LoginUser>,
   response: Response
-): Promise<void> => {
+): Promise<Response> => {
   try {
     const errors = validationResult(request);
 
@@ -117,7 +117,10 @@ export const loginUser = async (
   }
 };
 
-export const updateTokens = async (request: Request, response: Response): Promise<void> => {
+export const updateTokens = async (
+  request: Request,
+  response: Response
+): Promise<Response> => {
   try {
     const { refreshToken } = request.body;
 
