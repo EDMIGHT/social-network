@@ -3,9 +3,12 @@ import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 
 import User from '@/models/user.model';
+import userModel from '@/models/user.model';
 import tokenService from '@/services/token.service';
 import { isLoginUser, isRegisterUser, LoginUser, RegisterUser } from '@/types/auth.types';
+import createResponseUser from '@/utils/helpers/createResponseUser';
 import customResponse from '@/utils/helpers/customResponse';
+import isTokenInvalid from '@/utils/helpers/isTokenInvalid';
 
 export const registerUser = async (
   request: Request<RegisterUser>,
@@ -30,17 +33,21 @@ export const registerUser = async (
           password: hashedPassword,
         });
 
-        const accessToken = tokenService.createAccessToken({
+        const tokens = tokenService.createTokens({
           login: user.login,
           id: user.id,
         });
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password, ...responseUser } = user;
+        tokenService.save({
+          userId: user.id,
+          refreshToken: tokens.refreshToken,
+        });
+
+        const responseUser = createResponseUser(user);
 
         return customResponse.created(response, {
+          ...tokens,
           user: responseUser,
-          accessToken,
         });
       }
     } else {
@@ -81,17 +88,20 @@ export const loginUser = async (
           });
         }
 
-        const accessToken = tokenService.createAccessToken({
+        const tokens = tokenService.createTokens({
           login: user.login,
           id: user.id,
         });
+        await tokenService.save({
+          userId: user.id,
+          refreshToken: tokens.refreshToken,
+        });
 
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password, ...responseUser } = user;
+        const responseUser = createResponseUser(user);
 
         return customResponse.created(response, {
+          ...tokens,
           user: responseUser,
-          accessToken,
         });
       }
     } else {
@@ -104,5 +114,43 @@ export const loginUser = async (
     return customResponse.serverError(response, {
       message: 'an error occurred while authorizing the user on the server side',
     });
+  }
+};
+
+export const updateTokens = async (request: Request, response: Response): Promise<void> => {
+  try {
+    const { refreshToken } = request.body;
+
+    const tokenPayload = await tokenService.verifyRefreshToken(refreshToken);
+    const dbToken = await tokenService.findRefreshToken(refreshToken);
+
+    console.log(tokenPayload);
+    console.log(dbToken);
+
+    if (!dbToken || !tokenPayload || isTokenInvalid(dbToken, tokenPayload)) {
+      return customResponse.unauthorized(response, {
+        message: 'unauthorized access',
+      });
+    }
+
+    const tokens = tokenService.createTokens({
+      id: tokenPayload.id,
+      login: tokenPayload.login,
+    });
+    await tokenService.save({
+      userId: tokenPayload.id,
+      refreshToken: tokens.refreshToken,
+    });
+
+    const existedUser = await userModel.getUserByLogin(tokenPayload.login);
+
+    const responseUser = createResponseUser(existedUser);
+
+    return customResponse.ok(response, {
+      ...tokens,
+      user: responseUser,
+    });
+  } catch (error) {
+    console.error('update token: ', error);
   }
 };

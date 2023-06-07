@@ -1,9 +1,8 @@
 import { User } from '@prisma/client';
 
-export type RegisterUser = Pick<User, 'email' | 'name' | 'login' | 'password'> & {
-  img?: User['img'];
-};
+export type RegisterUser = Pick<User, 'img' | 'email' | 'name' | 'login' | 'password'>;
 export type LoginUser = Pick<User, 'login' | 'password'>;
+export type ResponseUser = Pick<User, 'login' | 'email' | 'img' | 'name' | 'createdAt'>;
 
 // type guards
 export const isRegisterUser = (obj: unknown): obj is RegisterUser => {

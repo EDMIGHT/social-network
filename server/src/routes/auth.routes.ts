@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { loginUser, registerUser } from '@/controllers/auth.controllers';
+import { loginUser, registerUser, updateTokens } from '@/controllers/auth.controllers';
 import { loginValidators, registerValidators } from '@/utils/validators/auth.validators';
 
 const router = express.Router({ mergeParams: true });
@@ -168,5 +168,7 @@ router.post('/register', registerValidators, registerUser);
  *                  example: 'an error occurred while authorizing the user on the server side'
  */
 router.post('/login', loginValidators, loginUser);
+
+router.post('/me', updateTokens);
 
 export default router;

@@ -1,7 +1,8 @@
+import { User } from '@prisma/client';
+
 import prisma from '@/db/prisma';
 import { RegisterUser } from '@/types/auth.types';
 import { IUserModel } from '@/types/user.model.interface';
-import { User } from '@prisma/client';
 
 class UserModel implements IUserModel {
   async createUser(data: RegisterUser): Promise<User> {

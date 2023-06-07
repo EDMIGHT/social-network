@@ -1,4 +1,5 @@
 import { User } from '@prisma/client';
+
 import { RegisterUser } from './auth.types';
 
 export interface IUserModel {
