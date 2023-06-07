@@ -7,7 +7,7 @@ const router = express.Router({ mergeParams: true });
 
 /**
  * @openapi
- * '/register':
+ * 'auth/register':
  *  post:
  *    tags:
  *    - auth 🚪
@@ -89,7 +89,7 @@ router.post('/register', registerValidators, registerUser);
 
 /**
  * @openapi
- * '/login':
+ * 'auth/login':
  *  post:
  *    tags:
  *    - auth 🚪
@@ -169,6 +169,62 @@ router.post('/register', registerValidators, registerUser);
  */
 router.post('/login', loginValidators, loginUser);
 
+/**
+ * @openapi
+ * 'auth/me':
+ *  post:
+ *    tags:
+ *    - auth 🚪
+ *    summary: Token Refresh
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            required:
+ *              - refreshToken
+ *            properties:
+ *              refreshToken:
+ *                type: string
+ *                example: eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp
+ *    responses:
+ *      200:
+ *        description: Tokens updated
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                accessToken:
+ *                  type: string
+ *                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6
+ *                refreshToken:
+ *                  type: string
+ *                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6I
+ *                expiresIn:
+ *                  type: number
+ *                  example: 86400
+ *                user:
+ *                  type: object
+ *                  properties:
+ *                    login:
+ *                      type: string
+ *                      example: textLogin
+ *                    img:
+ *                      type: string
+ *                      example: https://chat.openai.com/
+ *                    name:
+ *                      type: string
+ *                      example: Alexey Latyshev
+ *                    email:
+ *                      type: string
+ *                      example: test@gmail.com
+ *                    createdAt:
+ *                      type: string
+ *                      format: date-time
+ *                      example: 2023-06-07T08:36:47.171Z
+ */
 router.post('/me', updateTokens);
 
 export default router;

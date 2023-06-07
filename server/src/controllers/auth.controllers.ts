@@ -152,5 +152,8 @@ export const updateTokens = async (request: Request, response: Response): Promis
     });
   } catch (error) {
     console.error('update token: ', error);
+    return customResponse.serverError(response, {
+      message: `an error occurred on the server while updating tokens: ${error}`,
+    });
   }
 };
