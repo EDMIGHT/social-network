@@ -27,7 +27,7 @@ model Post {
   title      String
   text       String
   img        String?
-  viewsCount Int
+  viewsCount Int       @default(0)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime?
 
