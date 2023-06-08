@@ -68,7 +68,7 @@ class PostModel {
       query.userId = userId;
     }
 
-    return await prisma.post.findMany({
+    return prisma.post.findMany({
       skip: offset,
       take: limit,
       orderBy: {
@@ -98,7 +98,7 @@ class PostModel {
   }
 
   public async getTotal(): Promise<number> {
-    return await prisma.post.count();
+    return prisma.post.count();
   }
 
   public async updateById(id: string, data: any): Promise<Post | null> {
