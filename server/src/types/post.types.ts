@@ -1,6 +1,7 @@
 import { Post } from '@prisma/client';
 
 export interface GetPostArg {
+  userId?: string;
   page: number;
   limit: number;
   sort: string;
@@ -8,6 +9,6 @@ export interface GetPostArg {
   tags: string;
 }
 
-export type CreatePost = Pick<Post, 'title' | 'text' | 'img' | 'authorId'> & {
+export type CreatePost = Pick<Post, 'title' | 'text' | 'img' | 'userId'> & {
   tags: string[];
 };

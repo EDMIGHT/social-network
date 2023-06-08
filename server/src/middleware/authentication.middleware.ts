@@ -1,13 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 
+import userModel from '@/models/user.model';
 import tokenService from '@/services/token.service';
 import customResponse from '@/utils/helpers/customResponse';
 
-const authentication = (
+const authentication = async (
   request: Request,
   response: Response,
   next: NextFunction
-): Response | void => {
+): Promise<Response | void> => {
   try {
     const token = request.headers.authorization?.split(' ')[1];
     if (!token) {
@@ -23,8 +24,15 @@ const authentication = (
       dataFromToken.exp &&
       dataFromToken.exp > Math.floor(Date.now() / 1000)
     ) {
-      request.user = dataFromToken;
-      return next();
+      const existedUser = await userModel.getUseById(dataFromToken.id);
+      if (existedUser) {
+        request.user = dataFromToken;
+        return next();
+      } else {
+        return customResponse.unauthorized(response, {
+          message: 'request from non-existent user',
+        });
+      }
     }
   } catch (error) {
     return customResponse.serverError(response, {

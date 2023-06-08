@@ -127,9 +127,6 @@ export const updateTokens = async (
     const tokenPayload = await tokenService.verifyRefreshToken(refreshToken);
     const dbToken = await tokenService.findRefreshToken(refreshToken);
 
-    console.log(tokenPayload);
-    console.log(dbToken);
-
     if (!dbToken || !tokenPayload || isTokenInvalid(dbToken, tokenPayload)) {
       return customResponse.unauthorized(response, {
         message: 'unauthorized access',

@@ -12,6 +12,9 @@ class CustomResponse implements ICustomResponse {
   badRequest(response: Response, data: any): Response {
     return response.status(400).send(data);
   }
+  notFound(response: Response, data: any): Response {
+    return response.status(404).send(data);
+  }
   conflict(response: Response, data: any): Response {
     return response.status(409).send(data);
   }
