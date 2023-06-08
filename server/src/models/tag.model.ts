@@ -2,15 +2,19 @@ import { Tag } from '@prisma/client';
 
 import prisma from '@/db/prisma';
 
-interface GetAllTagsArgs {
+interface GetAllArgs {
   name: string;
   page: number;
   limit: number;
   order: string;
 }
 
+interface CreateArgs {
+  name: string;
+}
+
 class TagModel {
-  public getAllTags({ name, page, limit, order }: GetAllTagsArgs): Promise<Tag[]> {
+  public getAll({ name, page, limit, order }: GetAllArgs): Promise<Tag[]> {
     const offset = (page - 1) * limit;
 
     return prisma.tag.findMany({
@@ -25,6 +29,10 @@ class TagModel {
         name: order === 'desc' ? 'desc' : 'asc',
       },
     });
+  }
+
+  public create(data: CreateArgs): Promise<Tag> {
+    return prisma.tag.create({ data });
   }
 }
 
