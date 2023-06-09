@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { loginUser, registerUser, updateTokens } from '@/controllers/auth.controllers';
+import validationHandler from '@/middleware/validationHandler.middleware';
 import { loginValidators, registerValidators } from '@/utils/validators/auth.validators';
 
 const router = express.Router({ mergeParams: true });
@@ -85,7 +86,7 @@ const router = express.Router({ mergeParams: true });
  *                  type: string
  *                  example: 'an error occurred on the server side while creating the user'
  */
-router.post('/register', registerValidators, registerUser);
+router.post('/register', registerValidators, validationHandler, registerUser);
 
 /**
  * @openapi
@@ -167,7 +168,7 @@ router.post('/register', registerValidators, registerUser);
  *                  type: string
  *                  example: 'an error occurred while authorizing the user on the server side'
  */
-router.post('/login', loginValidators, loginUser);
+router.post('/login', loginValidators, validationHandler, loginUser);
 
 /**
  * @openapi

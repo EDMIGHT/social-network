@@ -1,23 +1,20 @@
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
 
 import User from '@/models/user.model';
 import userModel from '@/models/user.model';
 import tokenService from '@/services/token.service';
-import { isLoginUser, isRegisterUser, LoginUser, RegisterUser } from '@/types/auth.types';
+import { isLoginUser, isRegisterUser } from '@/types/auth.types';
 import createResponseUser from '@/utils/helpers/createResponseUser';
 import customResponse from '@/utils/helpers/customResponse';
 import isTokenInvalid from '@/utils/helpers/isTokenInvalid';
 
 export const registerUser = async (
-  request: Request<RegisterUser>,
+  request: Request,
   response: Response
 ): Promise<Response> => {
   try {
-    const errors = validationResult(request);
-
-    if (errors.isEmpty() && isRegisterUser(request.body)) {
+    if (isRegisterUser(request.body)) {
       const registeringUser = request.body;
 
       const user = await User.getUserByLogin(registeringUser.login);
@@ -53,7 +50,9 @@ export const registerUser = async (
     } else {
       return customResponse.badRequest(response, {
         message: 'Invalid request body',
-        details: errors.array(),
+        body: {
+          ...request.body,
+        },
       });
     }
   } catch (error) {
@@ -63,14 +62,9 @@ export const registerUser = async (
   }
 };
 
-export const loginUser = async (
-  request: Request<LoginUser>,
-  response: Response
-): Promise<Response> => {
+export const loginUser = async (request: Request, response: Response): Promise<Response> => {
   try {
-    const errors = validationResult(request);
-
-    if (errors.isEmpty() && isLoginUser(request.body)) {
+    if (isLoginUser(request.body)) {
       const loggingUser = request.body;
 
       const user = await User.getUserByLogin(loggingUser.login);
@@ -107,7 +101,9 @@ export const loginUser = async (
     } else {
       return customResponse.badRequest(response, {
         message: 'Invalid request body',
-        details: errors.array(),
+        body: {
+          ...request.body,
+        },
       });
     }
   } catch (error) {

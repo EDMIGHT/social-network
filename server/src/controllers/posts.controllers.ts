@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
 
 import postModel from '@/models/post.model';
 import tagModel from '@/models/tag.model';
@@ -91,37 +90,26 @@ export const createPost = async (request: Request, response: Response): Promise<
   const { tags } = request.body;
 
   try {
-    const errors = validationResult(request);
+    const tagList = tags ? (tags as string).split(',') : [];
 
-    if (errors.isEmpty()) {
-      const tagList = tags ? (tags as string).split(',') : [];
+    const existedTags = await tagModel.getTagsById(tagList);
 
-      const existedTags = await tagModel.getTagsById(tagList);
+    if (existedTags?.length === tagList.length) {
+      const post = await postModel.create({
+        ...request.body,
+        tags: tagList,
+        userId: request.user.id,
+      });
 
-      if (existedTags?.length === tagList.length) {
-        const post = await postModel.create({
-          ...request.body,
-          tags: tagList,
-          userId: request.user.id,
-        });
-
-        return customResponse.created(response, {
-          post,
-        });
-      } else {
-        return customResponse.badRequest(response, {
-          message: 'failed to create post using passed data',
-          body: {
-            ...request.body,
-          },
-          tags: tagList,
-          existedTags,
-        });
-      }
+      return customResponse.created(response, post);
     } else {
       return customResponse.badRequest(response, {
-        message: 'request body validation error',
-        details: errors.array(),
+        message: 'failed to create post using passed data',
+        body: {
+          ...request.body,
+        },
+        tags: tagList,
+        existedTags,
       });
     }
   } catch (error) {
@@ -164,29 +152,21 @@ export const updatePost = async (request: Request, response: Response): Promise<
   const { tags } = request.body;
 
   try {
-    const errors = validationResult(request);
-    if (errors.isEmpty()) {
-      const tagList = tags ? (tags as string).split(',') : [];
+    const tagList = tags ? (tags as string).split(',') : [];
 
-      const existedPost = await postModel.getById(id);
-      const existedTags = await tagModel.getTagsById(tagList);
+    const existedPost = await postModel.getById(id);
+    const existedTags = await tagModel.getTagsById(tagList);
 
-      if (existedPost && existedTags?.length === tagList.length) {
-        const post = await postModel.updateById(id, { ...request.body, tags: tagList });
+    if (existedPost && existedTags?.length === tagList.length) {
+      const post = await postModel.updateById(id, { ...request.body, tags: tagList });
 
-        return customResponse.ok(response, post);
-      } else {
-        return customResponse.notFound(response, {
-          message: `post with id = ${id} does not exist or non-existent tags were passed`,
-          id,
-          tags: tagList,
-          existedTags,
-        });
-      }
+      return customResponse.ok(response, post);
     } else {
-      return customResponse.badRequest(response, {
-        message: 'request body validation error',
-        details: errors.array(),
+      return customResponse.notFound(response, {
+        message: `post with id = ${id} does not exist or non-existent tags were passed`,
+        id,
+        tags: tagList,
+        existedTags,
       });
     }
   } catch (error) {
