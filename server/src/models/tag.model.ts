@@ -48,6 +48,13 @@ class TagModel {
       },
     });
   }
+  public getTagByName(name: string): Promise<Tag | null> {
+    return prisma.tag.findFirst({
+      where: {
+        name,
+      },
+    });
+  }
 
   public create(data: CreateArgs): Promise<Tag> {
     return prisma.tag.create({ data });

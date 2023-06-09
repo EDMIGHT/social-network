@@ -12,6 +12,7 @@
       "@/controllers/*": ["src/controllers/*"],
       "@/db/*": ["src/db/*"],
       "@/types/*": ["src/types/*"],
+      "@/middleware/*": ["src/middleware/*"],
       "@/utils/*": ["src/utils/*"],
       "@/docs/*": ["src/docs/*"],
       "@/services/*": ["src/services/*"],
