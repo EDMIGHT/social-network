@@ -22,44 +22,37 @@ interface QueryUpdate {
   };
 }
 
+type UpdatePostData = Partial<Post> & {
+  tags?: string[];
+};
+
 class PostModel {
-  public async createPost(data: CreatePost): Promise<Post | null> {
-    try {
-      // TODO проверку на существование тэгов
-      if (data.userId && data.title && data.text) {
-        return prisma.post.create({
-          data: {
-            ...data,
-            tags: {
-              connect: data.tags.map((tagId) => ({ id: tagId.trim() })),
-            },
-          },
-        });
-      } else return null;
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
+  public async create(data: CreatePost): Promise<Post> {
+    return prisma.post.create({
+      data: {
+        ...data,
+        tags: {
+          connect: data.tags.map((tagId) => ({ id: tagId.trim() })),
+        },
+      },
+    });
   }
 
-  public async getPosts({
+  public async get({
     userId,
-    page,
+    offset,
     limit,
     sort,
     order,
     tags,
-  }: GetPostArg): Promise<Post[]> {
-    const offset = (page - 1) * limit;
-
+  }: GetPostArg): Promise<Post[] | null> {
     const query: Query = {};
 
-    if (tags) {
-      const tagList = tags ? (tags as string).split(',') : [];
+    if (tags.length > 0) {
       query.tags = {
         some: {
           name: {
-            in: tagList,
+            in: tags,
           },
         },
       };
@@ -82,48 +75,41 @@ class PostModel {
       },
     });
   }
-
-  public async deleteById(id: string): Promise<Post | null> {
-    const post = await prisma.post.findFirst({
+  public async getById(id: string): Promise<Post | null> {
+    return await prisma.post.findFirst({
       where: { id },
     });
+  }
 
-    if (post) {
-      return prisma.post.delete({
-        where: { id },
-      });
-    } else {
-      return null;
-    }
+  public async deleteById(id: string): Promise<Post> {
+    return prisma.post.delete({
+      where: { id },
+    });
   }
 
   public async getTotal(): Promise<number> {
     return prisma.post.count();
   }
 
-  public async updateById(id: string, data: any): Promise<Post | null> {
+  public async updateById(
+    id: string,
+    { tags, ...data }: UpdatePostData
+  ): Promise<Post | null> {
     const query: QueryUpdate = {};
 
-    if (data.tags) {
-      const tagList = (data.tags as string).split(',');
+    if (tags) {
       query.tags = {
-        connect: tagList.map((tagId) => ({ id: tagId.trim() })),
+        connect: tags.map((tagId) => ({ id: tagId.trim() })),
       };
     }
 
-    const existedPost = await prisma.post.findFirst({
+    return prisma.post.update({
       where: { id },
+      data: {
+        ...data,
+        ...query,
+      },
     });
-
-    if (existedPost) {
-      return prisma.post.update({
-        where: { id },
-        data: {
-          ...data,
-          ...query,
-        },
-      });
-    } else return null;
   }
 }
 

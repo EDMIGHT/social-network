@@ -33,10 +33,14 @@ const authentication = async (
           message: 'request from non-existent user',
         });
       }
+    } else {
+      return customResponse.unauthorized(response, {
+        message: 'unauthorized access, token expired',
+      });
     }
   } catch (error) {
     return customResponse.serverError(response, {
-      message: 'an error occurred during authentication on the north side',
+      message: 'an error occurred while authenticating on the server side',
     });
   }
 };

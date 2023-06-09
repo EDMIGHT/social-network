@@ -19,7 +19,7 @@ export const getAllTags = async (request: Request, response: Response): Promise<
   } catch (error) {
     console.error(error);
     return customResponse.serverError(response, {
-      message: `an error occurred on the server side while fetching tags: \n${error}`,
+      message: `an error occurred on the server side while fetching tags, error: ${error}`,
       query: {
         ...request.query,
       },
@@ -38,7 +38,7 @@ export const createTag = async (request: Request, response: Response): Promise<R
     });
   } catch (error) {
     return customResponse.serverError(response, {
-      message: `an error occurred on the north side when creating a tag based on the passed body: \n${error}`,
+      message: `an error occurred on the north side when creating a tag based on the passed body, error: ${error}`,
       body: {
         ...request.body,
       },
@@ -74,7 +74,7 @@ export const updateTag = async (request: Request, response: Response): Promise<R
   } catch (error) {
     console.error(error);
     return customResponse.serverError(response, {
-      message: 'an error occurred while updating the tag on the server side',
+      message: `an error occurred while updating the tag on the server side, error: ${error}`,
       id,
       body: {
         ...request.body,
