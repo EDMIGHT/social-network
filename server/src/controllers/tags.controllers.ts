@@ -45,3 +45,40 @@ export const createTag = async (request: Request, response: Response): Promise<R
     });
   }
 };
+
+export const updateTag = async (request: Request, response: Response): Promise<Response> => {
+  const { id } = request.params;
+  const { name } = request.body;
+
+  try {
+    const existedTag = await tagModel.getTagById(id);
+
+    if (existedTag && name) {
+      const newTag = await tagModel.update(id, { name });
+      return customResponse.ok(response, {
+        newTag,
+      });
+    } else if (!existedTag) {
+      return customResponse.notFound(response, {
+        message: `tag with id = ${id} does not exist`,
+        id,
+      });
+    } else {
+      return customResponse.badRequest(response, {
+        message: 'invalid request body',
+        body: {
+          ...request.body,
+        },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return customResponse.serverError(response, {
+      message: 'an error occurred while updating the tag on the server side',
+      id,
+      body: {
+        ...request.body,
+      },
+    });
+  }
+};

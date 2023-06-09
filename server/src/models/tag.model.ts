@@ -13,6 +13,10 @@ interface CreateArgs {
   name: string;
 }
 
+interface UpdateArgs {
+  name: string;
+}
+
 class TagModel {
   public getAll({ name, page, limit, order }: GetAllArgs): Promise<Tag[]> {
     const offset = (page - 1) * limit;
@@ -30,9 +34,21 @@ class TagModel {
       },
     });
   }
+  public getTagById(id: string): Promise<Tag | null> {
+    return prisma.tag.findFirst({
+      where: { id },
+    });
+  }
 
   public create(data: CreateArgs): Promise<Tag> {
     return prisma.tag.create({ data });
+  }
+
+  public update(id: string, data: UpdateArgs): Promise<Tag> {
+    return prisma.tag.update({
+      where: { id },
+      data,
+    });
   }
 }
 
