@@ -4,6 +4,7 @@ import {
   createPost,
   deletePost,
   getAllPosts,
+  getPost,
   getPosts,
   updatePost,
 } from '@/controllers/posts.controllers';
@@ -179,11 +180,11 @@ router.get('/all', getAllPosts);
 
 /**
  * @openapi
- * posts/:userId:
+ * posts/all/:userId:
  *  get:
  *    tags:
  *    - posts 📰
- *    summary: Getting posts by a userId
+ *    summary: Getting all posts by a userId
  *    parameters:
  *      - in: path
  *        name: id
@@ -191,7 +192,7 @@ router.get('/all', getAllPosts);
  *        schema:
  *          type: string
  *          example: 863f78b8-13ee-49c1-925e-dc279f101e6c
- *        description: Tags to display posts for
+ *        description: User Id to display posts for
  *      - in: query
  *        name: tags
  *        required: false
@@ -343,7 +344,99 @@ router.get('/all', getAllPosts);
  *                      type: string
  *                      example: createdAt
  */
-router.get('/:id', getPosts);
+router.get('/all/:userId', getPosts);
+
+/**
+ * @openapi
+ * posts/:id:
+ *  get:
+ *    tags:
+ *    - posts 📰
+ *    summary: Getting post by a id
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        schema:
+ *          type: string
+ *          example: 863f78b8-13ee-49c1-925e-dc279f101e6c
+ *        description: id of the post to be received
+ *    responses:
+ *      200:
+ *        description: Success
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                id:
+ *                  type: string
+ *                  example: f6bbb9ce-5434-40de-a5f7-535a1e6e62cc
+ *                title:
+ *                  type: string
+ *                  example: lorem title
+ *                text:
+ *                  type: string
+ *                  example: lorem text
+ *                img:
+ *                  type: string
+ *                  example: /uploads/img.jpg
+ *                viewsCount:
+ *                  type: number
+ *                  example: 10
+ *                createdAt:
+ *                  type: string
+ *                  format: date-time
+ *                  example: 2023-06-08T06:34:26.774Z
+ *                updatedAt:
+ *                  type: string
+ *                  format: date-time
+ *                  example: 2023-08-08T06:34:26.774Z
+ *                userId:
+ *                  type: string
+ *                  example: 863f78b8-13ee-49c1-925e-dc279f101e6c
+ *                likedById:
+ *                  type: string
+ *                  example: f6bbb9ce-5434-40de-a5f7-535a1e6e62cc
+ *                tags:
+ *                  type: array
+ *                  items:
+ *                    type: object
+ *                    properties:
+ *                      id:
+ *                        type: string
+ *                        example: 549763ed-42f4-43c8-91d4-2eec8af50742
+ *                      name:
+ *                         type: string
+ *                         example: tag for win
+ *      404:
+ *        description: no post found by devotional id
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  example: failed to get post with id = 863f78b8-13ee-49c1-925e-dc279f101e6c
+ *                id:
+ *                  type: string
+ *                  example: 863f78b8-13ee-49c1-925e-dc279f101e6c
+ *      500:
+ *        description: an error occurred on the server side while fetching the post
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                message:
+ *                  type: string
+ *                  example: an error occurred on the server side while fetching the post, error {error_message}
+ *                id:
+ *                  type: string
+ *                  example: 863f78b8-13ee-49c1-925e-dc279f101e6c
+ */
+router.get('/:id', getPost);
 
 /**
  * @openapi

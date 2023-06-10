@@ -20,7 +20,7 @@ export const getAllPosts = async (request: Request, response: Response): Promise
       tags: tagList,
     });
 
-    if (posts) {
+    if (posts?.length) {
       return customResponse.ok(response, {
         posts,
         currentPage: page,
@@ -47,14 +47,14 @@ export const getAllPosts = async (request: Request, response: Response): Promise
 export const getPosts = async (request: Request, response: Response): Promise<Response> => {
   try {
     const { tags, page = 1, limit = 10, order = 'desc', sort = 'createdAt' } = request.query;
-    const { id } = request.params;
+    const { userId } = request.params;
 
     const totalPostsCount = await postModel.getTotal();
     const offset = (+page - 1) * +limit;
     const tagList = tags ? (tags as string).split(',') : [];
 
     const posts = await postModel.get({
-      userId: id as string,
+      userId: userId as string,
       offset,
       limit: +limit,
       sort: sort as string,
@@ -62,7 +62,7 @@ export const getPosts = async (request: Request, response: Response): Promise<Re
       tags: tagList,
     });
 
-    if (posts) {
+    if (posts?.length) {
       return customResponse.ok(response, {
         posts,
         currentPage: page,
@@ -83,6 +83,26 @@ export const getPosts = async (request: Request, response: Response): Promise<Re
       query: {
         ...request.query,
       },
+    });
+  }
+};
+export const getPost = async (request: Request, response: Response): Promise<Response> => {
+  const { id } = request.params;
+  try {
+    const post = await postModel.getById(id);
+    if (post) {
+      return customResponse.ok(response, post);
+    } else {
+      return customResponse.notFound(response, {
+        message: `failed to get post with id = ${id}`,
+        id,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    return customResponse.serverError(response, {
+      message: `an error occurred on the server side while fetching the post, error: ${error}`,
+      id,
     });
   }
 };
