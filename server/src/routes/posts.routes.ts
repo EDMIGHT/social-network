@@ -36,14 +36,14 @@ const router = express.Router({ mergeParams: true });
  *        required: false
  *        schema:
  *          type: number
- *          example: 1
+ *          default: 1
  *        description: current page
  *      - in: query
  *        name: limit
  *        required: false
  *        schema:
  *          type: number
- *          example: 10
+ *          default: 10
  *        description: the number of posts that will be retrieved when requested
  *      - in: query
  *        name: sort
@@ -51,7 +51,7 @@ const router = express.Router({ mergeParams: true });
  *        schema:
  *          type: string
  *          enum: [title, createdAt, updatedAt, viewsCount]
- *          example: createdAt
+ *          default: createdAt
  *        description: how posts will be sorted
  *      - in: query
  *        name: order
@@ -59,7 +59,7 @@ const router = express.Router({ mergeParams: true });
  *        schema:
  *          type: string
  *          enum: [asc, desc]
- *          example: desc
+ *          default: desc
  *        description: in what order will the posts be
  *    responses:
  *      200:
@@ -112,6 +112,12 @@ const router = express.Router({ mergeParams: true });
  *                          name:
  *                            type: string
  *                            example: tag for win
+ *                currentPage:
+ *                  type: number
+ *                  example: 1
+ *                totalPages:
+ *                  type: number
+ *                  example: 10
  *      400:
  *        description: Invalid request query
  *        content:
@@ -198,14 +204,14 @@ router.get('/all', getAllPosts);
  *        required: false
  *        schema:
  *          type: number
- *          example: 1
+ *          default: 1
  *        description: current page
  *      - in: query
  *        name: limit
  *        required: false
  *        schema:
  *          type: number
- *          example: 10
+ *          default: 10
  *        description: the number of posts that will be retrieved when requested
  *      - in: query
  *        name: sort
@@ -213,7 +219,7 @@ router.get('/all', getAllPosts);
  *        schema:
  *          type: string
  *          enum: [title, createdAt, updatedAt, viewsCount]
- *          example: createdAt
+ *          default: createdAt
  *        description: how posts will be sorted
  *      - in: query
  *        name: order
@@ -221,7 +227,7 @@ router.get('/all', getAllPosts);
  *        schema:
  *          type: string
  *          enum: [asc, desc]
- *          example: desc
+ *          default: desc
  *        description: in what order will the posts be
  *    responses:
  *      200:
@@ -274,6 +280,12 @@ router.get('/all', getAllPosts);
  *                          name:
  *                            type: string
  *                            example: tag for win
+ *                currentPage:
+ *                  type: number
+ *                  example: 1
+ *                totalPages:
+ *                  type: number
+ *                  example: 10
  *      400:
  *        description: Invalid request query
  *        content:
@@ -546,7 +558,7 @@ router.delete('/:id', authentication, deletePost);
  *                  example: 863f78b8-13ee-49c1-925e-dc279f101e6c
  *    responses:
  *      200:
- *        description: The post has been deleted
+ *        description: The post has been updated
  *        content:
  *          application/json:
  *            schema:

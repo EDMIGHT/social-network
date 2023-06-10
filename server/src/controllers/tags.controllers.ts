@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
 
 import tagModel from '@/models/tag.model';
 import customResponse from '@/utils/helpers/customResponse';
@@ -28,28 +27,19 @@ export const getAllTags = async (request: Request, response: Response): Promise<
 
 export const createTag = async (request: Request, response: Response): Promise<Response> => {
   try {
-    const errors = validationResult(request);
+    const existedTag = await tagModel.getTagByName(request.body.name);
+    if (!existedTag) {
+      const tag = await tagModel.create({
+        ...request.body,
+      });
 
-    if (errors.isEmpty()) {
-      const existedTag = tagModel.getTagByName(request.body.name);
-      if (!existedTag) {
-        const tag = await tagModel.create({
-          ...request.body,
-        });
-
-        return customResponse.created(response, tag);
-      } else {
-        return customResponse.conflict(response, {
-          message: `tag named '${request.body.name}' already exists`,
-          body: {
-            ...request.body,
-          },
-        });
-      }
+      return customResponse.created(response, tag);
     } else {
-      return customResponse.badRequest(response, {
-        message: 'request body validation error',
-        details: errors.array(),
+      return customResponse.conflict(response, {
+        message: `tag named '${request.body.name}' already exists`,
+        body: {
+          ...request.body,
+        },
       });
     }
   } catch (error) {
@@ -67,31 +57,15 @@ export const updateTag = async (request: Request, response: Response): Promise<R
   const { name } = request.body;
 
   try {
-    const errors = validationResult(request);
+    const existedTag = await tagModel.getTagById(id);
 
-    if (errors.isEmpty()) {
-      const existedTag = await tagModel.getTagById(id);
-
-      if (existedTag && name) {
-        const newTag = await tagModel.update(id, { name });
-        return customResponse.ok(response, newTag);
-      } else if (!existedTag) {
-        return customResponse.notFound(response, {
-          message: `tag with id = ${id} does not exist`,
-          id,
-        });
-      } else {
-        return customResponse.badRequest(response, {
-          message: 'invalid request body',
-          body: {
-            ...request.body,
-          },
-        });
-      }
+    if (existedTag) {
+      const newTag = await tagModel.update(id, { name });
+      return customResponse.ok(response, newTag);
     } else {
-      return customResponse.badRequest(response, {
-        message: 'request body validation error',
-        details: errors.array(),
+      return customResponse.notFound(response, {
+        message: `tag with id = ${id} does not exist`,
+        id,
       });
     }
   } catch (error) {
