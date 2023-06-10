@@ -33,3 +33,4 @@ dist-ssr
 
 # other
 /uploads/*
+!/uploads/.gitkeep

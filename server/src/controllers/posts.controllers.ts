@@ -29,7 +29,7 @@ export const getAllPosts = async (request: Request, response: Response): Promise
     } else {
       return customResponse.badRequest(response, {
         message: 'invalid request query',
-        body: {
+        query: {
           ...request.query,
         },
       });
@@ -44,16 +44,17 @@ export const getAllPosts = async (request: Request, response: Response): Promise
     });
   }
 };
-export const getMyPost = async (request: Request, response: Response): Promise<Response> => {
+export const getPosts = async (request: Request, response: Response): Promise<Response> => {
   try {
     const { tags, page = 1, limit = 10, order = 'desc', sort = 'createdAt' } = request.query;
+    const { id } = request.params;
 
     const totalPostsCount = await postModel.getTotal();
     const offset = (+page - 1) * +limit;
     const tagList = tags ? (tags as string).split(',') : [];
 
     const posts = await postModel.get({
-      userId: request.user.id,
+      userId: id as string,
       offset,
       limit: +limit,
       sort: sort as string,
@@ -70,7 +71,7 @@ export const getMyPost = async (request: Request, response: Response): Promise<R
     } else {
       return customResponse.badRequest(response, {
         message: 'invalid request query',
-        body: {
+        query: {
           ...request.query,
         },
       });
@@ -143,6 +144,7 @@ export const deletePost = async (request: Request, response: Response): Promise<
     console.error(error);
     return customResponse.serverError(response, {
       message: `an error occurred on the server side while deleting the post: ${error}`,
+      id,
     });
   }
 };
