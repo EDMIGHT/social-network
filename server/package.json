@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node src/app.ts",
+    "test": "jest",
     "swagger": "tsx src/swagger.ts",
     "dev": "tsx watch src/app.ts",
     "migrate": "npx prisma migrate dev",

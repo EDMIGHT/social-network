@@ -150,8 +150,7 @@ export const deletePost = async (request: Request, response: Response): Promise<
     const existedPost = await postModel.getById(id);
 
     if (existedPost) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const deleteResult = await postModel.deleteById(id);
+      await postModel.deleteById(id);
 
       return customResponse.ok(response, null);
     } else {
