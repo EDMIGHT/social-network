@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  /* typography */
+  .title-1 {
+    @apply font-[700] text-[3rem];
+  }
+  .title-2 {
+    @apply font-[500] text-[2rem];
+  }
+  .title-3 {
+    @apply font-[400] text-[1rem];
+  }
+  .text {
+    @apply font-[400];
+  }
+
+  /* buttons */
+  .activity {
+    @apply bg-activity;
+  }
+  .highlight {
+    @apply bg-highlight;
+  }
+}
+
+body {
+  @apply bg-light-bg-main font-open-sans;
+}
