@@ -2,7 +2,7 @@ import React from 'react';
 
 interface TypographyProps {
   component: 'h1' | 'h2' | 'h3' | 'p' | 'span';
-  variant: 'title-1' | 'title-2' | 'title-3' | 'text';
+  variant: 'title-1' | 'title-2' | 'title-3' | 'description' | 'text';
   children: React.ReactNode;
 }
 

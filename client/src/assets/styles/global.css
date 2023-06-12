@@ -8,13 +8,16 @@
     @apply font-[700] text-[3rem];
   }
   .title-2 {
-    @apply font-[500] text-[2rem];
+    @apply font-[500] text-[1.25rem];
   }
   .title-3 {
-    @apply font-[400] text-[1rem];
+    @apply font-[400] text-base;
+  }
+  .description {
+    @apply font-[400] italic text-sm text-opacity-10;
   }
   .text {
-    @apply font-[400];
+    @apply font-[400] text-base;
   }
 
   /* buttons */

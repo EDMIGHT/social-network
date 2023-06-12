@@ -6,6 +6,9 @@ export default {
       gridTemplateRows: {
         layout: 'auto 1fr auto',
       },
+      gridTemplateColumns: {
+        layout: '1fr 3fr 1fr',
+      },
       colors: {
         'light-bg-main': '#f6f8f9',
         'light-bg-content': '#fff',

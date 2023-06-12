@@ -1,13 +1,17 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
+import Dashboard from '@/components/sections/Dashboard';
 import Header from '@/components/sections/Header';
 
 const MainLayout: React.FC = () => {
   return (
-    <div className='mx-auto grid h-screen max-w-screen-xl grid-rows-layout p-3'>
+    <div className='mx-auto h-screen max-w-screen-xl p-3'>
       <Header />
-      <Outlet />
+      <div className='mt-2 grid grid-cols-layout grid-rows-layout gap-2'>
+        <Dashboard />
+        <Outlet />
+      </div>
     </div>
   );
 };
