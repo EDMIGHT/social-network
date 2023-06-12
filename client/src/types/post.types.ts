@@ -1,4 +1,5 @@
 import { Tag } from './tag.types';
+import { User } from './user.types';
 
 export interface Post {
   id: string;
@@ -14,4 +15,5 @@ export interface Post {
 
 export type ResponsePost = Post & {
   tags: Tag[];
+  user: Pick<User, 'login' | 'img' | 'name'>;
 };

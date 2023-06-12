@@ -72,6 +72,13 @@ class PostModel {
       },
       include: {
         tags: true, // убрать, если не нужно отображение тэгов
+        user: {
+          select: {
+            login: true,
+            name: true,
+            img: true,
+          },
+        },
       },
     });
   }

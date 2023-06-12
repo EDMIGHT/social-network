@@ -8,7 +8,7 @@ const MainLayout: React.FC = () => {
   return (
     <div className='mx-auto h-screen max-w-screen-xl p-3'>
       <Header />
-      <div className='mt-2 grid grid-cols-layout grid-rows-layout gap-2'>
+      <div className='mt-2 grid grid-cols-layout grid-rows-layout gap-4'>
         <Dashboard />
         <Outlet />
       </div>

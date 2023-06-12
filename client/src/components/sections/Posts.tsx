@@ -1,16 +1,16 @@
 import React from 'react';
 
-import { Post } from '@/types/post.types';
+import { ResponsePost } from '@/types/post.types';
 
 import PostItem from './PostItem';
 
 interface PostsProps {
-  posts: Post[];
+  posts: ResponsePost[];
 }
 
 const Posts: React.FC<PostsProps> = ({ posts }) => {
   const postsComponents = posts.map((post) => <PostItem key={post.id} {...post} />);
-  return <div>{postsComponents}</div>;
+  return <div className='flex flex-col gap-4'>{postsComponents}</div>;
 };
 
 export default Posts;
