@@ -1,19 +1,21 @@
 import React from 'react';
 
-import { ResponsePost } from '@/types/post.types';
+import { useGetAllPostsQuery } from '@/store/api/api';
 
 import PostItem from './PostItem';
 
-interface PostsProps {
-  posts: ResponsePost[] | undefined;
-}
+const Posts: React.FC = () => {
+  const { isLoading, isError, isSuccess, data } = useGetAllPostsQuery({}, {});
 
-const Posts: React.FC<PostsProps> = ({ posts }) => {
-  const postsComponents = posts ? (
-    posts.map((post) => <PostItem key={post.id} {...post} />)
+  if (isLoading) return <div>loading</div>;
+  if (isError) return <div>error</div>;
+
+  const postsComponents = data?.posts ? (
+    data?.posts.map((post) => <PostItem key={post.id} {...post} />)
   ) : (
     <div>no posts found in database</div>
   );
+
   return <div className='flex flex-col gap-2'>{postsComponents}</div>;
 };
 
