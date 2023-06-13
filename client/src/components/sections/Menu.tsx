@@ -13,9 +13,9 @@ const links = [
 ];
 
 const Menu: React.FC = () => {
-  const menuComponents = links.map(({ name, img, link }) => {
+  const menuComponents = links.map(({ name, img, link }, i) => {
     return (
-      <li>
+      <li key={i} className=' hover:text-activity'>
         <NavLink
           to={link}
           className={({ isActive }) =>

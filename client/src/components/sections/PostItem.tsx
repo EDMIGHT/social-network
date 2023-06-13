@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import Thumbnail from '@/components/ui/Thumbnail';
 import Typography from '@/components/ui/Typography';
@@ -10,7 +11,6 @@ const PostItem: React.FC<ResponsePost> = ({
   id,
   createdAt,
   img,
-
   likedById,
   text,
   title,
@@ -22,7 +22,7 @@ const PostItem: React.FC<ResponsePost> = ({
 }) => {
   return (
     <div className='flex flex-col gap-2 rounded bg-light-bg-content p-3'>
-      <div className='flex gap-2'>
+      <Link to={`/${user.login}`} className='flex gap-2 hover:opacity-80'>
         <div className='w-20'>
           <Thumbnail imgURL={user.img} alt={user.login} />
         </div>
@@ -30,11 +30,11 @@ const PostItem: React.FC<ResponsePost> = ({
           <Typography component='h3' variant='title-2'>
             {user.login}
           </Typography>
-          {createdAt && <Time time={createdAt}>created at:</Time>}
-          {updatedAt && <Time time={updatedAt}>updated at:</Time>}
+          {createdAt && <Time time={new Date(createdAt)}>created at:</Time>}
+          {updatedAt && <Time time={new Date(updatedAt)}>updated at:</Time>}
         </div>
-      </div>
-      <div className='h-96 bg-black'>
+      </Link>
+      <div className='h-96 cursor-pointer bg-black'>
         {img && <img src={img} alt={user.login} className='mx-auto h-full object-cover' />}
       </div>
       <Typography component='p' variant='text'>

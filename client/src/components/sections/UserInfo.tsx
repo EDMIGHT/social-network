@@ -13,7 +13,7 @@ interface UserInfoProps {
 const UserInfo: React.FC<UserInfoProps> = ({ name, login, imgURL }) => {
   return (
     <Link
-      to='/profile'
+      to={`/${login}`}
       className='flex h-28 items-center justify-center gap-2 rounded border-2 border-transparent bg-light-bg-content p-2 transition-all hover:border-activity'
     >
       <div className='h-20 w-2/6'>

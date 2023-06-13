@@ -5,7 +5,7 @@ import UserInfo from './UserInfo';
 
 const Dashboard: React.FC = () => {
   return (
-    <aside className='flex flex-col gap-4'>
+    <aside className='flex flex-col gap-2'>
       <UserInfo
         name='Alexey Latyshev'
         login='edmight'

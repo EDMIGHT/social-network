@@ -10,7 +10,7 @@ export default {
         layout: '1fr 3fr 1fr',
       },
       colors: {
-        'light-bg-main': '#f6f8f9',
+        'light-bg-main': '#ededed',
         'light-bg-content': '#fff',
         activity: '#84AFE6',
         highlight: '#8A84E2',
