@@ -5,12 +5,16 @@ interface ButtonProps {
   variant: 'activity' | 'highlight' | 'alert' | 'warn';
   className?: string;
   onClick?: any;
+  type?: 'button' | 'submit' | 'reset';
 }
 
-const Button: React.FC<ButtonProps> = ({ children, variant, className, onClick }) => {
+const Button: React.FC<ButtonProps> = ({ children, variant, className, onClick, type }) => {
+  const onClickHandler = typeof onClick === 'function' ? () => onClick() : undefined;
+
   return (
     <button
-      onClick={() => onClick()}
+      type={type ?? 'button'}
+      onClick={onClickHandler}
       className={`whitespace-nowrap rounded p-2 text-center ${variant} ${className}`}
     >
       {children}

@@ -26,12 +26,16 @@ const Header: React.FC = () => {
             alt='me'
           />
         </Link> */}
-        <Button variant='activity' className='w-1/6 hover:contrast-125'>
-          sign in
-        </Button>
-        <Button variant='highlight' className='w-1/6 hover:contrast-125'>
-          sign up
-        </Button>
+        <Link to='/signIn'>
+          <Button variant='activity' className='w-full hover:contrast-125'>
+            sign in
+          </Button>
+        </Link>
+        <Link to='/signIn'>
+          <Button variant='highlight' className='w-full hover:contrast-125'>
+            sign up
+          </Button>
+        </Link>
       </div>
     </header>
   );
