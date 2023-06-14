@@ -1,29 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/ui/Button';
+import Input from '@/components/ui/Input';
+import Typography from '@/components/ui/Typography';
+import { ILoginQuery, useLoginMutation } from '@/store/api/auth.api';
+import { setUserData } from '@/store/slices/user.slice';
 
-import Input from '../ui/Input';
-
-interface ILoginForm {
+export interface ILoginForm {
   login: string;
   password: string;
 }
 
 const LoginForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isLoginError, SetLoginError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ILoginForm>();
 
-  const onSubmit: SubmitHandler<ILoginForm> = (data) => {
-    console.log(data);
+  const [login, { isLoading, isError, isSuccess }] = useLoginMutation();
+
+  const onSubmit: SubmitHandler<ILoginForm> = async (data) => {
+    const response = (await login(data)) as ILoginQuery; // ? idk как типизировать ответ ртк правильно
+
+    if (response.error?.data.message) {
+      SetLoginError(response.error.data.message);
+    }
+
+    if (response.data) {
+      dispatch(setUserData(response.data));
+      navigate('/');
+    }
   };
+
+  // if (isLoading) return <div>loading</div>;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
       <Input
+        placeholder='enter login...'
         name='login'
         optionals={{
           ...register('login', {
@@ -39,6 +61,7 @@ const LoginForm: React.FC = () => {
         login
       </Input>
       <Input
+        placeholder='enter password...'
         name='password'
         optionals={{
           ...register('password', {
@@ -53,7 +76,15 @@ const LoginForm: React.FC = () => {
       >
         password
       </Input>
-
+      {isLoginError && (
+        <Typography
+          component='span'
+          variant='title-3'
+          className='pl-2 text-center font-bold text-red-700'
+        >
+          {isLoginError}
+        </Typography>
+      )}
       <Button type='submit' variant='activity' className='hover:contrast-125'>
         sign In
       </Button>

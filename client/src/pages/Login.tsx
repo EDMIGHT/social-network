@@ -12,7 +12,7 @@ const Login: React.FC = () => {
       <Typography component='h1' variant='title-2' className='text-[2rem] text-activity'>
         sign in
       </Typography>
-      <Card className='flex w-[350px] flex-col gap-4'>
+      <Card className='flex w-[350px] flex-col gap-2'>
         <LoginForm />
         <div className='flex gap-2'>
           <Link to='/' className='w-full'>

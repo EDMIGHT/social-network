@@ -1,16 +1,16 @@
 import React from 'react';
 
+import { useAppSelector } from '@/hooks/reduxHooks';
+
 import Menu from './Menu';
 import UserInfo from './UserInfo';
 
 const Dashboard: React.FC = () => {
+  const user = useAppSelector((state) => state.user.user);
+
   return (
     <aside className='flex flex-col gap-2'>
-      <UserInfo
-        name='Alexey Latyshev'
-        login='edmight'
-        imgURL='https://i.pinimg.com/564x/41/cf/a1/41cfa1f0553af546e6dd2a3bf70b59ba.jpg'
-      />
+      {user && <UserInfo name={user.name} login={user.login} imgURL={user.img} />}
       <Menu />
     </aside>
   );
