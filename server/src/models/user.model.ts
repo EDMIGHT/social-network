@@ -13,7 +13,7 @@ class UserModel implements IUserModel {
       where: { login },
     });
   }
-  async getUseById(id: string): Promise<User | null> {
+  async getUserById(id: string): Promise<User | null> {
     return prisma.user.findFirst({
       where: { id },
     });

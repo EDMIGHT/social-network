@@ -113,6 +113,20 @@ export const loginUser = async (request: Request, response: Response): Promise<R
   }
 };
 
+export const authMe = async (request: Request, response: Response): Promise<Response> => {
+  try {
+    const existedUser = await userModel.getUserById(request.user.id);
+
+    return customResponse.ok(response, createResponseUser(existedUser));
+  } catch (error) {
+    console.log(error);
+    return customResponse.serverError(response, {
+      id: request.user.id,
+      message: 'an error occurred on the server side while getting user information',
+    });
+  }
+};
+
 export const updateTokens = async (
   request: Request,
   response: Response

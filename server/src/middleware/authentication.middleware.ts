@@ -24,7 +24,7 @@ const authentication = async (
       dataFromToken.exp &&
       dataFromToken.exp > Math.floor(Date.now() / 1000)
     ) {
-      const existedUser = await userModel.getUseById(dataFromToken.id);
+      const existedUser = await userModel.getUserById(dataFromToken.id);
       if (existedUser) {
         request.user = dataFromToken;
         return next();

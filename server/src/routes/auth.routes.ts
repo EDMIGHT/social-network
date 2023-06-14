@@ -1,6 +1,7 @@
 import express from 'express';
 
-import { loginUser, registerUser, updateTokens } from '@/controllers/auth.controllers';
+import { authMe, loginUser, registerUser, updateTokens } from '@/controllers/auth.controllers';
+import authentication from '@/middleware/authentication.middleware';
 import validationHandler from '@/middleware/validationHandler.middleware';
 import { loginValidators, registerValidators } from '@/utils/validators/auth.validators';
 
@@ -170,9 +171,11 @@ router.post('/register', registerValidators, validationHandler, registerUser);
  */
 router.post('/login', loginValidators, validationHandler, loginUser);
 
+router.get('/me', authentication, authMe);
+
 /**
  * @openapi
- * 'auth/me':
+ * 'auth/token':
  *  post:
  *    tags:
  *    - auth 🚪
@@ -226,6 +229,6 @@ router.post('/login', loginValidators, validationHandler, loginUser);
  *                      format: date-time
  *                      example: 2023-06-07T08:36:47.171Z
  */
-router.post('/me', updateTokens);
+router.post('/token', updateTokens);
 
 export default router;
