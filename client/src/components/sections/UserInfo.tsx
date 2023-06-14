@@ -19,7 +19,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ name, login, imgURL }) => {
           <Thumbnail imgURL={imgURL} alt={name} />
         </div>
         <div className='flex w-4/6 flex-col'>
-          <Typography component='h2' variant='title-2'>
+          <Typography component='h2' variant='title-1'>
             {name}
           </Typography>
           <Typography component='span' variant='description'>

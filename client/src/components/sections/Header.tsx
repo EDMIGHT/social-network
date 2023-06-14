@@ -17,7 +17,7 @@ const Header: React.FC = () => {
       <div className='flex h-full justify-end gap-2'>
         <Search placeholder='search' className='w-full' />
         <img src={moonIcon} alt='dark-theme' className='cursor-pointer hover:contrast-125' />
-        <Link
+        {/* <Link
           to='/profile'
           className='w-1/6 rounded border-2 border-transparent transition-all hover:border-activity'
         >
@@ -25,9 +25,13 @@ const Header: React.FC = () => {
             imgURL='https://i.pinimg.com/564x/41/cf/a1/41cfa1f0553af546e6dd2a3bf70b59ba.jpg'
             alt='me'
           />
-        </Link>
-        {/* <Button text='sign in' variant='activity' className='w-1/6' />
-        <Button text='sign up' variant='highlight' className='w-1/6' /> */}
+        </Link> */}
+        <Button variant='activity' className='w-1/6 hover:contrast-125'>
+          sign in
+        </Button>
+        <Button variant='highlight' className='w-1/6 hover:contrast-125'>
+          sign up
+        </Button>
       </div>
     </header>
   );

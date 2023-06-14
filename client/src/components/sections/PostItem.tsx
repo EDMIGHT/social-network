@@ -27,7 +27,7 @@ const PostItem: React.FC<ResponsePost> = ({
           <Thumbnail imgURL={user.img} alt={user.login} />
         </div>
         <div className='flex flex-col justify-center'>
-          <Typography component='h3' variant='title-2'>
+          <Typography component='h3' variant='title-1'>
             {user.login}
           </Typography>
           {createdAt && <Time time={new Date(createdAt)}>created at:</Time>}

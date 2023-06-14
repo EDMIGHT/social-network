@@ -21,7 +21,7 @@ const MenuItem: React.FC<MenuItemProps> = ({ name, img, link }) => {
         }
       >
         <img src={img} alt={name} className='h-12' />
-        <Typography component='span' variant='title-2'>
+        <Typography component='span' variant='title-1'>
           {name}
         </Typography>
       </NavLink>

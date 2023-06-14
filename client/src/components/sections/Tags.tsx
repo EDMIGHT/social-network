@@ -1,26 +1,30 @@
 import React from 'react';
 
 import Card from '@/components/ui/Card';
-import { useGetAllTagsQuery } from '@/store/api/tags.api';
+import { Tag as ITag } from '@/types/tag.types';
 
-const Tags: React.FC = () => {
-  const { isError, isLoading, data } = useGetAllTagsQuery(null, {});
+import Tag, { TagProps } from './Tag';
 
+export interface TagsProps extends Pick<TagProps, 'onClick'> {
+  data: ITag[] | undefined;
+  status?: {
+    isLoading: boolean;
+    isError: boolean;
+  };
+}
+
+const Tags: React.FC<TagsProps> = ({ onClick, data, status }) => {
   const tagElements = data ? (
-    data.map(({ name, id }) => (
-      <li key={id} className='basis-auto flex-wrap whitespace-nowrap rounded bg-highlight p-1'>
-        {name}
-      </li>
-    ))
+    data.map(({ name, id }) => <Tag key={id} id={id} name={name} onClick={onClick} />)
   ) : (
     <li>no tags found in database</li>
   );
 
-  if (isError) return <div>error</div>;
-  if (isLoading) return <div>loading</div>;
+  if (status?.isError) return <div>error</div>;
+  if (status?.isLoading) return <div>loading</div>;
 
   return (
-    <Card>
+    <Card className='flex flex-col gap-2'>
       <ul className='flex flex-wrap gap-2'>{tagElements}</ul>
     </Card>
   );

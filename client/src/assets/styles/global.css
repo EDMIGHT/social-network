@@ -5,16 +5,16 @@
 @layer components {
   /* typography */
   .title-1 {
-    @apply font-[700] text-[3rem];
+    @apply font-[700] text-[1rem];
   }
   .title-2 {
-    @apply font-[500] text-[1.25rem];
+    @apply font-[700] text-[1rem] uppercase;
   }
   .title-3 {
     @apply font-[400] text-base;
   }
   .description {
-    @apply font-[400] italic text-sm text-opacity-10;
+    @apply font-[400] italic text-sm;
   }
   .text {
     @apply font-[400] text-base;
