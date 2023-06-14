@@ -1,4 +1,4 @@
-import { User } from '@prisma/client';
+import { Post, User } from '@prisma/client';
 
 import prisma from '@/db/prisma';
 import { RegisterUser } from '@/types/auth.types';
@@ -16,6 +16,19 @@ class UserModel implements IUserModel {
   async getUserById(id: string): Promise<User | null> {
     return prisma.user.findFirst({
       where: { id },
+    });
+  }
+  async getUserByLoginWithPosts(login: string): Promise<
+    | (User & {
+        createdPosts: Post[];
+      })
+    | null
+  > {
+    return prisma.user.findUnique({
+      where: { login },
+      include: {
+        createdPosts: true,
+      },
     });
   }
 }
