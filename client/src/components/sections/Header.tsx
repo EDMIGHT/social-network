@@ -1,14 +1,42 @@
-import React from 'react';
+import clsx from 'clsx';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import moonIcon from '@/assets/icons/moon.svg';
 import Button from '@/components/ui/Button';
+import Card from '@/components/ui/Card';
 import Search from '@/components/ui/Search';
 import Thumbnail from '@/components/ui/Thumbnail';
+import Typography from '@/components/ui/Typography';
 import { useAppSelector } from '@/hooks/reduxHooks';
+import useLogout from '@/hooks/useLogout';
 
 const Header: React.FC = () => {
   const user = useAppSelector((state) => state.user.user);
+  const logout = useLogout();
+
+  const [isActivePopup, setActivePopup] = useState(false);
+  const popupRef = useRef(null);
+
+  const onClickThumbnail = () => {
+    setActivePopup((prev) => !prev);
+  };
+
+  const onClickLogout = () => {
+    logout();
+  };
+
+  useEffect(() => {
+    const clickHandler = (e: MouseEvent) => {
+      if (popupRef.current && !e.composedPath().includes(popupRef.current)) {
+        setActivePopup(false);
+      }
+    };
+
+    document.body.addEventListener('click', clickHandler);
+
+    return () => document.body.removeEventListener('click', clickHandler);
+  }, []);
 
   return (
     <header className='flex h-full max-h-16 flex-row items-center justify-between rounded bg-light-bg-content p-3'>
@@ -21,12 +49,36 @@ const Header: React.FC = () => {
         <Search placeholder='search' className='w-full' />
         <img src={moonIcon} alt='dark-theme' className='cursor-pointer hover:contrast-125' />
         {user ? (
-          <Link
-            to={`/${user.login}`}
-            className='w-1/6 rounded border-2 border-transparent transition-all hover:border-activity'
-          >
-            <Thumbnail imgURL={user.img} alt='me' />
-          </Link>
+          <div className='relative inline-block w-1/6' ref={popupRef}>
+            <button className='h-full w-full' onClick={onClickThumbnail}>
+              <Thumbnail imgURL={user.img} alt='me' />
+            </button>
+            <div
+              className={clsx(
+                !isActivePopup && 'opacity-0',
+                'absolute -left-1 top-full mt-1 -translate-x-1/2 transition-all'
+              )}
+            >
+              <Card className='bg-activity'>
+                <ul className='cursor-pointer'>
+                  <li className='block w-full hover:text-white'>
+                    <Link to={`/${user.login}`}>
+                      <Typography component='span' variant='title-2'>
+                        profile
+                      </Typography>
+                    </Link>
+                  </li>
+                  <li className='hover:text-white'>
+                    <button onClick={onClickLogout}>
+                      <Typography component='span' variant='title-2'>
+                        logout
+                      </Typography>
+                    </button>
+                  </li>
+                </ul>
+              </Card>
+            </div>
+          </div>
         ) : (
           <>
             <Link to='/signIn'>

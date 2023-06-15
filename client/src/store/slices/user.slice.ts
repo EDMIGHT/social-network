@@ -20,11 +20,12 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserData: (state, action: PayloadAction<ResponseAuth>) => {
-      state.user = action.payload.user;
-      state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
-      state.expiresIn = action.payload.expiresIn;
+    setUserData: (state, action: PayloadAction<ResponseAuth | null>) => {
+      const { user, accessToken, refreshToken, expiresIn } = action.payload || {};
+      state.user = user || null;
+      state.accessToken = accessToken || null;
+      state.refreshToken = refreshToken || null;
+      state.expiresIn = expiresIn || null;
     },
     setUser: (state, action: PayloadAction<ResponseUser>) => {
       state.user = action.payload;
