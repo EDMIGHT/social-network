@@ -1,5 +1,6 @@
 import { ILoginForm } from '@/components/sections/LoginForm';
-import { ResponseAuth, ResponseUser } from '@/types/user.types';
+import { ResponseAuth } from '@/types/responses.types';
+import { ResponseUser } from '@/types/user.types';
 
 import { api } from './api';
 

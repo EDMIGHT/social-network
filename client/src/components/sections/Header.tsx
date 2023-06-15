@@ -11,6 +11,8 @@ import Typography from '@/components/ui/Typography';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import useLogout from '@/hooks/useLogout';
 
+import Popup from '../ui/Popup';
+
 const Header: React.FC = () => {
   const user = useAppSelector((state) => state.user.user);
   const logout = useLogout();
@@ -34,7 +36,6 @@ const Header: React.FC = () => {
     };
 
     document.body.addEventListener('click', clickHandler);
-
     return () => document.body.removeEventListener('click', clickHandler);
   }, []);
 
@@ -53,31 +54,24 @@ const Header: React.FC = () => {
             <button className='h-full w-full' onClick={onClickThumbnail}>
               <Thumbnail imgURL={user.img} alt='me' />
             </button>
-            <div
-              className={clsx(
-                !isActivePopup && 'opacity-0',
-                'absolute -left-1 top-full mt-1 -translate-x-1/2 transition-all'
-              )}
-            >
-              <Card className='bg-activity'>
-                <ul className='cursor-pointer'>
-                  <li className='block w-full hover:text-white'>
-                    <Link to={`/${user.login}`}>
-                      <Typography component='span' variant='title-2'>
-                        profile
-                      </Typography>
-                    </Link>
-                  </li>
-                  <li className='hover:text-white'>
-                    <button onClick={onClickLogout}>
-                      <Typography component='span' variant='title-2'>
-                        logout
-                      </Typography>
-                    </button>
-                  </li>
-                </ul>
-              </Card>
-            </div>
+            <Popup isActive={isActivePopup}>
+              <ul className='cursor-pointer'>
+                <li className='block w-full p-2 hover:text-white'>
+                  <Link to={`/${user.login}`}>
+                    <Typography component='span' variant='title-2'>
+                      profile
+                    </Typography>
+                  </Link>
+                </li>
+                <li className='p-2 hover:text-white'>
+                  <button onClick={onClickLogout}>
+                    <Typography component='span' variant='title-2'>
+                      logout
+                    </Typography>
+                  </button>
+                </li>
+              </ul>
+            </Popup>
           </div>
         ) : (
           <>

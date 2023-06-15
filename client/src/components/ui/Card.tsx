@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 interface CardProps {
@@ -6,7 +7,7 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ children, className }) => {
-  return <div className={`rounded bg-light-bg-content p-3 ${className}`}>{children}</div>;
+  return <div className={clsx('rounded bg-light-bg-content p-3', className)}>{children}</div>;
 };
 
 export default Card;
