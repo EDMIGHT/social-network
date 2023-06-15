@@ -26,9 +26,12 @@ const userSlice = createSlice({
       state.refreshToken = action.payload.refreshToken;
       state.expiresIn = action.payload.expiresIn;
     },
+    setUser: (state, action: PayloadAction<ResponseUser>) => {
+      state.user = action.payload;
+    },
   },
 });
 
-export const { setUserData } = userSlice.actions;
+export const { setUserData, setUser } = userSlice.actions;
 
 export default userSlice.reducer;

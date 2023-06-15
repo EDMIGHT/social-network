@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Typography from '@/components/ui/Typography';
+import useLocalStorage from '@/hooks/useLocalStorage';
 import { ILoginQuery, useLoginMutation } from '@/store/api/auth.api';
 import { setUserData } from '@/store/slices/user.slice';
 
@@ -17,6 +18,7 @@ export interface ILoginForm {
 const LoginForm: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [setLocalStorage] = useLocalStorage();
   const [isLoginError, SetLoginError] = useState<string | null>(null);
 
   const {
@@ -36,6 +38,10 @@ const LoginForm: React.FC = () => {
 
     if (response.data) {
       dispatch(setUserData(response.data));
+
+      setLocalStorage('accessToken', response.data.accessToken);
+      setLocalStorage('refreshToken', response.data.refreshToken);
+
       navigate('/');
     }
   };
