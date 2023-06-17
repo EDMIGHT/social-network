@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Typography from '@/components/ui/Typography';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
@@ -11,6 +11,7 @@ import Tags from './Tags';
 const Aside: React.FC = () => {
   const dispatch = useAppDispatch();
   const followedTags = useAppSelector((state) => state.options.tags);
+  const [filteredTags, setFilteredTags] = useState<typeof followedTags>([]);
 
   const { isError, isLoading, data } = useGetAllTagsQuery(null, {});
 
@@ -23,19 +24,34 @@ const Aside: React.FC = () => {
     dispatch(removeTag(tag));
   };
 
+  useEffect(() => {
+    const filter = data?.length
+      ? data.filter((tag) => !followedTags.some((followedTag) => followedTag.id === tag.id))
+      : [];
+    setFilteredTags(filter);
+  }, [data, followedTags]);
+
   return (
     <div>
       <div>
         <Typography component='h2' variant='title-2' className='ml-2 text-activity'>
           followed tags
         </Typography>
-        <Tags onClick={onClickFollowedTag} data={followedTags} />
+        <Tags
+          onClick={onClickFollowedTag}
+          data={followedTags}
+          emptyText='select tags to filter in the all tags section'
+        />
       </div>
       <div>
         <Typography component='h2' variant='title-2' className='ml-2 text-activity'>
           all tags
         </Typography>
-        <Tags onClick={onClickAllTag} data={data} status={status} />
+        <Tags
+          onClick={onClickAllTag}
+          data={filteredTags}
+          emptyText='there are no tags in the database'
+        />
       </div>
     </div>
   );

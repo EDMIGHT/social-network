@@ -3,17 +3,25 @@ import { useParams } from 'react-router-dom';
 
 import Posts from '@/components/sections/Posts';
 import ProfileHeader from '@/components/sections/ProfileHeader';
+import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetProfilePostsQuery, useGetProfileQuery } from '@/services/profile.service';
+import formatTagsForQuery from '@/utils/formatTagsForQuery';
 
 const Profile: React.FC = () => {
   const { login } = useParams();
+  const { tags } = useAppSelector((state) => state.options);
 
   const { data, isLoading, isError } = useGetProfileQuery(login as string);
+  const tagsQuery = tags && formatTagsForQuery(tags);
+
   const {
     data: postsData,
     isLoading: isPostsLoading,
     isError: isPostsError,
-  } = useGetProfilePostsQuery(login as string);
+  } = useGetProfilePostsQuery({
+    login: login as string,
+    tags: tagsQuery,
+  });
 
   if (isLoading && isPostsLoading) return <div>loading</div>;
   if (isError && isPostsError) return <div>error</div>;

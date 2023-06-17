@@ -40,7 +40,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
         </div>
 
         <div className='flex justify-around'>
-          <div className='flex flex-col items-center justify-center gap-1'>
+          <div className='flex flex-col items-center justify-between gap-1'>
             <Typography component='h3' variant='text'>
               posts
             </Typography>
@@ -62,7 +62,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               />
             </svg>
           </div>
-          <div className='flex flex-col items-center justify-center gap-1'>
+          <div className='flex flex-col items-center justify-between gap-1'>
             <Typography component='h3' variant='text'>
               views
             </Typography>
@@ -89,7 +89,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
               />
             </svg>
           </div>
-          <div className='flex flex-col items-center justify-center gap-1'>
+          <div className='flex flex-col items-center justify-between gap-1'>
             <Typography component='h3' variant='text'>
               followers
             </Typography>
