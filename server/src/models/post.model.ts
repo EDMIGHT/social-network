@@ -11,7 +11,9 @@ interface Query {
       };
     };
   };
-  userId?: string;
+  user?: {
+    login: string;
+  };
 }
 
 interface QueryUpdate {
@@ -39,7 +41,7 @@ class PostModel {
   }
 
   public async get({
-    userId,
+    login,
     offset,
     limit,
     sort,
@@ -57,8 +59,10 @@ class PostModel {
         },
       };
     }
-    if (userId) {
-      query.userId = userId;
+    if (login) {
+      query.user = {
+        login,
+      };
     }
 
     return prisma.post.findMany({

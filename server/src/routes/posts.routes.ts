@@ -180,11 +180,11 @@ router.get('/all', getAllPosts);
 
 /**
  * @openapi
- * posts/all/:userId:
+ * posts/all/:login:
  *  get:
  *    tags:
  *    - posts 📰
- *    summary: Getting all posts by a userId
+ *    summary: Getting all posts by a login
  *    parameters:
  *      - in: path
  *        name: id
@@ -344,7 +344,7 @@ router.get('/all', getAllPosts);
  *                      type: string
  *                      example: createdAt
  */
-router.get('/all/:userId', getPosts);
+router.get('/all/:login', getPosts);
 
 /**
  * @openapi
