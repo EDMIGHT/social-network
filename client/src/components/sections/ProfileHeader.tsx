@@ -17,7 +17,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 }) => {
   return (
     <Card className='flex w-full gap-2'>
-      <div className=' max-w-[170px]'>
+      <div className='w-[220px]'>
         <Thumbnail imgURL={img} alt={login} />
       </div>
 

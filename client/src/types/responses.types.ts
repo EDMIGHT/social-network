@@ -11,7 +11,7 @@ export interface PostQuery {
   order?: 'asc' | 'desc';
 }
 
-export interface ResponseGetAllPost {
+export interface ResponsePostsPagination {
   posts: ResponsePost[];
   currentPage: number;
   totalPages: number;

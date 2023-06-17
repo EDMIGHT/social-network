@@ -7,7 +7,7 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Typography from '@/components/ui/Typography';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { ILoginQuery, useLoginMutation } from '@/store/api/auth.api';
+import { ILoginQuery, useLoginMutation } from '@/services/auth.service';
 import { setUserData } from '@/store/slices/user.slice';
 
 export interface ILoginForm {

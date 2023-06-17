@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import { api } from '@/store/api/api';
+import { api } from '@/services/api';
 
 import * as reducers from './slices';
 

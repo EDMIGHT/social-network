@@ -1,6 +1,6 @@
 import { useAppDispatch } from '@/hooks/reduxHooks';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { authApi } from '@/store/api/auth.api';
+import { authApi } from '@/services/auth.service';
 import { setUser } from '@/store/slices/user.slice';
 
 const useAuthentication = (): (() => Promise<void>) => {

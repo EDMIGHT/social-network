@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 import moonIcon from '@/assets/icons/moon.svg';
 import Button from '@/components/ui/Button';
-import Card from '@/components/ui/Card';
 import Search from '@/components/ui/Search';
 import Thumbnail from '@/components/ui/Thumbnail';
 import Typography from '@/components/ui/Typography';
@@ -23,8 +22,11 @@ const Header: React.FC = () => {
   const onClickThumbnail = () => {
     setActivePopup((prev) => !prev);
   };
-
+  const onClickPopupItem = () => {
+    setActivePopup(false);
+  };
   const onClickLogout = () => {
+    setActivePopup(false);
     logout();
   };
 
@@ -55,9 +57,9 @@ const Header: React.FC = () => {
               <Thumbnail imgURL={user.img} alt='me' />
             </button>
             <Popup isActive={isActivePopup}>
-              <ul className='cursor-pointer'>
+              <ul className={clsx('cursor-pointer', !isActivePopup && 'hidden')}>
                 <li className='block w-full p-2 hover:text-white'>
-                  <Link to={`/${user.login}`}>
+                  <Link to={`/${user.login}`} onClick={onClickPopupItem}>
                     <Typography component='span' variant='title-2'>
                       profile
                     </Typography>

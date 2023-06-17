@@ -2,7 +2,7 @@ import React from 'react';
 
 import Typography from '@/components/ui/Typography';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
-import { useGetAllTagsQuery } from '@/store/api/tags.api';
+import { useGetAllTagsQuery } from '@/services/tags.service';
 import { addTag, removeTag } from '@/store/slices/options.slice';
 import { Tag } from '@/types/tag.types';
 
