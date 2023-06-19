@@ -11,7 +11,11 @@ const App = React.memo(() => {
   const fetchAuth = useAuthentication();
 
   useEffect(() => {
-    fetchAuth();
+    try {
+      fetchAuth();
+    } catch (error) {
+      console.log('da ', error);
+    }
   }, []);
 
   return (

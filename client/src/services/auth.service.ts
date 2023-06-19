@@ -27,7 +27,10 @@ export const authApi = api.injectEndpoints({
         },
       }),
     }),
+    token: builder.mutation<ILoginQuery, string>({
+      query: (refreshToken) => ({ url: 'auth/token', method: 'POST', refreshToken }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useAuthMeQuery } = authApi;
+export const { useLoginMutation, useAuthMeQuery, useTokenMutation } = authApi;

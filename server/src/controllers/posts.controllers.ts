@@ -20,20 +20,11 @@ export const getAllPosts = async (request: Request, response: Response): Promise
       tags: tagList,
     });
 
-    if (posts?.length) {
-      return customResponse.ok(response, {
-        posts,
-        currentPage: page,
-        totalPages: Math.floor(totalPostsCount / +limit),
-      });
-    } else {
-      return customResponse.badRequest(response, {
-        message: 'invalid request query',
-        query: {
-          ...request.query,
-        },
-      });
-    }
+    return customResponse.ok(response, {
+      posts,
+      currentPage: page,
+      totalPages: Math.floor(totalPostsCount / +limit),
+    });
   } catch (error) {
     console.log(error);
     return customResponse.serverError(response, {
@@ -62,20 +53,11 @@ export const getPosts = async (request: Request, response: Response): Promise<Re
       tags: tagList,
     });
 
-    if (posts?.length) {
-      return customResponse.ok(response, {
-        posts,
-        currentPage: page,
-        totalPages: Math.floor(totalPostsCount / +limit),
-      });
-    } else {
-      return customResponse.badRequest(response, {
-        message: 'invalid request query',
-        query: {
-          ...request.query,
-        },
-      });
-    }
+    return customResponse.ok(response, {
+      posts,
+      currentPage: page,
+      totalPages: Math.floor(totalPostsCount / +limit),
+    });
   } catch (error) {
     console.log(error);
     return customResponse.serverError(response, {
