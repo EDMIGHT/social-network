@@ -13,15 +13,9 @@ const useAuthentication = (): (() => Promise<void>) => {
     if (!accessToken) {
       return;
     }
-    try {
-      const { data, isSuccess } = await dispatch(
-        authApi.endpoints.authMe.initiate(accessToken)
-      );
-      if (isSuccess && data) {
-        dispatch(setUser(data));
-      }
-    } catch (error) {
-      console.error(error);
+    const { data, isSuccess } = await dispatch(authApi.endpoints.authMe.initiate(accessToken));
+    if (isSuccess && data) {
+      dispatch(setUser(data));
     }
   };
 

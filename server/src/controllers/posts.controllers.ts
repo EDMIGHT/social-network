@@ -95,7 +95,7 @@ export const createPost = async (request: Request, response: Response): Promise<
   try {
     const tagList = tags ? (tags as string).split(',') : [];
 
-    const existedTags = await tagModel.getTagsById(tagList);
+    const existedTags = await tagModel.getTagsByName(tagList);
 
     if (existedTags?.length === tagList.length) {
       const post = await postModel.create({

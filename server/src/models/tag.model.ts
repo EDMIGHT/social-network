@@ -55,6 +55,15 @@ class TagModel {
       },
     });
   }
+  public getTagsByName(names: string[]): Promise<Tag[] | null> {
+    return prisma.tag.findMany({
+      where: {
+        name: {
+          in: names,
+        },
+      },
+    });
+  }
 
   public create(data: CreateArgs): Promise<Tag> {
     return prisma.tag.create({ data });

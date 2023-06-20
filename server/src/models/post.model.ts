@@ -34,7 +34,7 @@ class PostModel {
       data: {
         ...data,
         tags: {
-          connect: data.tags.map((tagId) => ({ id: tagId.trim() })),
+          connect: data.tags.map((tagName) => ({ name: tagName.trim() })),
         },
       },
     });

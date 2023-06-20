@@ -1,5 +1,6 @@
 import React from 'react';
 
+import CreatePost from '@/components/sections/CreatePost';
 import Posts from '@/components/sections/Posts';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetAllPostsQuery } from '@/services/api';
@@ -16,7 +17,8 @@ const Home: React.FC = () => {
   if (isError) return <div>error</div>;
 
   return (
-    <div className=''>
+    <div className='flex flex-col gap-2'>
+      <CreatePost />
       <Posts posts={data?.posts} />
     </div>
   );

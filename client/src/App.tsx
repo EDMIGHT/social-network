@@ -1,22 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import useAuthentication from '@/hooks/useAuthentication';
+import { useAutoLogin } from '@/hooks/useAutoLogin';
 import MainLayout from '@/layouts/MainLayout';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import Profile from '@/pages/Profile';
 
 const App = React.memo(() => {
-  const fetchAuth = useAuthentication();
-
-  useEffect(() => {
-    try {
-      fetchAuth();
-    } catch (error) {
-      console.log('da ', error);
-    }
-  }, []);
+  useAutoLogin();
 
   return (
     <Routes>

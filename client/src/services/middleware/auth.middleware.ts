@@ -11,7 +11,6 @@ interface RefreshResult {
 }
 
 const authMiddleware: Middleware = (store) => (next) => async (action) => {
-  const navigate = useNavigate();
   const [setLocal, getLocal] = useLocalStorage();
 
   if (isRejectedWithValue(action) && action.payload.status === 401) {
@@ -39,8 +38,7 @@ const authMiddleware: Middleware = (store) => (next) => async (action) => {
       }
     }
 
-    // обработка ошибки обновления токена
-    navigate('/signIn');
+    // ! найти способ как доставать ошибку до того, как toolkit её сьест
   }
 
   return next(action);
