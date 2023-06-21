@@ -11,7 +11,6 @@ const PostItem: React.FC<ResponsePost> = ({
   id,
   createdAt,
   img,
-  likedById,
   text,
   title,
   updatedAt,

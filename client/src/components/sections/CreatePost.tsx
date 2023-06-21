@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
+import Typography from '@/components/ui/Typography';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useCreatePostMutation } from '@/services/post.service';
+
+import UploadPhoto from './UploadPhoto';
 
 export interface ICreatePost {
   text: string;
 }
 
-const CreaterPost: React.FC = () => {
+const CreatePost: React.FC = () => {
   const {
     register,
     handleSubmit,
@@ -29,7 +32,9 @@ const CreaterPost: React.FC = () => {
   };
 
   return (
-    <Card>
+    <Card className='flex flex-col gap-2'>
+      <UploadPhoto />
+
       <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
         <Input
           name='text'
@@ -55,4 +60,4 @@ const CreaterPost: React.FC = () => {
   );
 };
 
-export default CreaterPost;
+export default CreatePost;
