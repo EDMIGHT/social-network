@@ -20,7 +20,6 @@ export interface ResponsePostsPagination {
 export interface ResponseAuth {
   accessToken: string;
   refreshToken: string;
-  expiresIn: number;
   user: ResponseUser;
 }
 

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { useAutoLogin } from '@/hooks/useAutoLogin';
+import useAuthentication from '@/hooks/useAuthentication';
 import MainLayout from '@/layouts/MainLayout';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
 import Profile from '@/pages/Profile';
 
 const App = React.memo(() => {
-  useAutoLogin();
+  useAuthentication();
 
   return (
     <Routes>

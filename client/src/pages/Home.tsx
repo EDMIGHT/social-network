@@ -3,7 +3,7 @@ import React from 'react';
 import CreatePost from '@/components/sections/CreatePost';
 import Posts from '@/components/sections/Posts';
 import { useAppSelector } from '@/hooks/reduxHooks';
-import { useGetAllPostsQuery } from '@/services/api';
+import { useGetAllPostsQuery } from '@/services/post.service';
 import formatTagsForQuery from '@/utils/formatTagsForQuery';
 
 const Home: React.FC = () => {

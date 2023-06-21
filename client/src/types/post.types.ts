@@ -10,10 +10,16 @@ export interface Post {
   createdAt: Date;
   updatedAt: Date | null;
   userId: string;
-  likedById: string | null;
 }
 
 export type ResponsePost = Post & {
   tags: Tag[];
   user: Pick<User, 'login' | 'img' | 'name'>;
 };
+
+export interface CreatePostQuery {
+  accessToken: string;
+  text: string;
+  tags: string;
+  img?: string;
+}

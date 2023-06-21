@@ -5,7 +5,7 @@ export const createPostValidators = [
     .isString()
     .trim()
     .isLength({ min: 1 }),
-  check('tags', 'invalid tag format, string expected').isString().trim(),
+  // check('tags', 'invalid tag format, string expected').isString().trim(),
   check('img', 'wrong path for image, , string expected').optional().isString(),
 ];
 

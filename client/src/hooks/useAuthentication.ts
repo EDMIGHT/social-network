@@ -1,25 +1,31 @@
-import { useAppDispatch } from '@/hooks/reduxHooks';
-import useLocalStorage from '@/hooks/useLocalStorage';
-import { authApi } from '@/services/auth.service';
-import { setUser } from '@/store/slices/user.slice';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const useAuthentication = (): (() => Promise<void>) => {
-  const [setLocalStorage, getLocalStorage] = useLocalStorage();
+import { useAuthMeQuery } from '@/services/auth.service';
+import { setUser, setUserData } from '@/store/slices/user.slice';
+
+import { useAppDispatch } from './reduxHooks';
+import useLocalStorage from './useLocalStorage';
+
+const useAuthentication = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [setLocalStorage, getLocalStorage] = useLocalStorage();
 
-  const accessToken = getLocalStorage('accessToken') as string | null;
+  const accessToken = (getLocalStorage('accessToken') || '') as string;
+  const refreshToken = (getLocalStorage('refreshToken') || '') as string;
 
-  const auth = async () => {
-    if (!accessToken) {
-      return;
-    }
-    const { data, isSuccess } = await dispatch(authApi.endpoints.authMe.initiate(accessToken));
+  const { data, isSuccess, isError } = useAuthMeQuery(accessToken);
+
+  useEffect(() => {
     if (isSuccess && data) {
       dispatch(setUser(data));
+      dispatch(setUserData({ user: data, accessToken, refreshToken }));
     }
-  };
-
-  return auth;
+    if (isError) {
+      navigate('/signIn');
+    }
+  }, [isSuccess, isError, data]);
 };
 
 export default useAuthentication;

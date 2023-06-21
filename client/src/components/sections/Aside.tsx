@@ -10,12 +10,10 @@ import Tags from './Tags';
 
 const Aside: React.FC = () => {
   const dispatch = useAppDispatch();
-  const followedTags = useAppSelector((state) => state.options.tags);
-  const [filteredTags, setFilteredTags] = useState<typeof followedTags>([]);
+  const selectedTags = useAppSelector((state) => state.options.tags);
+  const [filteredTags, setFilteredTags] = useState<typeof selectedTags>([]);
 
   const { isError, isLoading, data } = useGetAllTagsQuery(null, {});
-
-  const status = { isError, isLoading };
 
   const onClickAllTag = (tag: Tag) => {
     dispatch(addTag(tag));
@@ -26,20 +24,20 @@ const Aside: React.FC = () => {
 
   useEffect(() => {
     const filter = data?.length
-      ? data.filter((tag) => !followedTags.some((followedTag) => followedTag.id === tag.id))
+      ? data.filter((tag) => !selectedTags.some((followedTag) => followedTag.id === tag.id))
       : [];
     setFilteredTags(filter);
-  }, [data, followedTags]);
+  }, [data, selectedTags]);
 
   return (
     <div>
       <div>
         <Typography component='h2' variant='title-2' className='ml-2 text-activity'>
-          followed tags
+          selected tags
         </Typography>
         <Tags
           onClick={onClickFollowedTag}
-          data={followedTags}
+          data={selectedTags}
           emptyText='select tags to filter in the all tags section'
         />
       </div>
