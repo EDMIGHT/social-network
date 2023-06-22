@@ -27,7 +27,7 @@ const PostItem: React.FC<ResponsePost> = ({
         </div>
         <div className='flex flex-col justify-center'>
           <Typography component='h3' variant='title-1'>
-            {user.login}
+            {user.name}
           </Typography>
           {createdAt && <Time time={new Date(createdAt)}>created at:</Time>}
           {updatedAt && <Time time={new Date(updatedAt)}>updated at:</Time>}

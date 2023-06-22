@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --background: #ededed;
+    --foreground: #000;
+
+    --primary: #84afe6;
+    --primary-foreground: #000;
+
+    --accent: #8a84e2;
+    --accent-foreground: #000;
+
+    --card: #fff;
+    --card-foreground: #000;
+
+    --input: #ededed;
+    --input-foreground: #9da9b9;
+  }
+
+  .dark {
+    --background: #121212;
+    --foreground: #e3e3e3;
+
+    --primary: #7498c6;
+    --primary-foreground: #000;
+
+    --accent: #706bb8;
+    --accent-foreground: #000;
+
+    --card: #1e1e1e;
+    --card-foreground: #e3e3e3;
+
+    --input: #121212;
+    --input-foreground: #9da9b9;
+  }
+}
+
 @layer components {
   /* typography */
   .title-1 {
@@ -22,13 +58,13 @@
 
   /* buttons */
   .activity {
-    @apply bg-activity;
+    @apply bg-primary;
   }
   .highlight {
-    @apply bg-highlight;
+    @apply bg-accent;
   }
 }
 
 body {
-  @apply bg-light-bg-main font-open-sans;
+  @apply bg-background text-foreground font-open-sans;
 }

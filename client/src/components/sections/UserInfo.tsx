@@ -13,7 +13,7 @@ interface UserInfoProps {
 
 const UserInfo: React.FC<UserInfoProps> = ({ name, login, imgURL }) => {
   return (
-    <Card className='border-2 border-transparent p-0 transition-all hover:border-activity'>
+    <Card className='border-2 border-transparent p-0 transition-all hover:border-primary'>
       <Link to={`/${login}`} className='flex items-center justify-center gap-2 p-2'>
         <div className='h-20 w-2/6 min-w-[80px]'>
           <Thumbnail imgURL={imgURL} alt={login} />

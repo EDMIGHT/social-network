@@ -32,7 +32,7 @@ const Aside: React.FC = () => {
   return (
     <div>
       <div>
-        <Typography component='h2' variant='title-2' className='ml-2 text-activity'>
+        <Typography component='h2' variant='title-2' className='ml-2 text-primary'>
           selected tags
         </Typography>
         <Tags
@@ -42,7 +42,7 @@ const Aside: React.FC = () => {
         />
       </div>
       <div>
-        <Typography component='h2' variant='title-2' className='ml-2 text-activity'>
+        <Typography component='h2' variant='title-2' className='ml-2 text-primary'>
           all tags
         </Typography>
         <Tags

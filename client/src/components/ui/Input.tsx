@@ -5,7 +5,7 @@ import Typography from './Typography';
 interface InputProps {
   name: string;
   error?: string;
-  optionals?: any;
+  optionals?: object;
   children: string;
   placeholder?: string;
 }
@@ -21,7 +21,7 @@ const Input: React.FC<InputProps> = ({ name, error, optionals, children, placeho
         placeholder={placeholder}
         name={name}
         id={name}
-        className='w-full cursor-pointer rounded border-2 border-transparent bg-light-bg-main p-2 transition-all hover:border-activity focus:border-activity focus:outline-none active:border-activity'
+        className='w-full cursor-pointer rounded border-2 border-transparent bg-input p-2 transition-all hover:border-primary focus:border-primary focus:outline-none active:border-primary'
       />
       {error && (
         <Typography

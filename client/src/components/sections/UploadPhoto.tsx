@@ -12,13 +12,13 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({ onChangeFile }) => {
   return (
     <>
       <button
-        className='h-96 w-full rounded bg-light-bg-main p-2'
+        className='h-96 w-full rounded bg-background p-2'
         onClick={() => inputFileRef.current && inputFileRef.current.click()}
       >
         <Typography component='h3' variant='title-2'>
           here you can upload your amazing photo <span className='text-[1.75rem]'>📷</span>
         </Typography>
-        <Typography component='span' variant='description' className='text-activity'>
+        <Typography component='span' variant='description' className='text-primary'>
           (click)
         </Typography>
       </button>

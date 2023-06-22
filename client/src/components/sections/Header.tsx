@@ -9,6 +9,7 @@ import Thumbnail from '@/components/ui/Thumbnail';
 import Typography from '@/components/ui/Typography';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import useLogout from '@/hooks/useLogout';
+import useTheme from '@/hooks/useTheme';
 
 import Popup from '../ui/Popup';
 
@@ -16,9 +17,14 @@ const Header: React.FC = () => {
   const user = useAppSelector((state) => state.user.user);
   const logout = useLogout();
 
+  const [theme, toggleTheme] = useTheme();
+
   const [isActivePopup, setActivePopup] = useState(false);
   const popupRef = useRef(null);
 
+  const onClickThemeSwitcher = () => {
+    toggleTheme();
+  };
   const onClickThumbnail = () => {
     setActivePopup((prev) => !prev);
   };
@@ -42,15 +48,30 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <header className='flex h-full max-h-16 flex-row items-center justify-between rounded bg-light-bg-content p-3'>
+    <header className='flex h-full max-h-16 flex-row items-center justify-between rounded bg-card p-3'>
       <Link to='/'>
-        <div className='whitespace-nowrap bg-gradient-to-r from-activity to-highlight bg-clip-text text-3xl text-transparent transition-all ease-in-out hover:from-highlight hover:to-activity'>
+        <div className='whitespace-nowrap bg-gradient-to-r from-primary to-accent bg-clip-text text-3xl text-transparent transition-all ease-in-out hover:from-accent hover:to-primary'>
           social 💬
         </div>
       </Link>
       <div className='flex h-full justify-end gap-2'>
         <Search placeholder='search' className='w-full' />
-        <img src={moonIcon} alt='dark-theme' className='cursor-pointer hover:contrast-125' />
+        <button onClick={onClickThemeSwitcher} className='h-full'>
+          {theme === 'light' && (
+            <img
+              src={moonIcon}
+              alt='dark-theme'
+              className='h-full cursor-pointer hover:contrast-125'
+            />
+          )}
+          {theme === 'dark' && (
+            <img
+              src={moonIcon}
+              alt='dark-theme'
+              className='h-full cursor-pointer hover:contrast-125'
+            />
+          )}
+        </button>
         {user ? (
           <div className='relative inline-block w-1/6' ref={popupRef}>
             <button className='h-full w-full' onClick={onClickThumbnail}>

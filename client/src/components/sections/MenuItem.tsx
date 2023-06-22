@@ -11,12 +11,12 @@ interface MenuItemProps {
 
 const MenuItem: React.FC<MenuItemProps> = ({ name, img, link }) => {
   return (
-    <li className=' hover:text-activity'>
+    <li className=' hover:text-primary'>
       <NavLink
         to={link}
         className={({ isActive }) =>
           `flex w-full flex-row items-center gap-2 border-l-4 p-2 ${
-            isActive ? 'border-l-activity text-activity' : 'border-l-transparent'
+            isActive ? 'border-l-primary text-primary' : 'border-l-transparent'
           }`
         }
       >
