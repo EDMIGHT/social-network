@@ -2,12 +2,12 @@ import React, { useRef } from 'react';
 
 import Typography from '@/components/ui/Typography';
 
-const UploadPhoto: React.FC = () => {
-  const inputFileRef = useRef<HTMLInputElement>(null);
+interface UploadPhotoProps {
+  onChangeFile: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
 
-  const changeFileHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.files);
-  };
+const UploadPhoto: React.FC<UploadPhotoProps> = ({ onChangeFile }) => {
+  const inputFileRef = useRef<HTMLInputElement>(null);
 
   return (
     <>
@@ -18,8 +18,11 @@ const UploadPhoto: React.FC = () => {
         <Typography component='h3' variant='title-2'>
           here you can upload your amazing photo <span className='text-[1.75rem]'>📷</span>
         </Typography>
+        <Typography component='span' variant='description' className='text-activity'>
+          (click)
+        </Typography>
       </button>
-      <input ref={inputFileRef} onChange={changeFileHandler} type='file' hidden />
+      <input ref={inputFileRef} onChange={onChangeFile} type='file' hidden />
     </>
   );
 };

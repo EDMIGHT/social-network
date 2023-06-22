@@ -15,6 +15,6 @@ export const updatePostValidators = [
     .isString()
     .trim()
     .isLength({ min: 1 }),
-  check('tags', 'invalid tag format, string expected').optional().isString(),
+  // check('tags', 'invalid tag format, string expected').optional().isString(),
   check('img', 'wrong path for image, , string expected').optional().isString(),
 ];
