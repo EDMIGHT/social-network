@@ -9,7 +9,7 @@ import routes from '@/routes/index';
 
 env.config();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 

@@ -6,8 +6,8 @@ import useLocalStorage from '@/hooks/useLocalStorage';
 import useTheme from '@/hooks/useTheme';
 import MainLayout from '@/layouts/MainLayout';
 import Home from '@/pages/Home';
-import Login from '@/pages/Login';
 import Profile from '@/pages/Profile';
+import SignIn from '@/pages/SignIn';
 
 const App = React.memo(() => {
   useAuthentication();
@@ -16,9 +16,12 @@ const App = React.memo(() => {
   const [currentTheme, toggleTheme, setTheme] = useTheme();
 
   useEffect(() => {
+    const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const theme = getLocal('theme') as 'dark' | 'light';
     if (theme) {
       setTheme(theme);
+    } else if (prefersDarkTheme) {
+      setTheme('dark');
     }
   }, []);
 
@@ -28,7 +31,7 @@ const App = React.memo(() => {
         <Route index element={<Home />} />
         <Route path='/:login' element={<Profile />} />
       </Route>
-      <Route path='/signIn' element={<Login />} />
+      <Route path='/signIn' element={<SignIn />} />
     </Routes>
   );
 });

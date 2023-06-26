@@ -19,6 +19,7 @@ const CreatePost: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<ICreatePost>();
 
   const [imgURL, setImgURL] = useState<string | null>(null);
@@ -28,7 +29,7 @@ const CreatePost: React.FC = () => {
   const [createPost, { isLoading }] = useCreatePostMutation();
 
   const changeFileHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && accessToken) {
+    if (event.target.files && event.target.files[0] && accessToken) {
       const formData = new FormData();
       const file = event.target.files[0];
       formData.append('image', file);
@@ -43,36 +44,61 @@ const CreatePost: React.FC = () => {
 
   const onSubmit = async (data: any) => {
     // TODO добавить выбор тэгов
-    await createPost({ accessToken, ...data });
+    await createPost({ accessToken, ...data, img: imgURL || null });
 
-    console.log(data);
+    setImgURL(null);
+    reset();
   };
 
   return (
     <Card className='flex flex-col gap-2'>
-      <UploadPhoto onChangeFile={changeFileHandler} />
-
-      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
-        <Input
-          name='text'
-          placeholder='enter the text post...'
-          optionals={{
-            ...register('text', {
-              required: 'text is a required field',
-              minLength: {
-                value: 1,
-                message: 'the minimum text length is 1 characters',
-              },
-            }),
-          }}
-          error={errors.text ? errors.text.message : undefined}
+      {imgURL && (
+        <div className='h-96 cursor-pointer bg-black'>
+          <img src={imgURL} alt='preview' className='mx-auto h-full object-cover' />
+        </div>
+      )}
+      <div className='flex w-full'>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className='flex w-full flex-row justify-end gap-2'
         >
-          text post
-        </Input>
-        <Button type='submit' variant='activity' className='w-1/5 hover:contrast-125'>
-          post
-        </Button>
-      </form>
+          <UploadPhoto
+            className='mt-[6px] flex items-start'
+            onChangeFile={changeFileHandler}
+          />
+
+          <Input
+            name='text'
+            placeholder='enter the text post...'
+            optionals={{
+              ...register('text', {
+                required: 'text is a required field',
+                minLength: {
+                  value: 1,
+                  message: 'the minimum text length is 1 characters',
+                },
+              }),
+            }}
+            error={errors.text ? errors.text.message : undefined}
+          />
+          <button type='submit' className='mt-[6px] flex items-start'>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              className='h-8 w-8 stroke-primary hover:stroke-accent'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5'
+              />
+            </svg>
+          </button>
+        </form>
+      </div>
     </Card>
   );
 };

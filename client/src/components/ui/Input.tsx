@@ -1,18 +1,28 @@
 import React from 'react';
 
+import { cn } from '@/utils/cn';
+
 import Typography from './Typography';
 
 interface InputProps {
   name: string;
   error?: string;
   optionals?: object;
-  children: string;
+  children?: string;
   placeholder?: string;
+  className?: string;
 }
 
-const Input: React.FC<InputProps> = ({ name, error, optionals, children, placeholder }) => {
+const Input: React.FC<InputProps> = ({
+  name,
+  error,
+  optionals,
+  children,
+  placeholder,
+  className,
+}) => {
   return (
-    <label htmlFor={name} className=' cursor-pointer'>
+    <label htmlFor={name} className={cn('w-full cursor-pointer', className)}>
       <Typography component='h2' variant='title-1' className='pl-2'>
         {children}
       </Typography>
