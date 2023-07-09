@@ -12,7 +12,7 @@ class TokenModel {
       where: { userId },
     });
   }
-  public async getToken(refreshToken: string): Promise<Token | null> {
+  public async getToken(refreshToken: string | undefined = undefined): Promise<Token | null> {
     return prisma.token.findFirst({
       where: { refreshToken },
     });

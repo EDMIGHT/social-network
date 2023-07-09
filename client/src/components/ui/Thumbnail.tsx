@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { cn } from '@/utils/cn';
+
 interface ThumbnailProps {
   imgURL: string;
   alt: string;
@@ -11,7 +13,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ imgURL, alt, className }) => {
     <img
       src={imgURL}
       alt={alt}
-      className={`h-full w-full rounded object-cover ${className}`}
+      className={cn('h-full w-full rounded object-contain', className)}
     />
   );
 };

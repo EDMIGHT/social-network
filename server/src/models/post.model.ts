@@ -30,11 +30,22 @@ type UpdatePostData = Partial<Post> & {
 
 class PostModel {
   public async create(data: CreatePost): Promise<Post> {
+    console.log(data);
     return prisma.post.create({
       data: {
         ...data,
         tags: {
           connect: data.tags.map((tagName) => ({ name: tagName.trim() })),
+        },
+      },
+      include: {
+        tags: true, // убрать, если не нужно отображение тэгов
+        user: {
+          select: {
+            login: true,
+            name: true,
+            img: true,
+          },
         },
       },
     });

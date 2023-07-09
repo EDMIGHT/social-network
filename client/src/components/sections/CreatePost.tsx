@@ -44,7 +44,7 @@ const CreatePost: React.FC = () => {
 
   const onSubmit = async (data: any) => {
     // TODO добавить выбор тэгов
-    await createPost({ accessToken, ...data, img: imgURL || null });
+    await createPost({ accessToken, ...data, img: imgURL || undefined });
 
     setImgURL(null);
     reset();

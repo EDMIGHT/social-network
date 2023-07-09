@@ -22,10 +22,13 @@ const useAuthentication = () => {
       dispatch(setUser(data));
       dispatch(setUserData({ user: data, accessToken, refreshToken }));
     }
+  }, [isSuccess, data]);
+
+  useEffect(() => {
     if (isError) {
-      navigate('/signIn');
+      // navigate('/signIn');
     }
-  }, [isSuccess, isError, data]);
+  }, [isError]);
 };
 
 export default useAuthentication;
