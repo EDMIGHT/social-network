@@ -1,5 +1,11 @@
 import { Post } from '@prisma/client';
 
+import { IncludedUser } from './user.types';
+
+export type PostWithUser = Post & {
+  likedBy: IncludedUser[];
+};
+
 export interface GetPostArg {
   login?: string;
   // page: number;

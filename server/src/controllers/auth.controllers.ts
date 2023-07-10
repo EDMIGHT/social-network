@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import User from '@/models/user.model';
 import userModel from '@/models/user.model';
 import tokenService from '@/services/token.service';
-import { isLoginUser, isRegisterUser } from '@/types/auth.types';
+import { isLoginUser, isRegisterUser } from '@/types/user.types';
 import createResponseUser from '@/utils/helpers/createResponseUser';
 import customResponse from '@/utils/helpers/customResponse';
 import isTokenInvalid from '@/utils/helpers/isTokenInvalid';

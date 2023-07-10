@@ -1,6 +1,6 @@
 import { User } from '@prisma/client';
 
-import { ResponseUser } from '@/types/auth.types';
+import { ResponseUser } from '@/types/user.types';
 
 const createResponseUser = (user: User | null): ResponseUser | null => {
   if (user) {

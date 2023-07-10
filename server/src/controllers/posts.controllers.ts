@@ -179,3 +179,34 @@ export const updatePost = async (request: Request, response: Response): Promise<
     });
   }
 };
+
+export const likePost = async (request: Request, response: Response): Promise<Response> => {
+  const { id } = request.params;
+
+  try {
+    const existedPost = await postModel.getById(id);
+
+    if (!existedPost) {
+      return customResponse.notFound(response, {
+        message: `post with id = ${id} does not exist`,
+      });
+    }
+
+    const checkExist = existedPost.likedBy.some((user) => user.id === request.user.id);
+
+    let updatedPost;
+
+    if (checkExist) {
+      updatedPost = await postModel.removeFromLikedBy(id, request.user.id);
+    } else {
+      updatedPost = await postModel.pushToLikedBy(id, request.user.id);
+    }
+
+    return customResponse.ok(response, updatedPost);
+  } catch (error) {
+    console.error(error);
+    return customResponse.serverError(response, {
+      message: `error when liking post with id ${id}`,
+    });
+  }
+};

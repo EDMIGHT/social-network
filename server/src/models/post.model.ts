@@ -1,7 +1,7 @@
 import { Post } from '@prisma/client';
 
 import prisma from '@/db/prisma';
-import { CreatePost, GetPostArg } from '@/types/post.types';
+import { CreatePost, GetPostArg, PostWithUser } from '@/types/post.types';
 
 interface Query {
   tags?: {
@@ -39,7 +39,7 @@ class PostModel {
         },
       },
       include: {
-        tags: true, // убрать, если не нужно отображение тэгов
+        tags: true,
         user: {
           select: {
             login: true,
@@ -51,14 +51,7 @@ class PostModel {
     });
   }
 
-  public async get({
-    login,
-    offset,
-    limit,
-    sort,
-    order,
-    tags,
-  }: GetPostArg): Promise<Post[] | null> {
+  public async get({ login, offset, limit, sort, order, tags }: GetPostArg) {
     const query: Query = {};
 
     if (tags.length > 0) {
@@ -86,7 +79,7 @@ class PostModel {
         ...query,
       },
       include: {
-        tags: true, // убрать, если не нужно отображение тэгов
+        tags: true,
         user: {
           select: {
             login: true,
@@ -97,9 +90,10 @@ class PostModel {
       },
     });
   }
-  public async getById(id: string): Promise<Post | null> {
+  public async getById(id: string): Promise<PostWithUser | null> {
     return await prisma.post.findFirst({
       where: { id },
+      include: { likedBy: { select: { id: true, img: true, name: true, login: true } } },
     });
   }
 
@@ -116,7 +110,7 @@ class PostModel {
   public async updateById(
     id: string,
     { tags, ...data }: UpdatePostData
-  ): Promise<Post | null> {
+  ): Promise<PostWithUser | null> {
     const query: QueryUpdate = {};
 
     if (tags) {
@@ -131,7 +125,32 @@ class PostModel {
         ...data,
         ...query,
       },
+      include: { likedBy: { select: { id: true, img: true, name: true, login: true } } },
     });
+  }
+
+  public async pushToLikedBy(postId: string, userId: string): Promise<PostWithUser> {
+    return prisma.post.update({
+      where: { id: postId },
+      data: { likedBy: { connect: { id: userId } } },
+      include: { likedBy: { select: { id: true, img: true, name: true, login: true } } },
+    });
+  }
+  public async removeFromLikedBy(
+    postId: string,
+    userId: string
+  ): Promise<PostWithUser | null> {
+    const post = await this.getById(postId);
+
+    if (post) {
+      const newLikedBy = post.likedBy.filter((user) => user.id !== userId);
+
+      return prisma.post.update({
+        where: { id: postId },
+        data: { likedBy: { set: newLikedBy.map((user) => ({ id: user.id })) } },
+        include: { likedBy: { select: { id: true, img: true, name: true, login: true } } },
+      });
+    } else return null;
   }
 }
 
