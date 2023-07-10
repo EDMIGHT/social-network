@@ -52,8 +52,10 @@ class PostModel {
     });
   }
 
-  public async get({ login, offset, limit, sort, order, tags }: GetPostArg) {
+  public async get({ login, page, limit, sort, order, tags }: GetPostArg) {
     const query: Query = {};
+
+    const offset = (+page - 1) * +limit;
 
     if (tags.length > 0) {
       query.tags = {

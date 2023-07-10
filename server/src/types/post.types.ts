@@ -8,12 +8,10 @@ export type PostWithUser = Post & {
 
 export interface GetPostArg {
   login?: string;
-  // page: number;
-  offset: number;
+  page: number;
   limit: number;
   sort: string;
   order: string;
-  // tags: string;
   tags: string[];
 }
 

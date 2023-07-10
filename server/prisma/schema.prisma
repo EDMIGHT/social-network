@@ -8,19 +8,19 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  login        String   @unique
+  id           String    @id @default(uuid())
+  login        String    @unique
   img          String
   name         String?
   email        String?
   password     String
-  createdAt    DateTime @default(now())
-  likedPosts   Post[]   @relation("liked posts")
-  createdPosts Post[]   @relation("created posts")
+  createdAt    DateTime  @default(now())
+  likedPosts   Post[]    @relation("liked posts")
+  createdPosts Post[]    @relation("created posts")
   Token        Token[]
-
-  following User[] @relation("follow")
-  followers User[] @relation("follow")
+  following    User[]    @relation("follow")
+  followers    User[]    @relation("follow")
+  Comment      Comment[]
 
   @@index([login])
 }
@@ -32,11 +32,22 @@ model Post {
   viewsCount Int       @default(0)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime?
+  user       User      @relation("created posts", fields: [userId], references: [id])
+  userId     String
+  likedBy    User[]    @relation("liked posts")
+  comments   Comment[] @relation("post comments")
+  tags       Tag[]
+}
 
-  user    User   @relation("created posts", fields: [userId], references: [id])
-  userId  String
-  likedBy User[] @relation("liked posts")
-  tags    Tag[]
+model Comment {
+  id        String    @id @default(uuid())
+  text      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?
+  post      Post      @relation("post comments", fields: [postId], references: [id])
+  postId    String
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
 }
 
 model Tag {
@@ -50,6 +61,5 @@ model Token {
   refreshToken String    @db.VarChar(255)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime?
-
-  user User @relation(fields: [userId], references: [id])
+  user         User      @relation(fields: [userId], references: [id])
 }

@@ -9,11 +9,10 @@ export const getAllPosts = async (request: Request, response: Response): Promise
     const { tags, page = 1, limit = 10, order = 'desc', sort = 'createdAt' } = request.query;
 
     const totalPostsCount = await postModel.getTotal();
-    const offset = (+page - 1) * +limit;
     const tagList = tags ? (tags as string).split(',') : [];
 
     const posts = await postModel.get({
-      offset,
+      page: +page,
       limit: +limit,
       sort: sort as string,
       order: order as string,
@@ -41,12 +40,11 @@ export const getPosts = async (request: Request, response: Response): Promise<Re
     const { login } = request.params;
 
     const totalPostsCount = await postModel.getTotal();
-    const offset = (+page - 1) * +limit;
     const tagList = tags ? (tags as string).split(',') : [];
 
     const posts = await postModel.get({
       login: login as string,
-      offset,
+      page: +page,
       limit: +limit,
       sort: sort as string,
       order: order as string,
