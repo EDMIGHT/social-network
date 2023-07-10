@@ -48,7 +48,7 @@ const PostItemMenu: React.FC<PostItemMenuProps> = ({ id, likedBy, comments }) =>
             viewBox='0 0 24 24'
             strokeWidth='1.5'
             stroke='currentColor'
-            className={cn('h-6 w-6', isExistLike && 'fill-primary')}
+            className={cn('h-6 w-6', isExistComment && 'fill-primary')}
           >
             <path
               strokeLinecap='round'

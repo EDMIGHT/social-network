@@ -7,7 +7,8 @@ import Time from '@/components/ui/Time';
 import Typography from '@/components/ui/Typography';
 import { IResponsePost } from '@/types/responses.types';
 
-import PostItemComments from './PostItemComments';
+import Comments from './Comments';
+import CreateComment from './CreateComment';
 import PostItemMenu from './PostItemMenu';
 
 const PostItem: React.FC<IResponsePost> = ({
@@ -50,7 +51,8 @@ const PostItem: React.FC<IResponsePost> = ({
         <Typography variant='title-1' component='h2'>
           comments:
         </Typography>
-        <PostItemComments id={id} />
+        <CreateComment id={id} />
+        <Comments id={id} />
       </Card>
     </li>
   );

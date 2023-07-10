@@ -1,18 +1,18 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React from 'react';
 
-import { useGetCommentsForPostQuery } from '@/services/comment.service';
+import { useGetCommentsQuery } from '@/services/comment.service';
 
-import PostItemComment from './PostItemComment';
+import PostItemComment from './Comment';
 
-interface PostItemCommentsProps {
+interface ICommentsProps {
   id: string;
 }
 
-const PostItemComments: React.FC<PostItemCommentsProps> = ({ id }) => {
+const Comments: React.FC<ICommentsProps> = ({ id }) => {
   const [parent] = useAutoAnimate();
 
-  const { data, isSuccess } = useGetCommentsForPostQuery({ id });
+  const { data, isSuccess } = useGetCommentsQuery({ id });
 
   const elementsComments =
     isSuccess && data.length > 0 ? (
@@ -28,4 +28,4 @@ const PostItemComments: React.FC<PostItemCommentsProps> = ({ id }) => {
   return elementsComments;
 };
 
-export default PostItemComments;
+export default Comments;

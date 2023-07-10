@@ -69,6 +69,7 @@ const CreatePost: React.FC = () => {
 
           <Input
             name='text'
+            id='text-post'
             placeholder='enter the text post...'
             optionals={{
               ...register('text', {
@@ -81,7 +82,7 @@ const CreatePost: React.FC = () => {
             }}
             error={errors.text ? errors.text.message : undefined}
           />
-          <button type='submit' className='mt-[6px] flex items-start'>
+          <button type='submit' className='mt-[5px] flex items-start'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'

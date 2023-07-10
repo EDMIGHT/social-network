@@ -4,7 +4,7 @@ import Thumbnail from '@/components/ui/Thumbnail';
 import Time from '@/components/ui/Time';
 import { ICommentWithUser } from '@/types/comment.types';
 
-const PostItemComment: React.FC<ICommentWithUser> = ({ user, text, createdAt }) => {
+const Comment: React.FC<ICommentWithUser> = ({ user, text, createdAt }) => {
   return (
     <li className='flex flex-col gap-2'>
       <div className='flex gap-2'>
@@ -20,4 +20,4 @@ const PostItemComment: React.FC<ICommentWithUser> = ({ user, text, createdAt }) 
   );
 };
 
-export default PostItemComment;
+export default Comment;

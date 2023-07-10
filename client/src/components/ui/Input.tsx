@@ -5,6 +5,7 @@ import { cn } from '@/utils/cn';
 import Typography from './Typography';
 
 interface InputProps {
+  id?: string;
   name: string;
   error?: string;
   optionals?: object;
@@ -14,6 +15,7 @@ interface InputProps {
 }
 
 const Input: React.FC<InputProps> = ({
+  id,
   name,
   error,
   optionals,
@@ -30,7 +32,7 @@ const Input: React.FC<InputProps> = ({
         {...optionals}
         placeholder={placeholder}
         name={name}
-        id={name}
+        id={id ?? name}
         className='w-full cursor-pointer rounded border-2 border-transparent bg-input p-2 transition-all hover:border-primary focus:border-primary focus:outline-none active:border-primary'
       />
       {error && (
