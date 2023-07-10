@@ -6,7 +6,7 @@ export const baseQuery = fetchBaseQuery({ baseUrl: BASE_API_URL });
 
 export const api = createApi({
   reducerPath: 'api',
-  tagTypes: ['post'],
+  tagTypes: ['post', 'comment'],
   baseQuery,
   // ! зарефакторить, когда можно будет оставлять endpoints пустым
   endpoints: (builder) => ({

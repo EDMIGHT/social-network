@@ -1,11 +1,28 @@
-import { CreatePostQuery, Post } from '@/types/post.types';
-import { PostQuery, ResponsePostsPagination } from '@/types/responses.types';
+import { Post } from '@/types/post.types';
+import { IResponsePostsPagination } from '@/types/responses.types';
 
 import { api } from './api';
 
+type SortPost = 'title' | 'createdAt' | 'updatedAt' | 'viewsCount';
+
+export interface IPostQuery {
+  tags?: string;
+  page?: number;
+  limit?: number;
+  sort?: SortPost;
+  order?: 'asc' | 'desc';
+}
+
+export interface ICreatePostQuery {
+  accessToken: string;
+  text: string;
+  tags: string;
+  img?: string;
+}
+
 const postApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllPosts: builder.query<ResponsePostsPagination, PostQuery>({
+    getAllPosts: builder.query<IResponsePostsPagination, IPostQuery>({
       query: ({ tags, page = 1, limit = 20, sort = 'createdAt', order = 'desc' }) => {
         const tagQuery = tags ? `&${tags}` : '';
         return `posts/all?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}`;
@@ -16,7 +33,7 @@ const postApi = api.injectEndpoints({
         },
       ],
     }),
-    createPost: builder.mutation<Post, CreatePostQuery>({
+    createPost: builder.mutation<Post, ICreatePostQuery>({
       query: ({ accessToken, ...body }) => ({
         url: 'posts',
         headers: {

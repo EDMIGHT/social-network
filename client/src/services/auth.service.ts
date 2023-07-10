@@ -1,11 +1,10 @@
 import { ILoginForm } from '@/components/sections/LoginForm';
-import { ResponseAuth } from '@/types/responses.types';
-import { ResponseUser } from '@/types/user.types';
+import { IResponseAuth, IResponseUser } from '@/types/responses.types';
 
 import { api } from './api';
 
 export interface ILoginQuery {
-  data?: ResponseAuth;
+  data?: IResponseAuth;
   error?: {
     data: {
       message: string;
@@ -19,7 +18,7 @@ export const authApi = api.injectEndpoints({
     login: builder.mutation<ILoginQuery, ILoginForm>({
       query: ({ ...body }) => ({ url: 'auth/login', method: 'POST', body }),
     }),
-    authMe: builder.query<ResponseUser, string>({
+    authMe: builder.query<IResponseUser, string>({
       query: (accessToken) => ({
         url: 'auth/me',
         headers: {

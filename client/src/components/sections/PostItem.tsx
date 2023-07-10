@@ -5,11 +5,12 @@ import Card from '@/components/ui/Card';
 import Thumbnail from '@/components/ui/Thumbnail';
 import Time from '@/components/ui/Time';
 import Typography from '@/components/ui/Typography';
-import { ResponsePost } from '@/types/post.types';
+import { IResponsePost } from '@/types/responses.types';
 
+import PostItemComments from './PostItemComments';
 import PostItemMenu from './PostItemMenu';
 
-const PostItem: React.FC<ResponsePost> = ({
+const PostItem: React.FC<IResponsePost> = ({
   id,
   createdAt,
   img,
@@ -18,6 +19,7 @@ const PostItem: React.FC<ResponsePost> = ({
   userId,
   viewsCount,
   user,
+  comments,
   tags,
   likedBy,
 }) => {
@@ -30,7 +32,7 @@ const PostItem: React.FC<ResponsePost> = ({
           </div>
           <div className='flex flex-col justify-center'>
             <Typography component='h3' variant='title-1'>
-              {user.name}
+              {user.name ?? user.login}
             </Typography>
             {createdAt && <Time time={new Date(createdAt)}>created at:</Time>}
             {updatedAt && <Time time={new Date(updatedAt)}>updated at:</Time>}
@@ -44,7 +46,11 @@ const PostItem: React.FC<ResponsePost> = ({
         <Typography component='p' variant='text'>
           {text}
         </Typography>
-        <PostItemMenu id={id} likedBy={likedBy} />
+        <PostItemMenu id={id} likedBy={likedBy} comments={comments} />
+        <Typography variant='title-1' component='h2'>
+          comments:
+        </Typography>
+        <PostItemComments id={id} />
       </Card>
     </li>
   );

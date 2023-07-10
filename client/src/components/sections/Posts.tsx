@@ -1,13 +1,13 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React from 'react';
 
-import { ResponsePost } from '@/types/post.types';
+import { IResponsePost } from '@/types/responses.types';
 
 import PostItem from './PostItem';
 import PostsEmpty from './PostsEmpty';
 
 interface PostsProps {
-  posts: ResponsePost[] | undefined;
+  posts: IResponsePost[] | undefined;
 }
 
 const Posts: React.FC<PostsProps> = ({ posts }) => {
