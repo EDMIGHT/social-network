@@ -83,6 +83,7 @@ class PostModel {
       },
       include: {
         tags: true,
+        comments: true,
         user: {
           select: {
             login: true,
