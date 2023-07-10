@@ -6,16 +6,17 @@ import { RegisterUser } from '@/types/user.types';
 
 class UserModel implements IUserModel {
   async createUser(data: RegisterUser): Promise<User> {
-    return prisma.user.create({ data });
+    return prisma.user.create({ data }); // FIX попробовать найти метод exclude, чтоб убрать при возращении свойство password
   }
   async getUserByLogin(login: string): Promise<User | null> {
     return prisma.user.findFirst({
       where: { login },
     });
   }
-  async getUserById(id: string): Promise<User | null> {
+  async getUserById(id: string) {
     return prisma.user.findFirst({
       where: { id },
+      include: { likedPosts: { select: { id: true } } },
     });
   }
   async getUserByLoginWithPosts(login: string): Promise<

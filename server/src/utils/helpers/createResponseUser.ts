@@ -5,7 +5,7 @@ import { ResponseUser } from '@/types/user.types';
 const createResponseUser = (user: User | null): ResponseUser | null => {
   if (user) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, password, ...responseUser } = user;
+    const { password, ...responseUser } = user;
 
     return responseUser;
   } else return null;

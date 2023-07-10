@@ -29,7 +29,7 @@ type UpdatePostData = Partial<Post> & {
 };
 
 class PostModel {
-  public async create(data: CreatePost): Promise<Post> {
+  public async create(data: CreatePost) {
     console.log(data);
     return prisma.post.create({
       data: {
@@ -47,6 +47,7 @@ class PostModel {
             img: true,
           },
         },
+        likedBy: { select: { id: true, img: true, name: true, login: true } },
       },
     });
   }
@@ -87,6 +88,7 @@ class PostModel {
             img: true,
           },
         },
+        likedBy: { select: { id: true, img: true, name: true, login: true } },
       },
     });
   }

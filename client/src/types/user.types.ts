@@ -8,4 +8,12 @@ export interface User {
   createdAt: Date;
 }
 
-export type ResponseUser = Pick<User, 'login' | 'img' | 'name' | 'email' | 'createdAt'>;
+export type UserWithLikedPosts = Omit<User, 'password'> & {
+  likedPosts: {
+    id: string;
+  }[];
+};
+
+export type IncludedUser = Pick<User, 'id' | 'name' | 'login' | 'img'>;
+
+export type ResponseUser = UserWithLikedPosts;

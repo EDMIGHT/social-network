@@ -10,7 +10,7 @@ const postApi = api.injectEndpoints({
         const tagQuery = tags ? `&${tags}` : '';
         return `posts/all?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}`;
       },
-      providesTags: (result, error) => [
+      providesTags: [
         {
           type: 'post',
         },
@@ -25,7 +25,21 @@ const postApi = api.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: () => [
+      invalidatesTags: [
+        {
+          type: 'post',
+        },
+      ],
+    }),
+    likePost: builder.mutation({
+      query: ({ accessToken, id }) => ({
+        url: `posts/like/${id}`,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+        method: 'POST',
+      }),
+      invalidatesTags: [
         {
           type: 'post',
         },
@@ -34,4 +48,4 @@ const postApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllPostsQuery, useCreatePostMutation } = postApi;
+export const { useGetAllPostsQuery, useCreatePostMutation, useLikePostMutation } = postApi;

@@ -1,10 +1,9 @@
 import { Tag } from './tag.types';
-import { User } from './user.types';
+import { IncludedUser, User } from './user.types';
 
 export interface Post {
   id: string;
-  title: string;
-  text: string;
+  text: string | null;
   img: string | null;
   viewsCount: number;
   createdAt: Date;
@@ -14,7 +13,8 @@ export interface Post {
 
 export type ResponsePost = Post & {
   tags: Tag[];
-  user: Pick<User, 'login' | 'img' | 'name'>;
+  user: IncludedUser;
+  likedBy: IncludedUser[];
 };
 
 export interface CreatePostQuery {

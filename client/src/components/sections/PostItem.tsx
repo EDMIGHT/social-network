@@ -7,17 +7,19 @@ import Time from '@/components/ui/Time';
 import Typography from '@/components/ui/Typography';
 import { ResponsePost } from '@/types/post.types';
 
+import PostItemMenu from './PostItemMenu';
+
 const PostItem: React.FC<ResponsePost> = ({
   id,
   createdAt,
   img,
   text,
-  title,
   updatedAt,
   userId,
   viewsCount,
   user,
   tags,
+  likedBy,
 }) => {
   return (
     <li>
@@ -42,6 +44,7 @@ const PostItem: React.FC<ResponsePost> = ({
         <Typography component='p' variant='text'>
           {text}
         </Typography>
+        <PostItemMenu id={id} likedBy={likedBy} />
       </Card>
     </li>
   );

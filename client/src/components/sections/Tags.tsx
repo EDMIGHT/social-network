@@ -1,3 +1,4 @@
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React from 'react';
 
 import Card from '@/components/ui/Card';
@@ -12,6 +13,8 @@ export interface TagsProps extends Pick<TagProps, 'onClick'> {
 }
 
 const Tags: React.FC<TagsProps> = ({ onClick, data, emptyText }) => {
+  const [parent] = useAutoAnimate();
+
   const tagElements = data?.length ? (
     data.map(({ name, id }) => <Tag key={id} id={id} name={name} onClick={onClick} />)
   ) : (
@@ -24,7 +27,9 @@ const Tags: React.FC<TagsProps> = ({ onClick, data, emptyText }) => {
 
   return (
     <Card className='flex flex-col gap-2'>
-      <ul className='flex flex-wrap gap-2'>{tagElements}</ul>
+      <ul ref={parent} className='flex flex-wrap gap-2'>
+        {tagElements}
+      </ul>
     </Card>
   );
 };

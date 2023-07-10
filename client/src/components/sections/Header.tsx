@@ -4,14 +4,13 @@ import { Link } from 'react-router-dom';
 
 import moonIcon from '@/assets/icons/moon.svg';
 import Button from '@/components/ui/Button';
+import Popup from '@/components/ui/Popup';
 import Search from '@/components/ui/Search';
 import Thumbnail from '@/components/ui/Thumbnail';
 import Typography from '@/components/ui/Typography';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import useLogout from '@/hooks/useLogout';
 import useTheme from '@/hooks/useTheme';
-
-import Popup from '../ui/Popup';
 
 const Header: React.FC = () => {
   const user = useAppSelector((state) => state.user.user);
