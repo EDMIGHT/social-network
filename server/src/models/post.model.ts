@@ -114,6 +114,20 @@ class PostModel {
   }
 
   public async deleteById(id: string): Promise<Post> {
+    const existedComments = await prisma.comment.count({
+      where: {
+        postId: id,
+      },
+    });
+
+    if (existedComments) {
+      await prisma.comment.deleteMany({
+        where: {
+          postId: id,
+        },
+      });
+    }
+
     return prisma.post.delete({
       where: { id },
     });
