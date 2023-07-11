@@ -27,7 +27,7 @@ model User {
 
 model Post {
   id         String    @id @default(uuid())
-  text       String?
+  text       String?   @db.Text
   img        String?
   viewsCount Int       @default(0)
   createdAt  DateTime  @default(now())
@@ -41,7 +41,7 @@ model Post {
 
 model Comment {
   id        String    @id @default(uuid())
-  text      String
+  text      String    @db.Text
   createdAt DateTime  @default(now())
   updatedAt DateTime?
   post      Post      @relation("post comments", fields: [postId], references: [id])

@@ -1,5 +1,9 @@
 import { Post } from '@/types/post.types';
-import { IResponsePostsPagination } from '@/types/responses.types';
+import {
+  IBadResponse,
+  IResponsePost,
+  IResponsePostsPagination,
+} from '@/types/responses.types';
 
 import { api } from './api';
 
@@ -33,6 +37,10 @@ const postApi = api.injectEndpoints({
         },
       ],
     }),
+    getPost: builder.query<IResponsePost | IBadResponse, string>({
+      query: (id) => `posts/${id}`,
+      providesTags: ['post'],
+    }),
     createPost: builder.mutation<Post, ICreatePostQuery>({
       query: ({ accessToken, ...body }) => ({
         url: 'posts',
@@ -65,4 +73,9 @@ const postApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetAllPostsQuery, useCreatePostMutation, useLikePostMutation } = postApi;
+export const {
+  useGetAllPostsQuery,
+  useGetPostQuery,
+  useCreatePostMutation,
+  useLikePostMutation,
+} = postApi;

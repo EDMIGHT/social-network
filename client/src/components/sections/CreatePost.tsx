@@ -78,6 +78,10 @@ const CreatePost: React.FC = () => {
                   value: 1,
                   message: 'the minimum text length is 1 characters',
                 },
+                maxLength: {
+                  value: 280,
+                  message: 'maximum post length 280 characters',
+                },
               }),
             }}
             error={errors.text ? errors.text.message : undefined}

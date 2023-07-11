@@ -98,7 +98,18 @@ class PostModel {
   public async getById(id: string): Promise<PostWithUser | null> {
     return await prisma.post.findFirst({
       where: { id },
-      include: { likedBy: { select: { id: true, img: true, name: true, login: true } } },
+      include: {
+        tags: true,
+        comments: true,
+        user: {
+          select: {
+            login: true,
+            name: true,
+            img: true,
+          },
+        },
+        likedBy: { select: { id: true, img: true, name: true, login: true } },
+      },
     });
   }
 

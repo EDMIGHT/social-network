@@ -5,9 +5,12 @@ import useAuthentication from '@/hooks/useAuthentication';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import useTheme from '@/hooks/useTheme';
 import MainLayout from '@/layouts/MainLayout';
+import PostLayout from '@/layouts/PostLayout';
 import Home from '@/pages/Home';
 import Profile from '@/pages/Profile';
 import SignIn from '@/pages/SignIn';
+
+import Post from './pages/Post';
 
 const App = React.memo(() => {
   useAuthentication();
@@ -30,6 +33,9 @@ const App = React.memo(() => {
       <Route path='/' element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path='/:login' element={<Profile />} />
+      </Route>
+      <Route path='/post' element={<PostLayout />}>
+        <Route path=':id' element={<Post />} />
       </Route>
       <Route path='/signIn' element={<SignIn />} />
     </Routes>

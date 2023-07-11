@@ -1,6 +1,7 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React from 'react';
 
+import Card from '@/components/ui/Card';
 import { useGetCommentsQuery } from '@/services/comment.service';
 
 import PostItemComment from './Comment';
@@ -25,7 +26,7 @@ const Comments: React.FC<ICommentsProps> = ({ id }) => {
       <div>No comments found 😢</div>
     );
 
-  return elementsComments;
+  return <Card>{elementsComments}</Card>;
 };
 
 export default Comments;

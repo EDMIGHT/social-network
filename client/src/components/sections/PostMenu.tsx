@@ -5,9 +5,9 @@ import { useLikePostMutation } from '@/services/post.service';
 import { IResponsePost } from '@/types/responses.types';
 import { cn } from '@/utils/cn';
 
-type PostItemMenuProps = Pick<IResponsePost, 'id' | 'likedBy' | 'comments'>;
+type PostMenuProps = Pick<IResponsePost, 'id' | 'likedBy' | 'comments'>;
 
-const PostItemMenu: React.FC<PostItemMenuProps> = ({ id, likedBy, comments }) => {
+const PostMenu: React.FC<PostMenuProps> = ({ id, likedBy, comments }) => {
   const { user, accessToken } = useAppSelector((state) => state.user);
 
   const [likePost, { isLoading }] = useLikePostMutation();
@@ -86,4 +86,4 @@ const PostItemMenu: React.FC<PostItemMenuProps> = ({ id, likedBy, comments }) =>
   );
 };
 
-export default PostItemMenu;
+export default PostMenu;
