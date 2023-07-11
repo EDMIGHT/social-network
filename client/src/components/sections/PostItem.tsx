@@ -7,6 +7,7 @@ import { IResponsePost } from '@/types/responses.types';
 
 import PostAuthor from './PostAuthor';
 import PostControl from './PostControl';
+import PostHeader from './PostHeader';
 import PostMenu from './PostMenu';
 
 const PostItem: React.FC<IResponsePost> = ({
@@ -25,10 +26,7 @@ const PostItem: React.FC<IResponsePost> = ({
   return (
     <li>
       <Card className='flex flex-col gap-2 '>
-        <div className='flex items-center justify-between gap-2'>
-          <PostAuthor user={user} createdAt={createdAt} updatedAt={updatedAt} />
-          <PostControl id={id} />
-        </div>
+        <PostHeader id={id} createdAt={createdAt} updatedAt={updatedAt} user={user} />
         <Link to={`/post/${id}`}>
           {img && (
             <div className='h-96 cursor-pointer bg-black'>

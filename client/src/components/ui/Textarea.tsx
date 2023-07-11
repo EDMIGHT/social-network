@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn';
 
 import Typography from './Typography';
 
-interface InputProps {
+interface TextareaProps {
   id?: string;
   name: string;
   error?: string;
@@ -15,7 +15,7 @@ interface InputProps {
   defaultValue?: string | undefined;
 }
 
-const Input: React.FC<InputProps> = ({
+const Textarea: React.FC<TextareaProps> = ({
   id,
   name,
   error,
@@ -30,13 +30,13 @@ const Input: React.FC<InputProps> = ({
       <Typography component='h2' variant='title-1' className='pl-2'>
         {children}
       </Typography>
-      <input
+      <textarea
         {...optionals}
         placeholder={placeholder}
         defaultValue={defaultValue}
         name={name}
         id={id ?? name}
-        className='w-full cursor-pointer rounded border-2 border-transparent bg-input p-2 transition-all hover:border-primary focus:border-primary focus:outline-none active:border-primary'
+        className='h-36 w-full cursor-pointer resize-none overflow-hidden break-words rounded border-2 border-transparent bg-input p-2 transition-all hover:border-primary focus:border-primary focus:outline-none active:border-primary'
       />
       {error && (
         <Typography
@@ -51,4 +51,4 @@ const Input: React.FC<InputProps> = ({
   );
 };
 
-export default Input;
+export default Textarea;

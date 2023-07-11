@@ -1,9 +1,5 @@
 import { Post } from '@/types/post.types';
-import {
-  IBadResponse,
-  IResponsePost,
-  IResponsePostsPagination,
-} from '@/types/responses.types';
+import { IResponsePost, IResponsePostsPagination } from '@/types/responses.types';
 
 import { api } from './api';
 
@@ -20,8 +16,8 @@ export interface IPostQuery {
 export interface ICreatePostQuery {
   accessToken: string;
   text: string;
-  tags: string;
-  img?: string;
+  tags?: string;
+  img: string | null;
 }
 
 export interface IDeletePostQuery {
@@ -69,6 +65,18 @@ const postApi = api.injectEndpoints({
       invalidatesTags: (result, error, arg) =>
         result ? [{ type: 'post', id: arg.id }] : ['post'],
     }),
+    updatePost: builder.mutation({
+      query: ({ accessToken, id, ...body }) => ({
+        url: `posts/${id}`,
+        method: 'PATCH',
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+        body,
+      }),
+      invalidatesTags: (result, error, arg) =>
+        result ? [{ type: 'post', id: arg.id }] : ['post'],
+    }),
     likePost: builder.mutation({
       query: ({ accessToken, id }) => ({
         url: `posts/like/${id}`,
@@ -88,5 +96,6 @@ export const {
   useGetPostQuery,
   useCreatePostMutation,
   useDeletePostMutation,
+  useUpdatePostMutation,
   useLikePostMutation,
 } = postApi;

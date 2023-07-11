@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Comments from '@/components/sections/Comments';
 import CreateComment from '@/components/sections/CreateComment';
-import PostAuthor from '@/components/sections/PostAuthor';
+import PostHeader from '@/components/sections/PostHeader';
 import PostMenu from '@/components/sections/PostMenu';
 import Card from '@/components/ui/Card';
 import Typography from '@/components/ui/Typography';
@@ -37,6 +37,8 @@ const Post: FC = () => {
     return <div>{isError && data && data.message}</div>;
   }
   if (isSuccess && id) {
+    const { id: responseId, createdAt, updatedAt, user, img, text, likedBy, comments } = data;
+
     return (
       <div ref={postRef} className='flex gap-2'>
         <button onClick={onClickClose} className='fixed left-3 top-3'>
@@ -52,27 +54,28 @@ const Post: FC = () => {
           </svg>
         </button>
         <Card className='flex h-fit flex-[2] flex-col gap-2'>
-          <PostAuthor user={data.user} createdAt={data.createdAt} updatedAt={data.updatedAt} />
+          <PostHeader
+            id={responseId}
+            createdAt={createdAt}
+            updatedAt={updatedAt}
+            user={user}
+          />
           <button onClick={onClickImg}>
-            {data.img && (
+            {img && (
               <div className='h-[70vh] cursor-pointer bg-black'>
-                <img
-                  src={data.img}
-                  alt={data.user.login}
-                  className='mx-auto h-full object-cover'
-                />
+                <img src={img} alt={user.login} className='mx-auto h-full object-cover' />
               </div>
             )}
           </button>
           <Typography component='p' variant='text'>
-            {data.text}
+            {text}
           </Typography>
-          <PostMenu id={data.id} comments={data.comments} likedBy={data.likedBy} />
+          <PostMenu id={responseId} comments={comments} likedBy={likedBy} />
         </Card>
 
         <div className='flex w-[400px] flex-1 flex-col gap-2'>
-          <CreateComment id={id} />
-          <Comments id={id} />
+          <CreateComment id={responseId} />
+          <Comments id={responseId} />
         </div>
       </div>
     );

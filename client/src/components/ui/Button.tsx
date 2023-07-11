@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ButtonProps {
   children: string;
-  variant: 'activity' | 'highlight' | 'alert' | 'warn';
+  variant?: 'activity' | 'highlight' | 'alert' | 'warn';
   className?: string;
   onClick?: any;
   disabled?: boolean;

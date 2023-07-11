@@ -85,11 +85,11 @@ const PostControl: React.FC<PostControlProps> = ({ id }) => {
               </Typography>
             </Link>
           </li>
-          <li className='flex p-2 hover:text-white'>
+          <li className='flex p-2 hover:text-white focus:text-white'>
             <button
               onClick={onClickDelete}
               disabled={isDeleteLoading}
-              className='disabled:text-muted'
+              className='disabled:text-muted disabled:hover:text-muted disabled:focus:text-muted'
             >
               <Typography
                 component='span'

@@ -11,6 +11,7 @@ import Profile from '@/pages/Profile';
 import SignIn from '@/pages/SignIn';
 
 import Post from './pages/Post';
+import PostEdit from './pages/PostEdit';
 
 const App = React.memo(() => {
   useAuthentication();
@@ -36,6 +37,7 @@ const App = React.memo(() => {
       </Route>
       <Route path='/post' element={<PostLayout />}>
         <Route path=':id' element={<Post />} />
+        <Route path='edit/:id' element={<PostEdit />} />
       </Route>
       <Route path='/signIn' element={<SignIn />} />
     </Routes>
