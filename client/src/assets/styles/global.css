@@ -18,6 +18,9 @@
 
     --input: #ededed;
     --input-foreground: #9da9b9;
+
+    --muted: #575757;
+    --muted-foreground: #ececec;
   }
 
   .dark {
@@ -35,6 +38,9 @@
 
     --input: #121212;
     --input-foreground: #9da9b9;
+
+    --muted: #575757;
+    --muted-foreground: #ececec;
   }
 }
 

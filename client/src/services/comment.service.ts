@@ -17,10 +17,14 @@ const commentApi = api.injectEndpoints({
       query: ({ id }) => ({
         url: `comments/${id}`,
       }),
-      providesTags: (result) =>
+      providesTags: (result, error, arg) =>
         result
-          ? [...result.map(({ id }) => ({ type: 'comment' as const, id })), 'comment']
-          : ['comment'],
+          ? [
+              ...result.map(({ id }) => ({ type: 'post' as const, id })),
+              'post',
+              { type: 'post', id: arg.id },
+            ]
+          : ['comment', { type: 'post', id: arg.id }],
     }),
     createComment: builder.mutation<ICommentWithUser, ICreateCommentArg>({
       query: ({ id, accessToken, text }) => ({
@@ -33,8 +37,13 @@ const commentApi = api.injectEndpoints({
           text,
         },
       }),
-      // invalidatesTags: (result, error, arg) => [{ type: 'comment', id: result.id }],
-      invalidatesTags: ['comment'],
+      invalidatesTags: (result, error, arg) =>
+        result
+          ? [
+              { type: 'comment', id: result.id },
+              { type: 'post', id: arg.id },
+            ]
+          : ['comment', { type: 'post', id: arg.id }],
     }),
   }),
 });

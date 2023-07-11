@@ -24,6 +24,11 @@ export interface ICreatePostQuery {
   img?: string;
 }
 
+export interface IDeletePostQuery {
+  id: string;
+  accessToken: string;
+}
+
 const postApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllPosts: builder.query<IResponsePostsPagination, IPostQuery>({
@@ -31,15 +36,15 @@ const postApi = api.injectEndpoints({
         const tagQuery = tags ? `&${tags}` : '';
         return `posts/all?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}`;
       },
-      providesTags: [
-        {
-          type: 'post',
-        },
-      ],
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.posts.map(({ id }) => ({ type: 'post' as const, id })), 'post']
+          : ['post'],
     }),
-    getPost: builder.query<IResponsePost | IBadResponse, string>({
+    getPost: builder.query<IResponsePost, string>({
       query: (id) => `posts/${id}`,
-      providesTags: ['post'],
+      providesTags: (result, error, arg) =>
+        result ? [{ type: 'post', id: result.id }] : ['post'],
     }),
     createPost: builder.mutation<Post, ICreatePostQuery>({
       query: ({ accessToken, ...body }) => ({
@@ -50,11 +55,19 @@ const postApi = api.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: [
-        {
-          type: 'post',
+      invalidatesTags: (result, error, arg) =>
+        result ? [{ type: 'post', id: result.id }] : ['post'],
+    }),
+    deletePost: builder.mutation<null, IDeletePostQuery>({
+      query: ({ id, accessToken }) => ({
+        url: `posts/${id}`,
+        method: 'DELETE',
+        headers: {
+          authorization: `Bearer ${accessToken}`,
         },
-      ],
+      }),
+      invalidatesTags: (result, error, arg) =>
+        result ? [{ type: 'post', id: arg.id }] : ['post'],
     }),
     likePost: builder.mutation({
       query: ({ accessToken, id }) => ({
@@ -64,11 +77,8 @@ const postApi = api.injectEndpoints({
         },
         method: 'POST',
       }),
-      invalidatesTags: [
-        {
-          type: 'post',
-        },
-      ],
+      invalidatesTags: (result, error, arg) =>
+        result ? [{ type: 'post', id: arg.id }] : ['post'],
     }),
   }),
 });
@@ -77,5 +87,6 @@ export const {
   useGetAllPostsQuery,
   useGetPostQuery,
   useCreatePostMutation,
+  useDeletePostMutation,
   useLikePostMutation,
 } = postApi;

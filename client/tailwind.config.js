@@ -26,6 +26,10 @@ export default {
           DEFAULT: 'var(--input)',
           foreground: 'var(--input-foreground)',
         },
+        muted: {
+          DEFAULT: 'var(--muted)',
+          foreground: 'var(--muted-foreground)',
+        },
       },
       fontFamily: {
         'open-sans': ['OpenSans', 'sans-serif'],

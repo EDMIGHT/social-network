@@ -6,13 +6,13 @@ import Time from '@/components/ui/Time';
 import Typography from '@/components/ui/Typography';
 import { IResponsePost } from '@/types/responses.types';
 
-const PostHeader: FC<Pick<IResponsePost, 'createdAt' | 'updatedAt' | 'user'>> = ({
+const PostAuthor: FC<Pick<IResponsePost, 'createdAt' | 'updatedAt' | 'user'>> = ({
   createdAt,
   updatedAt,
   user,
 }) => {
   return (
-    <Link to={`/${user.login}`} className='flex gap-2 hover:opacity-80'>
+    <Link to={`/${user.login}`} className='flex w-fit gap-2 hover:opacity-80'>
       <div className='w-20'>
         <Thumbnail imgURL={user.img} alt={user.login} />
       </div>
@@ -27,4 +27,4 @@ const PostHeader: FC<Pick<IResponsePost, 'createdAt' | 'updatedAt' | 'user'>> = 
   );
 };
 
-export default PostHeader;
+export default PostAuthor;

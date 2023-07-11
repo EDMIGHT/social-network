@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import Comments from '@/components/sections/Comments';
 import CreateComment from '@/components/sections/CreateComment';
-import PostHeader from '@/components/sections/PostHeader';
+import PostAuthor from '@/components/sections/PostAuthor';
 import PostMenu from '@/components/sections/PostMenu';
 import Card from '@/components/ui/Card';
 import Typography from '@/components/ui/Typography';
@@ -36,7 +36,7 @@ const Post: FC = () => {
   if (isError && isBadResponse(data)) {
     return <div>{isError && data && data.message}</div>;
   }
-  if (isSuccess && id && !isBadResponse(data)) {
+  if (isSuccess && id) {
     return (
       <div ref={postRef} className='flex gap-2'>
         <button onClick={onClickClose} className='fixed left-3 top-3'>
@@ -52,7 +52,7 @@ const Post: FC = () => {
           </svg>
         </button>
         <Card className='flex h-fit flex-[2] flex-col gap-2'>
-          <PostHeader user={data.user} createdAt={data.createdAt} updatedAt={data.updatedAt} />
+          <PostAuthor user={data.user} createdAt={data.createdAt} updatedAt={data.updatedAt} />
           <button onClick={onClickImg}>
             {data.img && (
               <div className='h-[70vh] cursor-pointer bg-black'>
