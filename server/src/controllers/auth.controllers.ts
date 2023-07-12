@@ -24,7 +24,7 @@ export const registerUser = async (
           message: 'User with this login already exists',
         });
       } else {
-        const hashedPassword = await bcrypt.hash(registeringUser.password, 10);
+        const hashedPassword = await bcrypt.hash(registeringUser.password as string, 10);
         const user = await User.createUser({
           ...registeringUser,
           password: hashedPassword,
@@ -74,7 +74,10 @@ export const loginUser = async (request: Request, response: Response): Promise<R
           message: 'User with this login does not exist',
         });
       } else {
-        const isPasswordEqual = await bcrypt.compare(loggingUser.password, user.password);
+        const isPasswordEqual = await bcrypt.compare(
+          loggingUser.password as string,
+          user.password as string
+        );
 
         if (!isPasswordEqual) {
           return customResponse.unauthorized(response, {

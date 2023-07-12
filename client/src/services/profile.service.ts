@@ -6,7 +6,7 @@ import { IPostQuery } from './post.service';
 const profileApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getProfile: builder.query<IResponseProfile, string>({
-      query: (login) => `profiles/${login}`,
+      query: (login) => `users/${login}`,
     }),
     getProfilePosts: builder.query<IResponsePostsPagination, IPostQuery & { login: string }>({
       query: ({ login, tags, page = 1, limit = 20, sort = 'createdAt', order = 'desc' }) => {

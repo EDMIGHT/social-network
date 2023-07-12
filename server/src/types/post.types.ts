@@ -1,9 +1,12 @@
-import { Post } from '@prisma/client';
+import { Comment, Post, Tag } from '@prisma/client';
 
 import { IncludedUser } from './user.types';
 
-export type PostWithUser = Post & {
+export type PostWithData = Post & {
   likedBy: IncludedUser[];
+  comments: Comment[];
+  tags: Tag[];
+  user: IncludedUser;
 };
 
 export interface GetPostArg {
