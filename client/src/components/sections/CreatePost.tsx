@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import { useAppSelector } from '@/hooks/reduxHooks';
@@ -10,7 +9,7 @@ import { useCreatePostMutation } from '@/services/post.service';
 import { Tag } from '@/types/tag.types';
 
 import Tags from './Tags';
-import TagSearch from './TagsInsert';
+import TagSearch from './TagSearch';
 import UploadPhoto from './UploadPhoto';
 
 export interface ICreatePost {

@@ -8,7 +8,7 @@ export const getProfile = async (request: Request, response: Response): Promise<
   const { login } = request.params;
 
   try {
-    const existedProfile = await userModel.getUserByLoginWithPosts(login);
+    const existedProfile = await userModel.getUserByLoginWithData(login);
 
     if (existedProfile) {
       return customResponse.ok(response, createResponseUser(existedProfile));

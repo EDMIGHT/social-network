@@ -2,11 +2,11 @@ import debounce from 'lodash.debounce';
 import { ChangeEvent, FC, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useGetTagByNameMutation } from '@/services/tags.service';
 import { Tag as ITag } from '@/types/tag.types';
 
-import Button from '../ui/Button';
 import Tag from './Tag';
 
 interface TagSearchProps {
@@ -50,7 +50,7 @@ const TagSearch: FC<TagSearchProps> = ({ onClickTag }) => {
       <Input
         value={localText}
         onChange={onChangeInput}
-        placeholder='tag name..'
+        placeholder='enter tag name..'
         name='name'
         id='tag-name'
       />

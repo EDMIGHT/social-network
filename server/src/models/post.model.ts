@@ -30,7 +30,6 @@ type UpdatePostData = Partial<Post> & {
 
 class PostModel {
   public async create(data: CreatePost) {
-    console.log(data);
     return prisma.post.create({
       data: {
         ...data,

@@ -19,7 +19,7 @@ class UserModel implements IUserModel {
       include: { likedPosts: { select: { id: true } } },
     });
   }
-  async getUserByLoginWithPosts(login: string): Promise<
+  async getUserByLoginWithData(login: string): Promise<
     | (User & {
         createdPosts: Post[];
       })
@@ -29,6 +29,9 @@ class UserModel implements IUserModel {
       where: { login },
       include: {
         createdPosts: true,
+        likedPosts: true,
+        followers: true,
+        following: true,
       },
     });
   }
