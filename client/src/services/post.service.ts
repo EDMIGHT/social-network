@@ -6,6 +6,7 @@ import { api } from './api';
 type SortPost = 'title' | 'createdAt' | 'updatedAt' | 'viewsCount';
 
 export interface IPostQuery {
+  login?: string;
   tags?: string;
   page?: number;
   limit?: number;
@@ -28,9 +29,10 @@ export interface IDeletePostQuery {
 const postApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllPosts: builder.query<IResponsePostsPagination, IPostQuery>({
-      query: ({ tags, page = 1, limit = 20, sort = 'createdAt', order = 'desc' }) => {
+      query: ({ tags, page = 1, limit = 20, sort = 'createdAt', order = 'desc', login }) => {
         const tagQuery = tags ? `&${tags}` : '';
-        return `posts/all?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}`;
+        const loginQuery = login ? `&${login}` : '';
+        return `posts/all?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}${loginQuery}`;
       },
       providesTags: (result, error, arg) =>
         result

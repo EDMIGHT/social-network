@@ -23,14 +23,6 @@ class UserModel implements IUserModel {
     return prisma.user.findUnique({
       where: { login },
       include: {
-        createdPosts: {
-          include: {
-            likedBy: true,
-            comments: true,
-            tags: true,
-            user: true,
-          },
-        },
         _count: {
           select: {
             createdPosts: true,

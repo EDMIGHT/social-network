@@ -21,7 +21,12 @@ export interface IResponseAuth {
 }
 
 export interface IResponseProfile extends IResponseUser {
-  createdPosts: Post[];
+  _count: {
+    createdPosts: number;
+    likedPosts: number;
+    followers: number;
+    following: number;
+  };
 }
 
 export type IResponsePost = Post & {

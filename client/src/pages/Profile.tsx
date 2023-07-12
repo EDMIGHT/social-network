@@ -4,7 +4,8 @@ import { useParams } from 'react-router-dom';
 import Posts from '@/components/sections/Posts';
 import ProfileHeader from '@/components/sections/ProfileHeader';
 import { useAppSelector } from '@/hooks/reduxHooks';
-import { useGetProfilePostsQuery, useGetProfileQuery } from '@/services/profile.service';
+import { useGetAllPostsQuery } from '@/services/post.service';
+import { useGetProfileQuery } from '@/services/users.service';
 import formatTagsForQuery from '@/utils/formatTagsForQuery';
 
 const Profile: React.FC = () => {
@@ -18,7 +19,7 @@ const Profile: React.FC = () => {
     data: postsData,
     isLoading: isPostsLoading,
     isError: isPostsError,
-  } = useGetProfilePostsQuery({
+  } = useGetAllPostsQuery({
     login: login as string,
     tags: tagsQuery,
   });

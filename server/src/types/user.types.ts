@@ -1,4 +1,4 @@
-import { Post, User } from '@prisma/client';
+import { User } from '@prisma/client';
 
 export type RegisterUser = Pick<User, 'img' | 'email' | 'name' | 'login' | 'password'>;
 export type LoginUser = Pick<User, 'login' | 'password'>;
@@ -12,7 +12,6 @@ export type UserWithLikedPosts = User & {
 };
 
 export type UserProfile = User & {
-  createdPosts: Post[];
   _count: {
     likedPosts: number;
     createdPosts: number;

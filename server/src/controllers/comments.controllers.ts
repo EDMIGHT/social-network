@@ -10,7 +10,7 @@ export const getAllCommentsForPost = async (
 ): Promise<Response> => {
   const { postId } = request.params;
   try {
-    const { page = 1, limit = 9, sort = 'createdAt', order = 'asc' } = request.query;
+    const { page = 1, limit = 9, sort = 'createdAt', order = 'desc' } = request.query;
 
     const comments = await commentModel.getAllByPostId({
       postId,
