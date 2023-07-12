@@ -7,7 +7,10 @@ import Input from '@/components/ui/Input';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import FileService from '@/services/file.service';
 import { useCreatePostMutation } from '@/services/post.service';
+import { Tag } from '@/types/tag.types';
 
+import Tags from './Tags';
+import TagSearch from './TagsInsert';
 import UploadPhoto from './UploadPhoto';
 
 export interface ICreatePost {
@@ -21,7 +24,7 @@ const CreatePost: React.FC = () => {
     formState: { errors },
     reset,
   } = useForm<ICreatePost>();
-
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [imgURL, setImgURL] = useState<string | null>(null);
 
   const { accessToken } = useAppSelector((state) => state.user);
@@ -42,9 +45,21 @@ const CreatePost: React.FC = () => {
     }
   };
 
+  const onClickAddTag = (tag: Tag) => {
+    const existTag = selectedTags.some((selectedTag) => selectedTag.id === tag.id);
+    if (!existTag) {
+      setSelectedTags((prev) => [...prev, tag]);
+    } else {
+      // TODO алерт про уже наличие такого тега
+    }
+  };
+  const onClickRemoveTag = (tag: Tag) => {
+    setSelectedTags((prev) => prev.filter((prevTag) => prevTag.id !== tag.id));
+  };
+
   const onSubmit = async (data: any) => {
-    // TODO добавить выбор тэгов
-    await createPost({ accessToken, ...data, img: imgURL });
+    const tags = selectedTags.map((tag) => tag.name).join(',');
+    await createPost({ accessToken, ...data, tags, img: imgURL });
 
     setImgURL(null);
     reset();
@@ -56,6 +71,10 @@ const CreatePost: React.FC = () => {
         <div className='h-96 cursor-pointer bg-black'>
           <img src={imgURL} alt='preview' className='mx-auto h-full object-cover' />
         </div>
+      )}
+      <TagSearch onClickTag={onClickAddTag} />
+      {selectedTags.length > 0 && (
+        <Tags data={selectedTags} className='p-0' onClick={onClickRemoveTag} />
       )}
       <div className='flex w-full'>
         <form
@@ -97,7 +116,7 @@ const CreatePost: React.FC = () => {
             }}
             error={errors.text ? errors.text.message : undefined}
           />
-          <button type='submit' className='mt-[5px] flex items-start'>
+          <button type='submit' disabled={isLoading} className='mt-[5px] flex items-start'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'

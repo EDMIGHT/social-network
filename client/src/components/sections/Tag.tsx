@@ -1,12 +1,12 @@
 import React from 'react';
 
 import Button from '@/components/ui/Button';
-import { Tag as ITag } from '@/types/tag.types';
 
 export interface TagProps {
   id: string;
   name: string;
-  onClick: (tag: ITag) => void;
+  // onClick: (tag: ITag) => void;
+  onClick?: any;
 }
 
 const Tag: React.FC<TagProps> = ({ id, name, onClick }) => {

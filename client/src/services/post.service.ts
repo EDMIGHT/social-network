@@ -51,8 +51,9 @@ const postApi = api.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: (result, error, arg) =>
-        result ? [{ type: 'post', id: result.id }] : ['post'],
+      // invalidatesTags: (result, error, arg) =>
+      //   result ? [{ type: 'post', id: result.id }] : ['post'],
+      invalidatesTags: ['post'],
     }),
     deletePost: builder.mutation<null, IDeletePostQuery>({
       query: ({ id, accessToken }) => ({

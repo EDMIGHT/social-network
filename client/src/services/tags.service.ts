@@ -7,7 +7,10 @@ export const tagsApi = api.injectEndpoints({
     getAllTags: builder.query<Tag[], null>({
       query: () => 'tags',
     }),
+    getTagByName: builder.mutation<Tag[], string>({
+      query: (name) => `tags?name=${name}`,
+    }),
   }),
 });
 
-export const { useGetAllTagsQuery } = tagsApi;
+export const { useGetAllTagsQuery, useGetTagByNameMutation } = tagsApi;

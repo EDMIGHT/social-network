@@ -8,11 +8,13 @@ interface InputProps {
   id?: string;
   name: string;
   error?: string;
+  value?: string;
   optionals?: object;
   children?: string;
   placeholder?: string;
   className?: string;
   defaultValue?: string | undefined;
+  onChange?: any;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -22,8 +24,10 @@ const Input: React.FC<InputProps> = ({
   optionals,
   children,
   placeholder,
+  value,
   className,
   defaultValue,
+  onChange,
 }) => {
   return (
     <label htmlFor={name} className={cn('w-full cursor-pointer', className)}>
@@ -32,10 +36,12 @@ const Input: React.FC<InputProps> = ({
       </Typography>
       <input
         {...optionals}
+        value={value}
         placeholder={placeholder}
         defaultValue={defaultValue}
         name={name}
         id={id ?? name}
+        onChange={onChange}
         className='w-full cursor-pointer rounded border-2 border-transparent bg-input p-2 transition-all hover:border-primary focus:border-primary focus:outline-none active:border-primary'
       />
       {error && (

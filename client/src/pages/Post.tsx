@@ -5,6 +5,7 @@ import Comments from '@/components/sections/Comments';
 import CreateComment from '@/components/sections/CreateComment';
 import PostHeader from '@/components/sections/PostHeader';
 import PostMenu from '@/components/sections/PostMenu';
+import Tags from '@/components/sections/Tags';
 import Card from '@/components/ui/Card';
 import Typography from '@/components/ui/Typography';
 import { useGetPostQuery } from '@/services/post.service';
@@ -37,7 +38,17 @@ const Post: FC = () => {
     return <div>{isError && data && data.message}</div>;
   }
   if (isSuccess && id) {
-    const { id: responseId, createdAt, updatedAt, user, img, text, likedBy, comments } = data;
+    const {
+      id: responseId,
+      createdAt,
+      updatedAt,
+      user,
+      img,
+      text,
+      likedBy,
+      comments,
+      tags,
+    } = data;
 
     return (
       <div ref={postRef} className='flex gap-2'>
@@ -60,6 +71,7 @@ const Post: FC = () => {
             updatedAt={updatedAt}
             user={user}
           />
+          <Tags data={tags} className='p-0' />
           <button onClick={onClickImg}>
             {img && (
               <div className='h-[70vh] cursor-pointer bg-black'>

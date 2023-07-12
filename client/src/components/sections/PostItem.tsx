@@ -9,6 +9,7 @@ import PostAuthor from './PostAuthor';
 import PostControl from './PostControl';
 import PostHeader from './PostHeader';
 import PostMenu from './PostMenu';
+import Tags from './Tags';
 
 const PostItem: React.FC<IResponsePost> = ({
   id,
@@ -27,6 +28,7 @@ const PostItem: React.FC<IResponsePost> = ({
     <li>
       <Card className='flex flex-col gap-2 '>
         <PostHeader id={id} createdAt={createdAt} updatedAt={updatedAt} user={user} />
+        <Tags data={tags} className='p-0' />
         <Link to={`/post/${id}`}>
           {img && (
             <div className='h-96 cursor-pointer bg-black'>
