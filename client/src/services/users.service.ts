@@ -1,4 +1,5 @@
 import { IResponsePostsPagination, IResponseProfile } from '@/types/responses.types';
+import { IFollowingWithPagination } from '@/types/user.types';
 
 import { api } from './api';
 import { IPostQuery } from './post.service';
@@ -8,19 +9,38 @@ interface IToggleLikeArg {
   login: string;
 }
 
+interface IGetFollowArg {
+  login: string;
+  page: number;
+  limit: number;
+}
+
 const profileApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getProfile: builder.query<IResponseProfile, string>({
       query: (login) => `users/${login}`,
-      providesTags: ['user'],
+      providesTags: ['user', 'post'],
     }),
     getLikedPosts: builder.query<IResponsePostsPagination, IPostQuery & { login: string }>({
       query: ({ login, tags, page = 1, limit = 20, sort = 'createdAt', order = 'desc' }) => {
         const tagQuery = tags ? `&${tags}` : '';
         return `users/likedPosts/${login}?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}`;
       },
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.posts.map(({ id }) => ({ type: 'post' as const, id })), 'post', 'user']
+          : ['post', 'user'],
     }),
-    toggleLike: builder.mutation({
+    getFollowing: builder.query<IFollowingWithPagination, IGetFollowArg>({
+      query: ({ login, page = 1, limit = 10 }) => {
+        return `users/following/${login}?page=${page}&limit=${limit}`;
+      },
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.following.map(({ id }) => ({ type: 'user' as const, id })), 'user']
+          : ['user'],
+    }),
+    toggleFollow: builder.mutation({
       query: ({ accessToken, login }: IToggleLikeArg) => {
         return {
           url: `users/follow/${login}`,
@@ -35,4 +55,9 @@ const profileApi = api.injectEndpoints({
   }),
 });
 
-export const { useGetProfileQuery, useGetLikedPostsQuery, useToggleLikeMutation } = profileApi;
+export const {
+  useGetProfileQuery,
+  useGetLikedPostsQuery,
+  useGetFollowingQuery,
+  useToggleFollowMutation,
+} = profileApi;

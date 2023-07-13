@@ -29,3 +29,9 @@ export interface IResponseAuth {
   refreshToken: string;
   user: IResponseUser;
 }
+
+export interface IFollowingWithPagination {
+  following: IJoinedUser[];
+  currentPage: number;
+  totalPages: number;
+}

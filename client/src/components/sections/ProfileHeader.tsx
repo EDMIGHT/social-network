@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card';
 import Thumbnail from '@/components/ui/Thumbnail';
 import Typography from '@/components/ui/Typography';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
-import { useGetProfileQuery, useToggleLikeMutation } from '@/services/users.service';
+import { useGetProfileQuery, useToggleFollowMutation } from '@/services/users.service';
 import { setUser } from '@/store/slices/user.slice';
 import { cn } from '@/utils/cn';
 
@@ -20,15 +20,16 @@ const ProfileHeader: FC = () => {
     isLoading: isLoadingProfile,
     isError,
   } = useGetProfileQuery(urlLogin as string);
-  const [toggleLike, { isLoading: isLoadingLike, isSuccess: isSuccessLike, data: dataLike }] =
-    useToggleLikeMutation();
+  const [
+    toggleFollow,
+    { isLoading: isLoadingFollow, isSuccess: isSuccessFollow, data: dataFollow },
+  ] = useToggleFollowMutation();
 
   useEffect(() => {
-    if (isSuccessLike && data) {
-      dispatch(setUser(dataLike));
-      console.log(data);
+    if (isSuccessFollow && data) {
+      dispatch(setUser(dataFollow));
     }
-  }, [isSuccessLike]);
+  }, [isSuccessFollow]);
 
   if (isLoadingProfile) return <div>loading</div>;
   if (isError) return <div>error</div>;
@@ -36,11 +37,11 @@ const ProfileHeader: FC = () => {
 
   const onClickFollow = async () => {
     if (user && accessToken && urlLogin) {
-      await toggleLike({ accessToken, login: urlLogin });
+      await toggleFollow({ accessToken, login: urlLogin });
     }
   };
 
-  const { createdAt, img, login, name } = data;
+  const { img, login, name } = data;
   // eslint-disable-next-line no-underscore-dangle
   const { createdPosts, followers, following, likedPosts } = data._count;
 
@@ -66,11 +67,11 @@ const ProfileHeader: FC = () => {
           {user && user.login !== login && (
             <div>
               {user.following.some((u) => u.login === login) ? (
-                <Button onClick={onClickFollow} variant='highlight' disabled={isLoadingLike}>
+                <Button onClick={onClickFollow} variant='highlight' disabled={isLoadingFollow}>
                   unfollow
                 </Button>
               ) : (
-                <Button onClick={onClickFollow} variant='activity' disabled={isLoadingLike}>
+                <Button onClick={onClickFollow} variant='activity' disabled={isLoadingFollow}>
                   follow
                 </Button>
               )}
@@ -141,7 +142,16 @@ const ProfileHeader: FC = () => {
               />
             </svg>
           </NavLink>
-          <div className='flex flex-col items-center justify-between gap-1'>
+          <NavLink
+            to='following'
+            end
+            className={({ isActive }) =>
+              cn(
+                'flex flex-col items-center justify-between gap-1 hover:text-accent',
+                isActive && 'text-primary'
+              )
+            }
+          >
             <Typography component='h3' variant='text'>
               following
             </Typography>
@@ -162,7 +172,7 @@ const ProfileHeader: FC = () => {
                 d='M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z'
               />
             </svg>
-          </div>
+          </NavLink>
           <div className='flex flex-col items-center justify-start gap-1'>
             <Typography component='h3' variant='text'>
               followers

@@ -89,7 +89,7 @@ const postApi = api.injectEndpoints({
         method: 'POST',
       }),
       invalidatesTags: (result, error, arg) =>
-        result ? [{ type: 'post', id: arg.id }] : ['post'],
+        result ? [{ type: 'post', id: arg.id }, 'user'] : ['post', 'user'],
     }),
   }),
 });

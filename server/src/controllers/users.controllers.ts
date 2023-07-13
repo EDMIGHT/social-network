@@ -98,17 +98,17 @@ export const getFollowing = async (
   const { login } = request.params;
   const { page = 1, limit = 10 } = request.query;
   try {
-    const followers = await userModel.getFollowing({
+    const following = await userModel.getFollowing({
       login,
       page: +page,
       limit: +limit,
     });
-    const totalFollowers = await userModel.getTotalFollowing(login);
+    const totalFollowing = await userModel.getTotalFollowing(login);
 
     return customResponse.ok(response, {
-      followers,
+      following,
       currentPage: page,
-      totalPages: Math.floor(totalFollowers / +limit),
+      totalPages: Math.floor(totalFollowing / +limit),
     });
   } catch (error) {
     console.error(error);

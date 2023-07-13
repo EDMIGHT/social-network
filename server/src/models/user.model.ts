@@ -4,11 +4,13 @@ import prisma from '@/db/prisma';
 import { IUserModel } from '@/types/user.model.interface';
 import {
   RegisterUser,
+  ResponseUser,
   UserProfile,
   UserWithData,
   UserWithFollow,
   UserWithFollowing,
 } from '@/types/user.types';
+import createResponseUser from '@/utils/helpers/createResponseUser';
 
 interface GetFollow {
   login: string;
@@ -100,7 +102,7 @@ class UserModel implements IUserModel {
       });
     } else return null;
   }
-  public async getFollowers({ login, page, limit }: GetFollow): Promise<User[]> {
+  public async getFollowers({ login, page, limit }: GetFollow): Promise<ResponseUser[]> {
     const offset = (page - 1) * limit;
 
     const user = await prisma.user.findFirst({
@@ -113,7 +115,7 @@ class UserModel implements IUserModel {
       },
     });
 
-    return user?.followers ?? [];
+    return user?.followers.map((follow) => createResponseUser(follow) as User) ?? [];
   }
   public async getTotalFollowers(login: string): Promise<number> {
     const user = await prisma.user.findFirst({
@@ -125,7 +127,7 @@ class UserModel implements IUserModel {
 
     return user?.followers.length ?? 0;
   }
-  public async getFollowing({ login, page, limit }: GetFollow): Promise<User[]> {
+  public async getFollowing({ login, page, limit }: GetFollow): Promise<ResponseUser[]> {
     const offset = (page - 1) * limit;
 
     const user = await prisma.user.findFirst({
@@ -138,7 +140,7 @@ class UserModel implements IUserModel {
       },
     });
 
-    return user?.following ?? [];
+    return user?.following.map((follow) => createResponseUser(follow) as User) ?? [];
   }
   public async getTotalFollowing(login: string): Promise<number> {
     const user = await prisma.user.findFirst({
