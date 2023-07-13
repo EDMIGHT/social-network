@@ -1,3 +1,5 @@
+import { IPagination } from '@/services/api';
+
 export interface User {
   id: string;
   login: string;
@@ -22,16 +24,10 @@ export type IUserWithData = Omit<User, 'password'> & {
 
 export type IJoinedUser = Pick<User, 'id' | 'name' | 'login' | 'img'>;
 
-export type IResponseUser = IUserWithData;
-
-export interface IResponseAuth {
-  accessToken: string;
-  refreshToken: string;
-  user: IResponseUser;
+export interface IFollowingWithPagination extends IPagination {
+  following: IJoinedUser[];
 }
 
-export interface IFollowingWithPagination {
-  following: IJoinedUser[];
-  currentPage: number;
-  totalPages: number;
+export interface IFollowersWithPagination extends IPagination {
+  followers: IJoinedUser[];
 }

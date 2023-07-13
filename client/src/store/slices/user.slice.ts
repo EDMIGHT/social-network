@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { IResponseAuth } from '@/types/responses.types';
-import { IResponseUser } from '@/types/user.types';
+import { IResponseAuth, IResponseUser } from '@/types/responses.types';
 
 export interface IUserSlice {
   user: IResponseUser | null;

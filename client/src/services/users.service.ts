@@ -1,5 +1,5 @@
 import { IResponsePostsPagination, IResponseProfile } from '@/types/responses.types';
-import { IFollowingWithPagination } from '@/types/user.types';
+import { IFollowersWithPagination, IFollowingWithPagination } from '@/types/user.types';
 
 import { api } from './api';
 import { IPostQuery } from './post.service';
@@ -40,6 +40,15 @@ const profileApi = api.injectEndpoints({
           ? [...result.following.map(({ id }) => ({ type: 'user' as const, id })), 'user']
           : ['user'],
     }),
+    getFollowers: builder.query<IFollowersWithPagination, IGetFollowArg>({
+      query: ({ login, page = 1, limit = 10 }) => {
+        return `users/followers/${login}?page=${page}&limit=${limit}`;
+      },
+      providesTags: (result, error, arg) =>
+        result
+          ? [...result.followers.map(({ id }) => ({ type: 'user' as const, id })), 'user']
+          : ['user'],
+    }),
     toggleFollow: builder.mutation({
       query: ({ accessToken, login }: IToggleLikeArg) => {
         return {
@@ -59,5 +68,6 @@ export const {
   useGetProfileQuery,
   useGetLikedPostsQuery,
   useGetFollowingQuery,
+  useGetFollowersQuery,
   useToggleFollowMutation,
 } = profileApi;

@@ -25,8 +25,8 @@ const User: FC<IJoinedUser> = ({ id, img, login, name }) => {
   }, [isSuccess]);
 
   const onClickFollow = async () => {
-    if (user && accessToken && urlLogin) {
-      await toggleFollow({ accessToken, login: urlLogin });
+    if (user && accessToken && login) {
+      await toggleFollow({ accessToken, login });
     }
   };
 

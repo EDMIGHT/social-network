@@ -1,3 +1,5 @@
+import { IPagination } from '@/services/api';
+
 import { Comment } from './comment.types';
 import { Post } from './post.types';
 import { Tag } from './tag.types';
@@ -7,10 +9,8 @@ export interface IBadResponse {
   message: string;
 }
 
-export interface IResponsePostsPagination {
+export interface IResponsePostsPagination extends IPagination {
   posts: IResponsePost[];
-  currentPage: number;
-  totalPages: number;
 }
 export type IResponseUser = IUserWithData;
 

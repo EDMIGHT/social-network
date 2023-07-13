@@ -4,6 +4,11 @@ const BASE_API_URL = import.meta.env.VITE_BASE_API_URL || 'http://localhost:3001
 
 export const baseQuery = fetchBaseQuery({ baseUrl: BASE_API_URL });
 
+export interface IPagination {
+  currentPage: number;
+  totalPages: number;
+}
+
 export const api = createApi({
   reducerPath: 'api',
   tagTypes: ['post', 'comment', 'user'],

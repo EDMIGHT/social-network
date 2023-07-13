@@ -13,6 +13,7 @@ import PostEdit from '@/pages/PostEdit';
 import Profile from '@/pages/Profile';
 import SignIn from '@/pages/SignIn';
 
+import UserFollowers from './components/sections/UserFollowers';
 import UserFollowing from './components/sections/UserFollowing';
 import UserPosts from './components/sections/UserPosts';
 
@@ -40,8 +41,8 @@ const App = React.memo(() => {
           <Route index element={<UserPosts />} />
           <Route path='likedPosts' element={<LikedPosts />} />
           <Route path='following' element={<UserFollowing />} />
+          <Route path='followers' element={<UserFollowers />} />
         </Route>
-        {/* <Route path='/likedPosts/:login' element={<LikedPosts />} /> */}
       </Route>
       <Route path='/post' element={<PageLayout />}>
         <Route path=':id' element={<Post />} />
