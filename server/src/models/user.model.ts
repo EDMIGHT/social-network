@@ -5,8 +5,9 @@ import { IUserModel } from '@/types/user.model.interface';
 import {
   RegisterUser,
   UserProfile,
-  UserWithFollowers,
-  UserWithLikedPosts,
+  UserWithData,
+  UserWithFollow,
+  UserWithFollowing,
 } from '@/types/user.types';
 
 interface GetFollow {
@@ -19,11 +20,11 @@ class UserModel implements IUserModel {
   public async createUser(data: RegisterUser): Promise<User> {
     return prisma.user.create({ data }); // FIX попробовать найти метод exclude, чтоб убрать при возращении свойство password
   }
-  public async getUserByLogin(login: string): Promise<UserWithFollowers | null> {
+  public async getUserByLogin(login: string): Promise<UserWithFollowing | null> {
     return prisma.user.findFirst({
       where: { login },
       include: {
-        followers: {
+        following: {
           select: {
             id: true,
             login: true,
@@ -34,10 +35,14 @@ class UserModel implements IUserModel {
       },
     });
   }
-  public async getUserById(id: string): Promise<UserWithLikedPosts | null> {
+  public async getUserById(id: string): Promise<UserWithFollow | null> {
     return prisma.user.findFirst({
       where: { id },
-      include: { likedPosts: { select: { id: true } } },
+      include: {
+        likedPosts: { select: { id: true } },
+        followers: { select: { login: true } },
+        following: { select: { login: true } },
+      },
     });
   }
   public async getUserByLoginWithData(login: string): Promise<UserProfile | null> {
@@ -58,49 +63,39 @@ class UserModel implements IUserModel {
   public async follow(
     followedLogin: string,
     followerLogin: string
-  ): Promise<UserWithFollowers | null> {
+  ): Promise<UserWithData | null> {
     return prisma.user.update({
       where: { login: followedLogin },
       data: {
-        followers: { connect: { login: followerLogin } },
+        following: { connect: { login: followerLogin } },
       },
       include: {
-        followers: {
-          select: {
-            id: true,
-            login: true,
-            name: true,
-            img: true,
-          },
-        },
+        likedPosts: { select: { id: true } },
+        followers: { select: { login: true } },
+        following: { select: { login: true } },
       },
     });
   }
   public async unfollow(
     followedLogin: string,
     unfollowLogin: string
-  ): Promise<UserWithFollowers | null> {
+  ): Promise<UserWithData | null> {
     const followedUser = await this.getUserByLogin(followedLogin);
 
     if (followedUser) {
-      const newFollowers = followedUser.followers.filter(
+      const newFollowers = followedUser.following.filter(
         (user) => user.login !== unfollowLogin
       );
 
       return prisma.user.update({
         where: { login: followedLogin },
         data: {
-          followers: { set: newFollowers.map((follow) => ({ id: follow.id })) },
+          following: { set: newFollowers.map((follow) => ({ login: follow.login })) },
         },
         include: {
-          followers: {
-            select: {
-              id: true,
-              login: true,
-              name: true,
-              img: true,
-            },
-          },
+          likedPosts: { select: { id: true } },
+          followers: { select: { login: true } },
+          following: { select: { login: true } },
         },
       });
     } else return null;

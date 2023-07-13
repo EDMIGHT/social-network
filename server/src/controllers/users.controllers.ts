@@ -125,7 +125,7 @@ export const toggleFollowUser = async (
   const { login } = request.params;
 
   try {
-    const existedUser = await userModel.getUserByLogin(login);
+    const existedUser = await userModel.getUserById(request.user.id);
 
     if (!existedUser) {
       return customResponse.notFound(response, {
@@ -133,18 +133,18 @@ export const toggleFollowUser = async (
         login,
       });
     }
-
-    const checkExist = existedUser.followers.some((user) => user.id === request.user.id);
+    const checkExist = existedUser.following.some((user) => user.login === login);
+    console.log(existedUser);
 
     let updatedUser;
 
     if (checkExist) {
-      updatedUser = await userModel.unfollow(login, request.user.login);
+      updatedUser = await userModel.unfollow(request.user.login, login);
     } else {
-      updatedUser = await userModel.follow(login, request.user.login);
+      updatedUser = await userModel.follow(request.user.login, login);
     }
 
-    return customResponse.ok(response, updatedUser);
+    return customResponse.ok(response, createResponseUser(updatedUser));
   } catch (error) {
     console.error(error);
     return customResponse.serverError(response, {

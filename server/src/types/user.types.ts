@@ -20,8 +20,30 @@ export type UserProfile = User & {
   };
 };
 
-export type UserWithFollowers = User & {
-  followers: IncludedUser[];
+export type UserWithFollowing = User & {
+  following: {
+    login: string;
+  }[];
+};
+
+export type UserWithData = User & {
+  likedPosts: {
+    id: string;
+  }[];
+  followers: {
+    login: string;
+  }[];
+  following: {
+    login: string;
+  }[];
+};
+export type UserWithFollow = User & {
+  followers: {
+    login: string;
+  }[];
+  following: {
+    login: string;
+  }[];
 };
 
 // type guards

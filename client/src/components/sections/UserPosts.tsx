@@ -1,7 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import Typography from '@/components/ui/Typography';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetAllPostsQuery } from '@/services/post.service';
 import formatTagsForQuery from '@/utils/formatTagsForQuery';

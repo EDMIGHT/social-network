@@ -8,15 +8,21 @@ export interface User {
   createdAt: Date;
 }
 
-export type IUserWithLikedPosts = Omit<User, 'password'> & {
+export type IUserWithData = Omit<User, 'password'> & {
   likedPosts: {
     id: string;
+  }[];
+  followers: {
+    login: string;
+  }[];
+  following: {
+    login: string;
   }[];
 };
 
 export type IJoinedUser = Pick<User, 'id' | 'name' | 'login' | 'img'>;
 
-export type IResponseUser = IUserWithLikedPosts;
+export type IResponseUser = IUserWithData;
 
 export interface IResponseAuth {
   accessToken: string;

@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ResponseAuth } from '@/types/responses.types';
-import { ResponseUser } from '@/types/user.types';
+import { IResponseAuth } from '@/types/responses.types';
+import { IResponseUser } from '@/types/user.types';
 
 export interface IUserSlice {
-  user: ResponseUser | null;
+  user: IResponseUser | null;
   accessToken: string | null;
   refreshToken: string | null;
 }
@@ -19,13 +19,13 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserData: (state, action: PayloadAction<ResponseAuth | null>) => {
+    setUserData: (state, action: PayloadAction<IResponseAuth | null>) => {
       const { user, accessToken, refreshToken } = action.payload || {};
       state.user = user || null;
       state.accessToken = accessToken || null;
       state.refreshToken = refreshToken || null;
     },
-    setUser: (state, action: PayloadAction<ResponseUser>) => {
+    setUser: (state, action: PayloadAction<IResponseUser>) => {
       state.user = action.payload;
     },
   },

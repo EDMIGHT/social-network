@@ -1,7 +1,7 @@
 import { Comment } from './comment.types';
 import { Post } from './post.types';
 import { Tag } from './tag.types';
-import { IJoinedUser, IUserWithLikedPosts } from './user.types';
+import { IJoinedUser, IUserWithData } from './user.types';
 
 export interface IBadResponse {
   message: string;
@@ -12,7 +12,7 @@ export interface IResponsePostsPagination {
   currentPage: number;
   totalPages: number;
 }
-export type IResponseUser = IUserWithLikedPosts;
+export type IResponseUser = IUserWithData;
 
 export interface IResponseAuth {
   accessToken: string;

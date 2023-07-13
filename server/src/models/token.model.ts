@@ -14,7 +14,7 @@ class TokenModel {
   }
   public async getToken(refreshToken: string | undefined = undefined): Promise<Token | null> {
     return prisma.token.findFirst({
-      where: { refreshToken },
+      where: { refreshToken: refreshToken || undefined },
     });
   }
   public async updateToken(userId: string, refreshToken: string): Promise<Token> {

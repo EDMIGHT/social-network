@@ -1,21 +1,49 @@
-import React from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { FC, useEffect } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
 
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Thumbnail from '@/components/ui/Thumbnail';
 import Typography from '@/components/ui/Typography';
-import { IResponseProfile } from '@/types/responses.types';
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
+import { useGetProfileQuery, useToggleLikeMutation } from '@/services/users.service';
+import { setUser } from '@/store/slices/user.slice';
 import { cn } from '@/utils/cn';
 
-const ProfileHeader: React.FC<IResponseProfile> = ({
-  createdAt,
-  _count,
-  img,
-  login,
-  name,
-}) => {
-  const { createdPosts, followers, following, likedPosts } = _count;
+const ProfileHeader: FC = () => {
+  const { login: urlLogin } = useParams();
+  const dispatch = useAppDispatch();
+  const { user, accessToken } = useAppSelector((state) => state.user);
+
+  const {
+    data,
+    isLoading: isLoadingProfile,
+    isError,
+  } = useGetProfileQuery(urlLogin as string);
+  const [toggleLike, { isLoading: isLoadingLike, isSuccess: isSuccessLike, data: dataLike }] =
+    useToggleLikeMutation();
+
+  useEffect(() => {
+    if (isSuccessLike && data) {
+      dispatch(setUser(dataLike));
+      console.log(data);
+    }
+  }, [isSuccessLike]);
+
+  if (isLoadingProfile) return <div>loading</div>;
+  if (isError) return <div>error</div>;
+  if (!data) return <div>not found</div>;
+
+  const onClickFollow = async () => {
+    if (user && accessToken && urlLogin) {
+      await toggleLike({ accessToken, login: urlLogin });
+    }
+  };
+
+  const { createdAt, img, login, name } = data;
+  // eslint-disable-next-line no-underscore-dangle
+  const { createdPosts, followers, following, likedPosts } = data._count;
+
   return (
     <Card className='flex w-full gap-2'>
       <div className='w-[220px]'>
@@ -35,9 +63,19 @@ const ProfileHeader: React.FC<IResponseProfile> = ({
             </Typography>
           </div>
 
-          <div>
-            <Button variant='activity'>subscribe</Button>
-          </div>
+          {user && user.login !== login && (
+            <div>
+              {user.following.some((u) => u.login === login) ? (
+                <Button onClick={onClickFollow} variant='highlight' disabled={isLoadingLike}>
+                  unfollow
+                </Button>
+              ) : (
+                <Button onClick={onClickFollow} variant='activity' disabled={isLoadingLike}>
+                  follow
+                </Button>
+              )}
+            </div>
+          )}
         </div>
 
         <div className='flex justify-around'>
