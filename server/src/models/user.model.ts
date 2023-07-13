@@ -9,7 +9,7 @@ import {
   UserWithLikedPosts,
 } from '@/types/user.types';
 
-interface GetFollowers {
+interface GetFollow {
   login: string;
   page: number;
   limit: number;
@@ -105,7 +105,7 @@ class UserModel implements IUserModel {
       });
     } else return null;
   }
-  public async getFollowers({ login, page, limit }: GetFollowers) {
+  public async getFollowers({ login, page, limit }: GetFollow): Promise<User[]> {
     const offset = (page - 1) * limit;
 
     const user = await prisma.user.findFirst({
@@ -118,9 +118,9 @@ class UserModel implements IUserModel {
       },
     });
 
-    return user?.followers;
+    return user?.followers ?? [];
   }
-  public async getTotalFollowers(login: string) {
+  public async getTotalFollowers(login: string): Promise<number> {
     const user = await prisma.user.findFirst({
       where: { login },
       include: {
@@ -129,6 +129,31 @@ class UserModel implements IUserModel {
     });
 
     return user?.followers.length ?? 0;
+  }
+  public async getFollowing({ login, page, limit }: GetFollow): Promise<User[]> {
+    const offset = (page - 1) * limit;
+
+    const user = await prisma.user.findFirst({
+      where: { login },
+      select: {
+        following: {
+          take: limit,
+          skip: offset,
+        },
+      },
+    });
+
+    return user?.following ?? [];
+  }
+  public async getTotalFollowing(login: string): Promise<number> {
+    const user = await prisma.user.findFirst({
+      where: { login },
+      include: {
+        following: true,
+      },
+    });
+
+    return user?.following.length ?? 0;
   }
 }
 
