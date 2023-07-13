@@ -9,6 +9,12 @@ import {
   UserWithLikedPosts,
 } from '@/types/user.types';
 
+interface GetFollowers {
+  login: string;
+  page: number;
+  limit: number;
+}
+
 class UserModel implements IUserModel {
   public async createUser(data: RegisterUser): Promise<User> {
     return prisma.user.create({ data }); // FIX попробовать найти метод exclude, чтоб убрать при возращении свойство password
@@ -98,6 +104,31 @@ class UserModel implements IUserModel {
         },
       });
     } else return null;
+  }
+  public async getFollowers({ login, page, limit }: GetFollowers) {
+    const offset = (page - 1) * limit;
+
+    const user = await prisma.user.findFirst({
+      where: { login },
+      select: {
+        followers: {
+          take: limit,
+          skip: offset,
+        },
+      },
+    });
+
+    return user?.followers;
+  }
+  public async getTotalFollowers(login: string) {
+    const user = await prisma.user.findFirst({
+      where: { login },
+      include: {
+        followers: true,
+      },
+    });
+
+    return user?.followers.length ?? 0;
   }
 }
 

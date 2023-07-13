@@ -64,6 +64,33 @@ export const getLikedPosts = async (
   }
 };
 
+export const getFollowers = async (
+  request: Request,
+  response: Response
+): Promise<Response> => {
+  const { login } = request.params;
+  const { page = 1, limit = 10 } = request.query;
+  try {
+    const followers = await userModel.getFollowers({
+      login,
+      page: +page,
+      limit: +limit,
+    });
+    const totalFollowers = await userModel.getTotalFollowers(login);
+
+    return customResponse.ok(response, {
+      followers,
+      currentPage: page,
+      totalPages: Math.floor(totalFollowers / +limit),
+    });
+  } catch (error) {
+    console.error(error);
+    return customResponse.serverError(response, {
+      message: 'error on the server when fetching the users favorite posts',
+    });
+  }
+};
+
 export const toggleFollowUser = async (
   request: Request,
   response: Response
