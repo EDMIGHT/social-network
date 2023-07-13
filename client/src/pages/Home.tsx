@@ -11,7 +11,7 @@ const Home: React.FC = () => {
 
   const tagsQuery = tags && formatTagsForQuery(tags);
 
-  const { isLoading, isError, isSuccess, data } = useGetAllPostsQuery({ tags: tagsQuery }, {});
+  const { isLoading, isError, data } = useGetAllPostsQuery({ tags: tagsQuery });
 
   if (isLoading) return <div>loading</div>;
   if (isError) return <div>error</div>;

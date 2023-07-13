@@ -31,8 +31,8 @@ const postApi = api.injectEndpoints({
     getAllPosts: builder.query<IResponsePostsPagination, IPostQuery>({
       query: ({ tags, page = 1, limit = 20, sort = 'createdAt', order = 'desc', login }) => {
         const tagQuery = tags ? `&${tags}` : '';
-        const loginQuery = login ? `&${login}` : '';
-        return `posts/all?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}${loginQuery}`;
+        const loginQuery = login ? `/${login}` : '';
+        return `posts/all${loginQuery}?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}`;
       },
       providesTags: (result, error, arg) =>
         result

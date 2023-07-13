@@ -18,14 +18,7 @@ const LikedPosts: FC = () => {
   });
 
   if (isSuccess && data) {
-    return (
-      <div className='flex flex-col items-center justify-center gap-2'>
-        <Typography component='h2' variant='title-2'>
-          Liked Posts {login}
-        </Typography>
-        <Posts posts={data?.posts} />
-      </div>
-    );
+    return <Posts posts={data?.posts} />;
   }
 
   return <div>loading</div>;
