@@ -63,3 +63,38 @@ export const getLikedPosts = async (
     });
   }
 };
+
+export const toggleFollowUser = async (
+  request: Request,
+  response: Response
+): Promise<Response> => {
+  const { login } = request.params;
+
+  try {
+    const existedUser = await userModel.getUserByLogin(login);
+
+    if (!existedUser) {
+      return customResponse.notFound(response, {
+        message: 'the user with the specified login does not exist',
+        login,
+      });
+    }
+
+    const checkExist = existedUser.followers.some((user) => user.id === request.user.id);
+
+    let updatedUser;
+
+    if (checkExist) {
+      updatedUser = await userModel.unfollow(login, request.user.login);
+    } else {
+      updatedUser = await userModel.follow(login, request.user.login);
+    }
+
+    return customResponse.ok(response, updatedUser);
+  } catch (error) {
+    console.error(error);
+    return customResponse.serverError(response, {
+      message: 'a server-side error occurred while subscribing to a user',
+    });
+  }
+};

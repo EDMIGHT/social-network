@@ -6,7 +6,7 @@ import {
   getAllPosts,
   getPost,
   getPosts,
-  likePost,
+  toggleLikePost,
   updatePost,
 } from '@/controllers/posts.controllers';
 import authentication from '@/middleware/authentication.middleware';
@@ -558,7 +558,7 @@ router.get('/:id', getPost);
  */
 router.post('/', authentication, createPostValidators, validationHandler, createPost);
 
-router.post('/like/:id', authentication, likePost);
+router.post('/like/:id', authentication, toggleLikePost);
 
 /**
  * @openapi

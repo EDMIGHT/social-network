@@ -20,6 +20,10 @@ export type UserProfile = User & {
   };
 };
 
+export type UserWithFollowers = User & {
+  followers: IncludedUser[];
+};
+
 // type guards
 export const isRegisterUser = (obj: unknown): obj is RegisterUser => {
   return obj !== null && typeof obj === 'object' && 'password' in obj && 'img' in obj;

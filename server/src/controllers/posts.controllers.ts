@@ -178,7 +178,10 @@ export const updatePost = async (request: Request, response: Response): Promise<
   }
 };
 
-export const likePost = async (request: Request, response: Response): Promise<Response> => {
+export const toggleLikePost = async (
+  request: Request,
+  response: Response
+): Promise<Response> => {
   const { id } = request.params;
 
   try {
