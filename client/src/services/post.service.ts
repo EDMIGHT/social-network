@@ -1,15 +1,13 @@
 import { Post } from '@/types/post.types';
 import { IResponsePost, IResponsePostsPagination } from '@/types/responses.types';
 
-import { api } from './api';
+import { api, IPaginationArg } from './api';
 
 type SortPost = 'title' | 'createdAt' | 'updatedAt' | 'viewsCount';
 
-export interface IPostQuery {
+export interface IPostQuery extends IPaginationArg {
   login?: string;
   tags?: string;
-  page?: number;
-  limit?: number;
   sort?: SortPost;
   order?: 'asc' | 'desc';
 }

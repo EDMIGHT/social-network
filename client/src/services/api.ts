@@ -8,6 +8,10 @@ export interface IPagination {
   currentPage: number;
   totalPages: number;
 }
+export interface IPaginationArg {
+  page?: number;
+  limit?: number;
+}
 
 export const api = createApi({
   reducerPath: 'api',

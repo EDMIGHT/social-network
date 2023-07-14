@@ -1,13 +1,11 @@
-import React, { useEffect } from 'react';
+import { FC } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import LikedPosts from '@/components/sections/LikedPosts';
 import UserFollowers from '@/components/sections/UserFollowers';
 import UserFollowing from '@/components/sections/UserFollowing';
 import UserPosts from '@/components/sections/UserPosts';
-import useAuthentication from '@/hooks/useAuthentication';
-import useLocalStorage from '@/hooks/useLocalStorage';
-import useTheme from '@/hooks/useTheme';
+import { useInitialization } from '@/hooks/useInitialization';
 import MainLayout from '@/layouts/MainLayout';
 import PageLayout from '@/layouts/PageLayout';
 import Home from '@/pages/Home';
@@ -16,21 +14,8 @@ import PostEdit from '@/pages/PostEdit';
 import Profile from '@/pages/Profile';
 import SignIn from '@/pages/SignIn';
 
-const App = React.memo(() => {
-  useAuthentication();
-
-  const [setLocal, getLocal] = useLocalStorage();
-  const [currentTheme, toggleTheme, setTheme] = useTheme();
-
-  useEffect(() => {
-    const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme = getLocal('theme') as 'dark' | 'light';
-    if (theme) {
-      setTheme(theme);
-    } else if (prefersDarkTheme) {
-      setTheme('dark');
-    }
-  }, []);
+const App: FC = () => {
+  useInitialization();
 
   return (
     <Routes>
@@ -50,6 +35,6 @@ const App = React.memo(() => {
       <Route path='/signIn' element={<SignIn />} />
     </Routes>
   );
-});
+};
 
 export default App;

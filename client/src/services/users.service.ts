@@ -1,7 +1,11 @@
 import { IResponsePostsPagination, IResponseProfile } from '@/types/responses.types';
-import { IFollowersWithPagination, IFollowingWithPagination } from '@/types/user.types';
+import {
+  IFollowersWithPagination,
+  IFollowingWithPagination,
+  IJoinedUsersWithPagination,
+} from '@/types/user.types';
 
-import { api } from './api';
+import { api, IPaginationArg } from './api';
 import { IPostQuery } from './post.service';
 
 interface IToggleLikeArg {
@@ -9,10 +13,11 @@ interface IToggleLikeArg {
   login: string;
 }
 
-interface IGetFollowArg {
+interface IGetFollowArg extends IPaginationArg {
   login: string;
-  page: number;
-  limit: number;
+}
+interface ISearchUsersByLoginArg extends IPaginationArg {
+  login: string;
 }
 
 const profileApi = api.injectEndpoints({
@@ -61,6 +66,10 @@ const profileApi = api.injectEndpoints({
       },
       invalidatesTags: ['user'],
     }),
+    searchUserByLogin: builder.mutation<IJoinedUsersWithPagination, ISearchUsersByLoginArg>({
+      query: ({ login, page = 1, limit = 10 }) =>
+        `users?login=${login}&page=${page}&limit=${limit}`,
+    }),
   }),
 });
 
@@ -70,4 +79,5 @@ export const {
   useGetFollowingQuery,
   useGetFollowersQuery,
   useToggleFollowMutation,
+  useSearchUserByLoginMutation,
 } = profileApi;

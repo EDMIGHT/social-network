@@ -24,6 +24,10 @@ export type IUserWithData = Omit<User, 'password'> & {
 
 export type IJoinedUser = Pick<User, 'id' | 'name' | 'login' | 'img'>;
 
+export interface IJoinedUsersWithPagination extends IPagination {
+  users: IJoinedUser[];
+}
+
 export interface IFollowingWithPagination extends IPagination {
   following: IJoinedUser[];
 }

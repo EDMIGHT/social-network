@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
+import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Thumbnail from '@/components/ui/Thumbnail';
 import Typography from '@/components/ui/Typography';
@@ -9,10 +10,11 @@ import { useToggleFollowMutation } from '@/services/users.service';
 import { setUser } from '@/store/slices/user.slice';
 import { IJoinedUser } from '@/types/user.types';
 
-import Button from '../ui/Button';
+interface IUserProps extends IJoinedUser {
+  onClickUser?: any;
+}
 
-const User: FC<IJoinedUser> = ({ id, img, login, name }) => {
-  const { login: urlLogin } = useParams();
+const User: FC<IUserProps> = ({ id, img, login, name, onClickUser }) => {
   const { user, accessToken } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
@@ -33,7 +35,7 @@ const User: FC<IJoinedUser> = ({ id, img, login, name }) => {
   return (
     <li>
       <Card className='flex items-center justify-between gap-2'>
-        <Link to={`/${login}`} className='flex gap-2 hover:opacity-80'>
+        <Link to={`/${login}`} onClick={onClickUser} className='flex gap-2 hover:opacity-80'>
           <div className='w-20'>
             <Thumbnail imgURL={img} alt={login} />
           </div>

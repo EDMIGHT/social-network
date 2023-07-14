@@ -4,12 +4,13 @@ import { Link } from 'react-router-dom';
 
 import Button from '@/components/ui/Button';
 import Popup from '@/components/ui/Popup';
-import Search from '@/components/ui/Search';
 import Thumbnail from '@/components/ui/Thumbnail';
 import Typography from '@/components/ui/Typography';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import useLogout from '@/hooks/useLogout';
 import useTheme from '@/hooks/useTheme';
+
+import Search from './Search';
 
 const Header: React.FC = () => {
   const user = useAppSelector((state) => state.user.user);
@@ -53,7 +54,7 @@ const Header: React.FC = () => {
         </div>
       </Link>
       <div className='flex h-full justify-end gap-2'>
-        <Search placeholder='search' className='w-full' />
+        <Search />
         <button onClick={onClickThemeSwitcher} className='h-full'>
           {theme === 'light' && (
             <svg
@@ -89,7 +90,7 @@ const Header: React.FC = () => {
           )}
         </button>
         {user ? (
-          <div className='relative inline-block w-1/6' ref={popupRef}>
+          <div className='relative inline-block' ref={popupRef}>
             <button className='h-full w-full' onClick={onClickThumbnail}>
               <Thumbnail imgURL={user.img} alt='me' />
             </button>

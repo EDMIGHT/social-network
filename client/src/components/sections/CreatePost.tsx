@@ -16,7 +16,7 @@ export interface ICreatePost {
   text: string;
 }
 
-const CreatePost: React.FC = () => {
+const CreatePost: React.FC = React.memo(() => {
   const {
     register,
     handleSubmit,
@@ -135,6 +135,6 @@ const CreatePost: React.FC = () => {
       </div>
     </Card>
   );
-};
+});
 
 export default CreatePost;
