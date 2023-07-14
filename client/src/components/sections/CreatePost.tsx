@@ -8,8 +8,8 @@ import FileService from '@/services/file.service';
 import { useCreatePostMutation } from '@/services/post.service';
 import { Tag } from '@/types/tag.types';
 
+import SearchTag from './SearchTag';
 import Tags from './Tags';
-import TagSearch from './TagSearch';
 import UploadPhoto from './UploadPhoto';
 
 export interface ICreatePost {
@@ -71,7 +71,7 @@ const CreatePost: React.FC = React.memo(() => {
           <img src={imgURL} alt='preview' className='mx-auto h-full object-cover' />
         </div>
       )}
-      <TagSearch onClickTag={onClickAddTag} />
+      <SearchTag onClickTag={onClickAddTag} />
       {selectedTags.length > 0 && (
         <Tags data={selectedTags} className='p-0' onClick={onClickRemoveTag} />
       )}

@@ -45,8 +45,8 @@ const User: FC<IUserProps> = ({ id, img, login, name, onClickUser }) => {
                 {name}
               </Typography>
             )}
-            <Typography component='h3' variant='title-1'>
-              {login}
+            <Typography component='h3' variant='description'>
+              @{login}
             </Typography>
           </div>
         </Link>
