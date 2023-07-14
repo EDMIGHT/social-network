@@ -107,12 +107,15 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img }) => {
       )}
       <Textarea
         name='text'
-        id='text-comment'
-        placeholder='write comment here..'
+        id='text-post'
+        placeholder='write text here..'
         defaultValue={PostTest || undefined}
         optionals={{
           ...register('text', {
-            required: 'this field is required to create a comment',
+            maxLength: {
+              value: 280,
+              message: 'maximum post length 280 characters',
+            },
           }),
         }}
         error={errors.text?.message}

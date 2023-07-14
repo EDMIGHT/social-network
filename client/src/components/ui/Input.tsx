@@ -46,13 +46,13 @@ const Input: React.FC<InputProps> = ({
       </Typography>
       <input
         ref={inputRef}
-        {...optionals}
         value={value}
         placeholder={placeholder}
         defaultValue={defaultValue}
         name={name}
         id={id ?? name}
         onChange={onChange}
+        {...optionals}
         className='w-full cursor-pointer rounded border-2 border-transparent bg-input p-2 transition-all hover:border-primary focus:border-primary focus:outline-none active:border-primary'
       />
       {error && (

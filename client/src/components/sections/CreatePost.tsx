@@ -102,11 +102,6 @@ const CreatePost: React.FC = React.memo(() => {
             placeholder='enter the text post...'
             optionals={{
               ...register('text', {
-                required: 'text is a required field',
-                minLength: {
-                  value: 1,
-                  message: 'the minimum text length is 1 characters',
-                },
                 maxLength: {
                   value: 280,
                   message: 'maximum post length 280 characters',

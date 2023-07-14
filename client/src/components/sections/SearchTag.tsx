@@ -1,5 +1,4 @@
-import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { FC, useState } from 'react';
 
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -7,6 +6,7 @@ import { useInputDebounce } from '@/hooks/useInputDebounce';
 import { useGetTagByNameMutation } from '@/services/tags.service';
 import { Tag as ITag } from '@/types/tag.types';
 
+import CreateTag from './CreateTag';
 import Tag from './Tag';
 
 interface SearchTagProps {
@@ -14,6 +14,8 @@ interface SearchTagProps {
 }
 
 const SearchTag: FC<SearchTagProps> = ({ onClickTag }) => {
+  const [isActiveCreateTag, setIsActiveCreateTag] = useState(false);
+
   const [getTagsByName, { data, isSuccess }] = useGetTagByNameMutation();
 
   const [localText, onChangeInput, setLocalText] = useInputDebounce({
@@ -23,6 +25,14 @@ const SearchTag: FC<SearchTagProps> = ({ onClickTag }) => {
   const onClickTagCustomization = (tag: ITag) => {
     onClickTag(tag);
     setLocalText('');
+  };
+  const onClickCreateTag = () => {
+    setIsActiveCreateTag(true);
+  };
+  const onCreateTag = (tag: ITag) => {
+    onClickTag(tag);
+    setLocalText('');
+    setIsActiveCreateTag(false);
   };
 
   const foundedTags =
@@ -45,9 +55,11 @@ const SearchTag: FC<SearchTagProps> = ({ onClickTag }) => {
         <ul className='absolute top-12 z-20 flex w-full gap-2  rounded bg-black p-3'>
           {foundedTags}
           <li>
-            <Link to={`/createTag?name=${localText}`}>
-              <Button>create your</Button>
-            </Link>
+            {isActiveCreateTag ? (
+              <CreateTag name={localText} callback={onCreateTag} />
+            ) : (
+              <Button onClick={onClickCreateTag}>create your</Button>
+            )}
           </li>
         </ul>
       )}

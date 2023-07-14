@@ -15,7 +15,7 @@ export interface IPaginationArg {
 
 export const api = createApi({
   reducerPath: 'api',
-  tagTypes: ['post', 'comment', 'user'],
+  tagTypes: ['post', 'comment', 'user', 'tag'],
   baseQuery,
   // ! зарефакторить, когда можно будет оставлять endpoints пустым
   endpoints: (builder) => ({

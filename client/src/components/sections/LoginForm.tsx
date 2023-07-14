@@ -27,7 +27,7 @@ const LoginForm: React.FC = () => {
     formState: { errors },
   } = useForm<ILoginForm>();
 
-  const [login, { isLoading, isError, isSuccess }] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const onSubmit: SubmitHandler<ILoginForm> = async (data) => {
     const response = (await login(data)) as ILoginQuery; // ? idk как типизировать ответ ртк правильно
