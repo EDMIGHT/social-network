@@ -1,6 +1,7 @@
 import { User } from '@prisma/client';
 
 import prisma from '@/db/prisma';
+import { IPagination } from '@/types/response.types';
 import { IUserModel } from '@/types/user.model.interface';
 import {
   RegisterUser,
@@ -12,15 +13,40 @@ import {
 } from '@/types/user.types';
 import createResponseUser from '@/utils/helpers/createResponseUser';
 
-interface GetFollow {
+interface IGetFollow extends IPagination {
   login: string;
-  page: number;
-  limit: number;
+}
+interface ISearchUsersArg extends IPagination {
+  login: string;
 }
 
 class UserModel implements IUserModel {
   public async createUser(data: RegisterUser): Promise<User> {
     return prisma.user.create({ data }); // FIX попробовать найти метод exclude, чтоб убрать при возращении свойство password
+  }
+  public async searchUsersByLogin({ login, limit, page }: ISearchUsersArg) {
+    const offset = (page - 1) * limit;
+
+    const existedUser = await prisma.user.findMany({
+      skip: offset,
+      take: limit,
+      where: {
+        login: {
+          contains: login,
+        },
+      },
+    });
+
+    return existedUser.map((user) => createResponseUser(user));
+  }
+  public async getTotalSearchedUsers(login: string) {
+    return prisma.user.count({
+      where: {
+        login: {
+          contains: login,
+        },
+      },
+    });
   }
   public async getUserByLogin(login: string): Promise<UserWithFollowing | null> {
     return prisma.user.findFirst({
@@ -102,7 +128,7 @@ class UserModel implements IUserModel {
       });
     } else return null;
   }
-  public async getFollowers({ login, page, limit }: GetFollow): Promise<ResponseUser[]> {
+  public async getFollowers({ login, page, limit }: IGetFollow): Promise<ResponseUser[]> {
     const offset = (page - 1) * limit;
 
     const user = await prisma.user.findFirst({
@@ -127,7 +153,7 @@ class UserModel implements IUserModel {
 
     return user?.followers.length ?? 0;
   }
-  public async getFollowing({ login, page, limit }: GetFollow): Promise<ResponseUser[]> {
+  public async getFollowing({ login, page, limit }: IGetFollow): Promise<ResponseUser[]> {
     const offset = (page - 1) * limit;
 
     const user = await prisma.user.findFirst({

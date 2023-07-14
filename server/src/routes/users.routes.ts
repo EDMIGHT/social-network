@@ -5,12 +5,14 @@ import {
   getFollowing,
   getLikedPosts,
   getProfile,
+  searchUsers,
   toggleFollowUser,
 } from '@/controllers/users.controllers';
 import authentication from '@/middleware/authentication.middleware';
 
 const router = express.Router({ mergeParams: true });
 
+router.get('/', searchUsers);
 router.get('/:login', getProfile);
 router.get('/likedPosts/:login', getLikedPosts);
 router.get('/followers/:login', getFollowers);

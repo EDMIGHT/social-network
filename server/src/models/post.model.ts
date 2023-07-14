@@ -2,8 +2,9 @@ import { Post } from '@prisma/client';
 
 import prisma from '@/db/prisma';
 import { CreatePost, GetPostArg, PostWithData } from '@/types/post.types';
+import { IPagination } from '@/types/response.types';
 
-interface Query {
+interface IQuery {
   tags?: {
     some: {
       name: {
@@ -16,16 +17,14 @@ interface Query {
   };
 }
 
-interface GetLikedPots {
+interface IGetLikedPots extends IPagination {
   login: string;
-  page: number;
-  limit: number;
   sort: string;
   order: string;
   tags: string[];
 }
 
-interface QueryUpdate {
+interface IQueryUpdate {
   tags?: {
     connect: {
       id: string;
@@ -33,7 +32,7 @@ interface QueryUpdate {
   };
 }
 
-type UpdatePostData = Partial<Post> & {
+type IUpdatePostData = Partial<Post> & {
   tags?: string[];
 };
 
@@ -70,7 +69,7 @@ class PostModel {
     order,
     tags,
   }: GetPostArg): Promise<PostWithData[]> {
-    const query: Query = {};
+    const query: IQuery = {};
 
     const offset = (+page - 1) * +limit;
 
@@ -168,9 +167,9 @@ class PostModel {
 
   public async updateById(
     id: string,
-    { tags, ...data }: UpdatePostData
+    { tags, ...data }: IUpdatePostData
   ): Promise<PostWithData | null> {
-    const query: QueryUpdate = {};
+    const query: IQueryUpdate = {};
 
     if (tags) {
       query.tags = {
@@ -256,9 +255,9 @@ class PostModel {
     sort,
     order,
     tags,
-  }: GetLikedPots): Promise<PostWithData[]> {
+  }: IGetLikedPots): Promise<PostWithData[]> {
     const offset = (page - 1) * limit;
-    const query: Query = {};
+    const query: IQuery = {};
 
     if (tags.length > 0) {
       query.tags = {
@@ -302,8 +301,8 @@ class PostModel {
   public getTotalLikedPostByUser({
     login,
     tags,
-  }: Pick<GetLikedPots, 'login' | 'tags'>): Promise<number> {
-    const query: Query = {};
+  }: Pick<IGetLikedPots, 'login' | 'tags'>): Promise<number> {
+    const query: IQuery = {};
 
     if (tags.length > 0) {
       query.tags = {

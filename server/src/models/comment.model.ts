@@ -1,15 +1,14 @@
 import prisma from '@/db/prisma';
 import { CommentsWithUser } from '@/types/comment.types';
+import { IPagination } from '@/types/response.types';
 
-interface GetAllCommentsArg {
+interface IGetAllCommentsArg extends IPagination {
   postId: string;
-  page: number;
-  limit: number;
   sort: string;
   order: 'asc' | 'desc';
 }
 
-interface CreateCommentArg {
+interface ICreateCommentArg {
   postId: string;
   userId: string;
   text: string;
@@ -22,7 +21,7 @@ class CommentModel {
     limit,
     sort,
     order,
-  }: GetAllCommentsArg): Promise<CommentsWithUser[]> {
+  }: IGetAllCommentsArg): Promise<CommentsWithUser[]> {
     const offset = (+page - 1) * +limit;
 
     return prisma.comment.findMany({
@@ -37,7 +36,7 @@ class CommentModel {
       },
     });
   }
-  public create({ postId, userId, text }: CreateCommentArg): Promise<CommentsWithUser> {
+  public create({ postId, userId, text }: ICreateCommentArg): Promise<CommentsWithUser> {
     return prisma.comment.create({
       data: {
         postId,

@@ -2,6 +2,9 @@ import React, { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import LikedPosts from '@/components/sections/LikedPosts';
+import UserFollowers from '@/components/sections/UserFollowers';
+import UserFollowing from '@/components/sections/UserFollowing';
+import UserPosts from '@/components/sections/UserPosts';
 import useAuthentication from '@/hooks/useAuthentication';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import useTheme from '@/hooks/useTheme';
@@ -12,10 +15,6 @@ import Post from '@/pages/Post';
 import PostEdit from '@/pages/PostEdit';
 import Profile from '@/pages/Profile';
 import SignIn from '@/pages/SignIn';
-
-import UserFollowers from './components/sections/UserFollowers';
-import UserFollowing from './components/sections/UserFollowing';
-import UserPosts from './components/sections/UserPosts';
 
 const App = React.memo(() => {
   useAuthentication();

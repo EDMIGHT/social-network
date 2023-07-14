@@ -5,6 +5,31 @@ import userModel from '@/models/user.model';
 import createResponseUser from '@/utils/helpers/createResponseUser';
 import customResponse from '@/utils/helpers/customResponse';
 
+export const searchUsers = async (request: Request, response: Response): Promise<Response> => {
+  const { login, page = 1, limit = 10 } = request.query;
+
+  try {
+    const existedUsers = await userModel.searchUsersByLogin({
+      login: login as string,
+      page: +page,
+      limit: +limit,
+    });
+
+    const totalSearchedUsers = await userModel.getTotalSearchedUsers(login as string);
+
+    return customResponse.ok(response, {
+      users: existedUsers,
+      currentPage: +page,
+      totalPages: Math.floor(totalSearchedUsers / +limit),
+    });
+  } catch (error) {
+    console.error(error);
+    return customResponse.serverError(response, {
+      message: 'error while looking up user on server side',
+    });
+  }
+};
+
 export const getProfile = async (request: Request, response: Response): Promise<Response> => {
   const { login } = request.params;
 

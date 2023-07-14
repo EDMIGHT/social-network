@@ -1,24 +1,23 @@
 import { Tag } from '@prisma/client';
 
 import prisma from '@/db/prisma';
+import { IPagination } from '@/types/response.types';
 
-interface GetAllArgs {
+interface IGetAllArgs extends IPagination {
   name: string;
-  page: number;
-  limit: number;
   order: string;
 }
 
-interface CreateArgs {
+interface ICreateArgs {
   name: string;
 }
 
-interface UpdateArgs {
+interface IUpdateArgs {
   name: string;
 }
 
 class TagModel {
-  public getAll({ name, page, limit, order }: GetAllArgs): Promise<Tag[]> {
+  public getAll({ name, page, limit, order }: IGetAllArgs): Promise<Tag[]> {
     const offset = (page - 1) * limit;
 
     return prisma.tag.findMany({
@@ -65,11 +64,11 @@ class TagModel {
     });
   }
 
-  public create(data: CreateArgs): Promise<Tag> {
+  public create(data: ICreateArgs): Promise<Tag> {
     return prisma.tag.create({ data });
   }
 
-  public update(id: string, data: UpdateArgs): Promise<Tag> {
+  public update(id: string, data: IUpdateArgs): Promise<Tag> {
     return prisma.tag.update({
       where: { id },
       data,
