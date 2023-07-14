@@ -152,17 +152,21 @@ class PostModel {
   }
 
   public async getTotal(tags: string[]): Promise<number> {
-    return prisma.post.count({
-      where: {
-        tags: {
-          some: {
-            name: {
-              in: tags,
+    if (tags.length > 0) {
+      return prisma.post.count({
+        where: {
+          tags: {
+            some: {
+              name: {
+                in: tags,
+              },
             },
           },
         },
-      },
-    });
+      });
+    } else {
+      return prisma.post.count();
+    }
   }
 
   public async updateById(

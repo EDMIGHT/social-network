@@ -21,7 +21,7 @@ export const getAllPosts = async (request: Request, response: Response): Promise
 
     return customResponse.ok(response, {
       posts,
-      currentPage: page,
+      currentPage: +page,
       totalPages: Math.floor(totalPostsCount / +limit),
     });
   } catch (error) {

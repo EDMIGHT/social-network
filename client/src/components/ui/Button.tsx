@@ -23,7 +23,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       type={type ?? 'button'}
       onClick={onClickHandler}
-      className={`whitespace-nowrap rounded p-2 text-center ${variant} ${className}`}
+      className={`whitespace-nowrap rounded p-2 text-center ${variant} ${className} disabled:bg-muted`}
       disabled={disabled}
     >
       {children}
