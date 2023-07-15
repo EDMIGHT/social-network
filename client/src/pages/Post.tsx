@@ -8,6 +8,7 @@ import PostMenu from '@/components/sections/PostMenu';
 import Tags from '@/components/sections/Tags';
 import Card from '@/components/ui/Card';
 import Typography from '@/components/ui/Typography';
+import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetPostQuery } from '@/services/post.service';
 import { isBadResponse } from '@/types/responses.types';
 
@@ -15,6 +16,8 @@ const Post: FC = () => {
   const { id } = useParams();
   const postRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  const { user: localUser } = useAppSelector((state) => state.user);
 
   const { data, isSuccess, isError } = useGetPostQuery(id as string);
 
@@ -86,7 +89,7 @@ const Post: FC = () => {
         </Card>
 
         <div className='flex w-[400px] flex-1 flex-col gap-2'>
-          <CreateComment id={responseId} />
+          {localUser && <CreateComment id={responseId} />}
           <Comments id={responseId} />
         </div>
       </div>

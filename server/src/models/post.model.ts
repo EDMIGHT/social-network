@@ -1,4 +1,4 @@
-import { Post } from '@prisma/client';
+import { Post, Tag } from '@prisma/client';
 
 import prisma from '@/db/prisma';
 import { CreatePost, GetPostArg, GetTotalPostArg, PostWithData } from '@/types/post.types';
@@ -29,11 +29,14 @@ interface IQueryUpdate {
     connect: {
       id: string;
     }[];
+    disconnect: {
+      id: string;
+    }[];
   };
 }
 
 type IUpdatePostData = Partial<Post> & {
-  tags?: string[];
+  tags?: Tag[];
 };
 
 class PostModel {
@@ -180,11 +183,14 @@ class PostModel {
     id: string,
     { tags, ...data }: IUpdatePostData
   ): Promise<PostWithData | null> {
+    const existedPosts = (await this.getById(id)) as PostWithData;
+
     const query: IQueryUpdate = {};
 
     if (tags) {
       query.tags = {
-        connect: tags.map((tagId) => ({ id: tagId.trim() })),
+        disconnect: existedPosts.tags.map((tag) => ({ id: tag.id })),
+        connect: tags.map((tag) => ({ id: tag.id })),
       };
     }
 

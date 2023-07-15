@@ -161,10 +161,10 @@ export const updatePost = async (request: Request, response: Response): Promise<
     const tagList = tags ? (tags as string).split(',') : [];
 
     const existedPost = await postModel.getById(id);
-    const existedTags = await tagModel.getTagsById(tagList);
+    const existedTags = await tagModel.getTagsByName(tagList);
 
     if (existedPost && existedTags?.length === tagList.length) {
-      const post = await postModel.updateById(id, { ...request.body, tags: tagList });
+      const post = await postModel.updateById(id, { ...request.body, tags: existedTags });
 
       return customResponse.ok(response, post);
     } else {

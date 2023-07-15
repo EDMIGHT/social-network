@@ -10,6 +10,7 @@ import formatTagsForQuery from '@/utils/formatTagsForQuery';
 const Home: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { tags } = useAppSelector((state) => state.options);
+  const { user } = useAppSelector((state) => state.user);
 
   const tagsQuery = tags && formatTagsForQuery(tags);
 
@@ -27,7 +28,7 @@ const Home: React.FC = () => {
 
   return (
     <div className='flex flex-col gap-2'>
-      <CreatePost />
+      {user && <CreatePost />}
       <Posts posts={data?.posts} />
       {data && data.totalPages > 1 && (
         <Pagination
