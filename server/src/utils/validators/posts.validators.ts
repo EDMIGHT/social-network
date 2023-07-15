@@ -6,9 +6,11 @@ export const createPostValidators = [
       .exists()
       .withMessage('text field is required')
       .isString()
-      .withMessage('the minimum post text length is 1 character')
       .trim()
-      .isLength({ min: 1 }),
+      .isLength({ min: 1 })
+      .withMessage('the minimum post text length is 1 character')
+      .isLength({ max: 290 })
+      .withMessage('the maximum post text length is 280 character'),
     check('img')
       .exists()
       .withMessage('img field is required')
@@ -20,9 +22,14 @@ export const createPostValidators = [
 ];
 
 export const updatePostValidators = [
+  check('text')
+    .optional()
+    .isLength({ max: 290 })
+    .withMessage('the maximum post text length is 280 character'),
+  check('tags', 'invalid tag format, string expected').optional().isString().trim(),
   check('img')
     .optional()
+    .trim()
     .isString()
-    .withMessage('wrong path for image, string expected')
-    .trim(),
+    .withMessage('wrong path for image, string expected'),
 ];

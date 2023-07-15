@@ -33,6 +33,15 @@ class TagModel {
       },
     });
   }
+  public getTotal(name: string): Promise<number> {
+    return prisma.tag.count({
+      where: {
+        name: {
+          contains: name || undefined,
+        },
+      },
+    });
+  }
   public getTagById(id: string): Promise<Tag | null> {
     return prisma.tag.findFirst({
       where: { id },

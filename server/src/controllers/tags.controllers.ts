@@ -13,7 +13,13 @@ export const getAllTags = async (request: Request, response: Response): Promise<
       order: order as string,
     });
 
-    return customResponse.ok(response, tags);
+    const totalCount = await tagModel.getTotal(name as string);
+
+    return customResponse.ok(response, {
+      tags,
+      currentPage: +page,
+      totalPages: Math.ceil(totalCount / +limit),
+    });
   } catch (error) {
     console.error(error);
     return customResponse.serverError(response, {
