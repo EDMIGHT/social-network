@@ -20,7 +20,13 @@ export const getAllCommentsForPost = async (
       order: order as 'asc' | 'desc',
     });
 
-    return customResponse.ok(response, comments);
+    const totalComments = await commentModel.getTotalCommentByPost(postId);
+
+    return customResponse.ok(response, {
+      comments: comments,
+      currentPage: +page,
+      totalPages: Math.ceil(totalComments / +limit),
+    });
   } catch (error) {
     console.error(error);
     return customResponse.serverError(response, {

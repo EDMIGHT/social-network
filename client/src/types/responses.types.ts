@@ -1,6 +1,6 @@
 import { IPagination } from '@/services/api';
 
-import { Comment } from './comment.types';
+import { Comment, ICommentWithUser } from './comment.types';
 import { Post } from './post.types';
 import { Tag } from './tag.types';
 import { IJoinedUser, IUserWithData } from './user.types';
@@ -35,6 +35,10 @@ export type IResponsePost = Post & {
   user: IJoinedUser;
   likedBy: IJoinedUser[];
 };
+
+export interface IResponseCommentsByUser extends IPagination {
+  comments: ICommentWithUser[];
+}
 
 export const isBadResponse = (arg: unknown): arg is IBadResponse => {
   if (arg && typeof arg === 'object') {

@@ -26,11 +26,13 @@ const UserPosts: FC = () => {
     return (
       <>
         <Posts posts={data?.posts} />
-        <Pagination
-          setCurrentPage={setCurrentPage}
-          currentPage={currentPage}
-          totalPages={data?.totalPages || 0}
-        />
+        {data && data.totalPages > 1 && (
+          <Pagination
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            totalPages={data.totalPages}
+          />
+        )}
       </>
     );
   }

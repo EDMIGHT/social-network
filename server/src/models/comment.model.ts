@@ -36,6 +36,11 @@ class CommentModel {
       },
     });
   }
+  public getTotalCommentByPost(id: string) {
+    return prisma.comment.count({
+      where: { postId: id },
+    });
+  }
   public create({ postId, userId, text }: ICreateCommentArg): Promise<CommentsWithUser> {
     return prisma.comment.create({
       data: {

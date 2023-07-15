@@ -1,8 +1,9 @@
 import { ICommentWithUser, ICreateCommentForm } from '@/types/comment.types';
+import { IResponseCommentsByUser } from '@/types/responses.types';
 
-import { api } from './api';
+import { api, IPaginationArg } from './api';
 
-interface IGetCommentsForPostArg {
+interface IGetCommentsForPostArg extends IPaginationArg {
   id: string;
 }
 
@@ -13,14 +14,14 @@ interface ICreateCommentArg extends ICreateCommentForm {
 
 const commentApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getComments: builder.query<ICommentWithUser[], IGetCommentsForPostArg>({
-      query: ({ id }) => ({
-        url: `comments/${id}`,
+    getComments: builder.query<IResponseCommentsByUser, IGetCommentsForPostArg>({
+      query: ({ id, page = 1, limit = 5 }) => ({
+        url: `comments/${id}?page=${page}&limit=${limit}`,
       }),
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'post' as const, id })),
+              ...result.comments.map(({ id }) => ({ type: 'post' as const, id })),
               'post',
               { type: 'post', id: arg.id },
             ]

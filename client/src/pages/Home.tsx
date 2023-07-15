@@ -29,11 +29,13 @@ const Home: React.FC = () => {
     <div className='flex flex-col gap-2'>
       <CreatePost />
       <Posts posts={data?.posts} />
-      <Pagination
-        setCurrentPage={setCurrentPage}
-        currentPage={currentPage}
-        totalPages={data?.totalPages || 1}
-      />
+      {data && data.totalPages > 1 && (
+        <Pagination
+          setCurrentPage={setCurrentPage}
+          currentPage={currentPage}
+          totalPages={data.totalPages}
+        />
+      )}
     </div>
   );
 };

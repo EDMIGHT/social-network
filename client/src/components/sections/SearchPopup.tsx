@@ -16,7 +16,7 @@ const SearchPopup = forwardRef<HTMLDivElement, ISearchPopupProps>(({ onClickUser
   const [searchUsers, { data, isSuccess }] = useSearchUserByLoginMutation();
 
   const [localText, onChangeInput] = useInputDebounce({
-    callback: (login) => searchUsers({ login, page: 1 }),
+    callback: (login) => searchUsers({ login }),
   });
 
   return (
@@ -34,7 +34,7 @@ const SearchPopup = forwardRef<HTMLDivElement, ISearchPopupProps>(({ onClickUser
           />
         </Card>
         {localText.length > 0 && isSuccess && data && data.users.length > 0 && (
-          <Card>
+          <Card className='max-h-[300px] overflow-auto'>
             <Users users={data.users} onClickUser={onClickUser} />
           </Card>
         )}
