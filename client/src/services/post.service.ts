@@ -27,7 +27,7 @@ export interface IDeletePostQuery {
 const postApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllPosts: builder.query<IResponsePostsPagination, IPostQuery>({
-      query: ({ tags, page = 1, limit = 20, sort = 'createdAt', order = 'desc', login }) => {
+      query: ({ tags, page = 1, limit = 10, sort = 'createdAt', order = 'desc', login }) => {
         const tagQuery = tags ? `&${tags}` : '';
         const loginQuery = login ? `/${login}` : '';
         return `posts/all${loginQuery}?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}`;

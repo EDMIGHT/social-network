@@ -20,7 +20,7 @@ export const searchUsers = async (request: Request, response: Response): Promise
     return customResponse.ok(response, {
       users: existedUsers,
       currentPage: +page,
-      totalPages: Math.floor(totalSearchedUsers / +limit),
+      totalPages: Math.ceil(totalSearchedUsers / +limit),
     });
   } catch (error) {
     console.error(error);
@@ -79,7 +79,7 @@ export const getLikedPosts = async (
     return customResponse.ok(response, {
       posts: likedPosts,
       currentPage: page,
-      totalPages: Math.floor(totalLikedPosts / +limit),
+      totalPages: Math.ceil(totalLikedPosts / +limit),
     });
   } catch (error) {
     console.error(error);
@@ -106,7 +106,7 @@ export const getFollowers = async (
     return customResponse.ok(response, {
       followers,
       currentPage: page,
-      totalPages: Math.floor(totalFollowers / +limit),
+      totalPages: Math.ceil(totalFollowers / +limit),
     });
   } catch (error) {
     console.error(error);
@@ -133,7 +133,7 @@ export const getFollowing = async (
     return customResponse.ok(response, {
       following,
       currentPage: page,
-      totalPages: Math.floor(totalFollowing / +limit),
+      totalPages: Math.ceil(totalFollowing / +limit),
     });
   } catch (error) {
     console.error(error);

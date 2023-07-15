@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import CreatePost from '@/components/sections/CreatePost';
+import Pagination from '@/components/sections/Pagination';
 import Posts from '@/components/sections/Posts';
-import Button from '@/components/ui/Button';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetAllPostsQuery } from '@/services/post.service';
 import formatTagsForQuery from '@/utils/formatTagsForQuery';
@@ -28,25 +28,12 @@ const Home: React.FC = () => {
   return (
     <div className='flex flex-col gap-2'>
       <CreatePost />
-      <div className='flex gap-2'>
-        <Button
-          onClick={() => {
-            setCurrentPage((prev) => prev - 1);
-          }}
-          disabled={currentPage === 1}
-        >
-          prev
-        </Button>
-        <Button
-          onClick={() => {
-            setCurrentPage((prev) => prev + 1);
-          }}
-          disabled={currentPage === data?.totalPages}
-        >
-          next
-        </Button>
-      </div>
       <Posts posts={data?.posts} />
+      <Pagination
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+        totalPages={data?.totalPages || 1}
+      />
     </div>
   );
 };

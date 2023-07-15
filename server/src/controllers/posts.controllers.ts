@@ -9,7 +9,9 @@ export const getAllPosts = async (request: Request, response: Response): Promise
     const { tags, page = 1, limit = 10, order = 'desc', sort = 'createdAt' } = request.query;
 
     const tagList = tags ? (tags as string).split(',') : [];
-    const totalPostsCount = await postModel.getTotal(tagList);
+    const totalPostsCount = await postModel.getTotal({
+      tags: tagList,
+    });
 
     const posts = await postModel.get({
       page: +page,
@@ -22,7 +24,7 @@ export const getAllPosts = async (request: Request, response: Response): Promise
     return customResponse.ok(response, {
       posts,
       currentPage: +page,
-      totalPages: Math.floor(totalPostsCount / +limit),
+      totalPages: Math.ceil(totalPostsCount / +limit),
     });
   } catch (error) {
     console.log(error);
@@ -40,7 +42,10 @@ export const getPosts = async (request: Request, response: Response): Promise<Re
     const { login } = request.params;
 
     const tagList = tags ? (tags as string).split(',') : [];
-    const totalPostsCount = await postModel.getTotal(tagList);
+    const totalPostsCount = await postModel.getTotal({
+      tags: tagList,
+      login,
+    });
 
     const posts = await postModel.get({
       login: login as string,
@@ -53,8 +58,8 @@ export const getPosts = async (request: Request, response: Response): Promise<Re
 
     return customResponse.ok(response, {
       posts,
-      currentPage: page,
-      totalPages: Math.floor(totalPostsCount / +limit),
+      currentPage: +page,
+      totalPages: Math.ceil(totalPostsCount / +limit),
     });
   } catch (error) {
     console.log(error);

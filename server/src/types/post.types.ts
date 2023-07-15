@@ -18,6 +18,11 @@ export interface GetPostArg {
   tags: string[];
 }
 
+export interface GetTotalPostArg {
+  login?: string;
+  tags?: string[];
+}
+
 export type CreatePost = Pick<Post, 'text' | 'img' | 'userId'> & {
   tags: string[];
 };

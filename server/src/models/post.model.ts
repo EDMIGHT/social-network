@@ -1,7 +1,7 @@
 import { Post } from '@prisma/client';
 
 import prisma from '@/db/prisma';
-import { CreatePost, GetPostArg, PostWithData } from '@/types/post.types';
+import { CreatePost, GetPostArg, GetTotalPostArg, PostWithData } from '@/types/post.types';
 import { IPagination } from '@/types/response.types';
 
 interface IQuery {
@@ -151,22 +151,29 @@ class PostModel {
     });
   }
 
-  public async getTotal(tags: string[]): Promise<number> {
-    if (tags.length > 0) {
-      return prisma.post.count({
-        where: {
-          tags: {
-            some: {
-              name: {
-                in: tags,
-              },
-            },
+  public async getTotal({ tags, login }: GetTotalPostArg): Promise<number> {
+    const query: IQuery = {};
+
+    if (tags && tags.length > 0) {
+      query.tags = {
+        some: {
+          name: {
+            in: tags,
           },
         },
-      });
-    } else {
-      return prisma.post.count();
+      };
     }
+    if (login) {
+      query.user = {
+        login,
+      };
+    }
+
+    return prisma.post.count({
+      where: {
+        ...query,
+      },
+    });
   }
 
   public async updateById(
