@@ -17,8 +17,8 @@ interface IGetAllTags extends IPaginationArg {
 export const tagsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllTags: builder.query<IResponseTagsWithPagination, IGetAllTags>({
-      query: ({ page = 1, limit = 2, name, order, sort }) =>
-        `tags?page=${page}&limit=${limit}`,
+      query: ({ page = 1, limit = 5, name, order = 'asc', sort = 'name' }) =>
+        `tags?page=${page}&limit=${limit}&sort=${sort}&order=${order}&name=${name}`,
       providesTags: (result) =>
         result
           ? [...result.tags.map(({ id }) => ({ type: 'tag' as const, id })), 'tag']
