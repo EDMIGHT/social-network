@@ -6,14 +6,19 @@ import { useGetAllTagsQuery } from '@/services/tags.service';
 import { addTag, removeTag } from '@/store/slices/options.slice';
 import { Tag } from '@/types/tag.types';
 
+import Card from '../ui/Card';
+import Pagination from './Pagination';
 import Tags from './Tags';
 
 const Aside: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState(1);
   const dispatch = useAppDispatch();
   const selectedTags = useAppSelector((state) => state.options.tags);
   const [filteredTags, setFilteredTags] = useState<typeof selectedTags>([]);
 
-  const { isError, isLoading, data } = useGetAllTagsQuery(null, {});
+  const { isError, isLoading, data } = useGetAllTagsQuery({
+    page: currentPage,
+  });
 
   const onClickAllTag = (tag: Tag) => {
     dispatch(addTag(tag));
@@ -23,8 +28,10 @@ const Aside: React.FC = () => {
   };
 
   useEffect(() => {
-    const filter = data?.length
-      ? data.filter((tag) => !selectedTags.some((followedTag) => followedTag.id === tag.id))
+    const filter = data?.tags?.length
+      ? data.tags.filter(
+          (tag) => !selectedTags.some((followedTag) => followedTag.id === tag.id)
+        )
       : [];
     setFilteredTags(filter);
   }, [data, selectedTags]);
@@ -45,11 +52,19 @@ const Aside: React.FC = () => {
         <Typography component='h2' variant='title-2' className='ml-2 text-primary'>
           all tags
         </Typography>
-        <Tags
-          onClick={onClickAllTag}
-          data={filteredTags}
-          emptyText='there are no tags in the database'
-        />
+        <Card className='flex flex-col gap-2'>
+          <Tags
+            onClick={onClickAllTag}
+            data={filteredTags}
+            emptyText='there are no tags in the database'
+            className='p-0'
+          />
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={data?.totalPages || 1}
+          />
+        </Card>
       </div>
     </div>
   );

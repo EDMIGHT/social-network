@@ -22,11 +22,19 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className='flex justify-center gap-2'>
-      <Button onClick={onClickPrev} disabled={currentPage === 1}>
-        prev
+      <Button
+        onClick={onClickPrev}
+        disabled={currentPage === 1}
+        className='px-3 text-center font-bold'
+      >
+        &#60;
       </Button>
-      <Button onClick={onClickNext} disabled={currentPage >= totalPages}>
-        next
+      <Button
+        onClick={onClickNext}
+        disabled={currentPage >= totalPages}
+        className='px-3 text-center font-bold'
+      >
+        &#62;
       </Button>
     </div>
   );

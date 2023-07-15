@@ -1,18 +1,28 @@
+import { IResponseTagsWithPagination } from '@/types/responses.types';
 import { Tag } from '@/types/tag.types';
 
-import { api } from './api';
+import { api, IPaginationArg } from './api';
 
 interface ICreateTagArg {
   name: string;
   accessToken: string;
 }
 
+interface IGetAllTags extends IPaginationArg {
+  name?: string;
+  sort?: string;
+  order?: 'asc' | 'desc';
+}
+
 export const tagsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getAllTags: builder.query<Tag[], null>({
-      query: () => 'tags',
+    getAllTags: builder.query<IResponseTagsWithPagination, IGetAllTags>({
+      query: ({ page = 1, limit = 2, name, order, sort }) =>
+        `tags?page=${page}&limit=${limit}`,
       providesTags: (result) =>
-        result ? [...result.map(({ id }) => ({ type: 'tag' as const, id })), 'tag'] : ['tag'],
+        result
+          ? [...result.tags.map(({ id }) => ({ type: 'tag' as const, id })), 'tag']
+          : ['tag'],
     }),
     getTagByName: builder.mutation<Tag[], string>({
       query: (name) => `tags?name=${name}`,

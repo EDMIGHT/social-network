@@ -40,6 +40,10 @@ export interface IResponseCommentsByUser extends IPagination {
   comments: ICommentWithUser[];
 }
 
+export interface IResponseTagsWithPagination extends IPagination {
+  tags: Tag[];
+}
+
 export const isBadResponse = (arg: unknown): arg is IBadResponse => {
   if (arg && typeof arg === 'object') {
     return 'message' in arg;
