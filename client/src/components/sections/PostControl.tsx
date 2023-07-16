@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import Alert from '@/components/ui/Alert';
 import Popup from '@/components/ui/Popup';
 import Typography from '@/components/ui/Typography';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useDeletePostMutation } from '@/services/post.service';
+import { isErrorWithMessage } from '@/types/responses.types';
 import { cn } from '@/utils/cn';
 
 interface PostControlProps {
@@ -15,15 +17,22 @@ const PostControl: React.FC<PostControlProps> = ({ id }) => {
   const { accessToken } = useAppSelector((state) => state.user);
   const [isActivePopup, setIsActive] = useState(false);
   const controlRef = useRef<HTMLDivElement>(null);
+  const [isMessageError, SetMessageError] = useState<string | null>(null);
 
-  const [deletePost, { isLoading: isDeleteLoading }] = useDeletePostMutation();
+  const [deletePost, { isLoading, isError }] = useDeletePostMutation();
 
   const onClickControl = () => {
     setIsActive((prev) => !prev);
   };
   const onClickDelete = async () => {
     if (accessToken) {
-      await deletePost({ id, accessToken });
+      const response = await deletePost({ id, accessToken });
+
+      if (isErrorWithMessage(response)) {
+        SetMessageError(response.error.data.message);
+      }
+    } else {
+      SetMessageError('you are not authorized to delete a post');
     }
     setIsActive(false);
   };
@@ -41,6 +50,9 @@ const PostControl: React.FC<PostControlProps> = ({ id }) => {
 
   return (
     <div ref={controlRef} className='relative'>
+      {(isError || isMessageError) && (
+        <Alert type='error'>{isMessageError || 'error when deleting post'}</Alert>
+      )}
       <button onClick={onClickControl}>
         <svg
           xmlns='http://www.w3.org/2000/svg'
@@ -88,7 +100,7 @@ const PostControl: React.FC<PostControlProps> = ({ id }) => {
           <li className='flex p-2 hover:text-white focus:text-white'>
             <button
               onClick={onClickDelete}
-              disabled={isDeleteLoading}
+              disabled={isLoading}
               className='disabled:text-muted disabled:hover:text-muted disabled:focus:text-muted'
             >
               <Typography

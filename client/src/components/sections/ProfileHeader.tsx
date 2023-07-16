@@ -47,7 +47,7 @@ const ProfileHeader: FC = () => {
 
   return (
     <Card className='flex w-full gap-2'>
-      <div className='w-[220px]'>
+      <div className='max-h-[160px] w-[220px]'>
         <Thumbnail imgURL={img} alt={login} />
       </div>
 

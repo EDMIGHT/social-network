@@ -4,6 +4,7 @@ import { ChangeEvent, useCallback, useState } from 'react';
 interface IUseInputDebounceArg {
   debounceTime?: number;
   callback: (arg: string) => void;
+  reqWhenLocalEmpty?: boolean;
 }
 
 type IUseInputDebounceResult = [
@@ -15,12 +16,15 @@ type IUseInputDebounceResult = [
 export const useInputDebounce = ({
   debounceTime = 200,
   callback,
+  reqWhenLocalEmpty = false,
 }: IUseInputDebounceArg): IUseInputDebounceResult => {
   const [localText, setLocalText] = useState('');
 
   const debounceUpdateSearchValue = useCallback(
     debounce(async (inputText: string) => {
-      if (inputText) {
+      if (reqWhenLocalEmpty) {
+        await callback(inputText);
+      } else if (inputText) {
         await callback(inputText);
       }
     }, debounceTime),

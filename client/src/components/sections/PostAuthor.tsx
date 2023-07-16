@@ -13,7 +13,7 @@ const PostAuthor: FC<Pick<IResponsePost, 'createdAt' | 'updatedAt' | 'user'>> = 
 }) => {
   return (
     <Link to={`/${user.login}`} className='flex w-fit gap-2 hover:opacity-80'>
-      <div className='w-20'>
+      <div className='max-h-[80px] w-20'>
         <Thumbnail imgURL={user.img} alt={user.login} />
       </div>
       <div className='flex flex-col justify-center'>

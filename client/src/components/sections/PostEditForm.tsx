@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@/components/ui/Button';
 import Textarea from '@/components/ui/Textarea';
 import { useAppSelector } from '@/hooks/reduxHooks';
-import FileService from '@/services/file.service';
 import { useUpdatePostMutation } from '@/services/post.service';
 import { ICreateCommentForm } from '@/types/comment.types';
-import { IResponsePost } from '@/types/responses.types';
+import { IResponsePost, isErrorWithMessage } from '@/types/responses.types';
 import { Tag } from '@/types/tag.types';
 
+import Alert from '../ui/Alert';
 import TagsControl from './TagsControl';
 import UploadPhoto from './UploadPhoto';
 
@@ -19,8 +19,9 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
   const { accessToken } = useAppSelector((state) => state.user);
   const [localImg, setLocalImg] = useState(img);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
+  const [isMessageError, SetMessageError] = useState<string | null>(null);
 
-  const [updatePost, { isLoading, isSuccess }] = useUpdatePostMutation();
+  const [updatePost, { isLoading, isSuccess, isError }] = useUpdatePostMutation();
 
   const {
     register,
@@ -31,19 +32,6 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
 
   const onClickDeleteImg = () => {
     setLocalImg(null);
-  };
-  const onClickUploadPhoto = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0] && accessToken) {
-      const formData = new FormData();
-      const file = event.target.files[0];
-      formData.append('image', file);
-
-      const data = await FileService.sendFile({ accessToken, body: formData }).then(
-        (response) => response.json()
-      );
-
-      setLocalImg(data.imgURL);
-    }
   };
   const onClickCancel = () => {
     navigate(-1);
@@ -60,18 +48,33 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
   const onSubmit = handleSubmit(async (data) => {
     if (accessToken) {
       const tagsQuery = selectedTags.map((tag) => tag.name).join(',');
-      await updatePost({ accessToken, id, ...data, img: localImg, tags: tagsQuery });
+      const response = await updatePost({
+        accessToken,
+        id,
+        ...data,
+        img: localImg,
+        tags: tagsQuery,
+      });
+
+      if (isErrorWithMessage(response)) {
+        SetMessageError(response.error.data.message);
+      }
+    } else {
+      SetMessageError('you are not authorized to post');
     }
   });
 
   return (
     <>
       <TagsControl selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+      {(isError || isMessageError) && (
+        <Alert type='error'>{isMessageError || 'post update error'}</Alert>
+      )}
       <form onSubmit={onSubmit} className='flex flex-col gap-2'>
         {localImg ? (
           <div className='relative h-[60vh] cursor-pointer bg-black'>
             <div className='absolute right-2 top-2 flex gap-2'>
-              <UploadPhoto onChangeFile={onClickUploadPhoto}>
+              <UploadPhoto onChangeFile={setLocalImg}>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -108,7 +111,7 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
           </div>
         ) : (
           <UploadPhoto
-            onChangeFile={onClickUploadPhoto}
+            onChangeFile={setLocalImg}
             className='relative flex h-[30vh] cursor-pointer flex-col  items-center justify-center gap-5 bg-black p-2'
           >
             <span className='text-5xl'>📷</span>

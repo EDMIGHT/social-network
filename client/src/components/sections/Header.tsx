@@ -91,7 +91,7 @@ const Header: React.FC = () => {
         </button>
         {user ? (
           <div className='relative inline-block' ref={popupRef}>
-            <button className='h-full w-full' onClick={onClickThumbnail}>
+            <button className='h-full w-full min-w-[40px]' onClick={onClickThumbnail}>
               <Thumbnail imgURL={user.img} alt='me' />
             </button>
             <Popup isActive={isActivePopup}>

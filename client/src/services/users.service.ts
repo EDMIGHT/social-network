@@ -31,7 +31,7 @@ const profileApi = api.injectEndpoints({
         const tagQuery = tags ? `&${tags}` : '';
         return `users/likedPosts/${login}?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}`;
       },
-      providesTags: (result, error, arg) =>
+      providesTags: (result) =>
         result
           ? [...result.posts.map(({ id }) => ({ type: 'post' as const, id })), 'post', 'user']
           : ['post', 'user'],
@@ -40,7 +40,7 @@ const profileApi = api.injectEndpoints({
       query: ({ login, page = 1, limit = 10 }) => {
         return `users/following/${login}?page=${page}&limit=${limit}`;
       },
-      providesTags: (result, error, arg) =>
+      providesTags: (result) =>
         result
           ? [...result.following.map(({ id }) => ({ type: 'user' as const, id })), 'user']
           : ['user'],
@@ -49,7 +49,7 @@ const profileApi = api.injectEndpoints({
       query: ({ login, page = 1, limit = 10 }) => {
         return `users/followers/${login}?page=${page}&limit=${limit}`;
       },
-      providesTags: (result, error, arg) =>
+      providesTags: (result) =>
         result
           ? [...result.followers.map(({ id }) => ({ type: 'user' as const, id })), 'user']
           : ['user'],

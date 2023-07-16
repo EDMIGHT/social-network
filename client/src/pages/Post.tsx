@@ -5,12 +5,12 @@ import Comments from '@/components/sections/Comments';
 import CreateComment from '@/components/sections/CreateComment';
 import PostHeader from '@/components/sections/PostHeader';
 import PostMenu from '@/components/sections/PostMenu';
+import PostNotFound from '@/components/sections/PostNotFound';
 import Tags from '@/components/sections/Tags';
 import Card from '@/components/ui/Card';
 import Typography from '@/components/ui/Typography';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetPostQuery } from '@/services/post.service';
-import { isBadResponse } from '@/types/responses.types';
 
 const Post: FC = () => {
   const { id } = useParams();
@@ -37,9 +37,6 @@ const Post: FC = () => {
     return () => document.body.removeEventListener('click', onClickBody);
   }, []);
 
-  if (isError && isBadResponse(data)) {
-    return <div>{isError && data && data.message}</div>;
-  }
   if (isSuccess && id) {
     const {
       id: responseId,
@@ -94,6 +91,10 @@ const Post: FC = () => {
         </div>
       </div>
     );
+  }
+
+  if (isError) {
+    return <PostNotFound />;
   }
 
   return <div>loading</div>;

@@ -1,5 +1,6 @@
-import React from 'react';
+import { FC } from 'react';
 
+import Alert from '@/components/ui/Alert';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useLikePostMutation } from '@/services/post.service';
 import { IResponsePost } from '@/types/responses.types';
@@ -7,10 +8,10 @@ import { cn } from '@/utils/cn';
 
 type PostMenuProps = Pick<IResponsePost, 'id' | 'likedBy' | 'comments'>;
 
-const PostMenu: React.FC<PostMenuProps> = ({ id, likedBy, comments }) => {
+const PostMenu: FC<PostMenuProps> = ({ id, likedBy, comments }) => {
   const { user, accessToken } = useAppSelector((state) => state.user);
 
-  const [likePost, { isLoading }] = useLikePostMutation();
+  const [likePost, { isLoading, isError }] = useLikePostMutation();
 
   const isExistLike = user && likedBy.some((userLike) => userLike.id === user.id);
   const isExistComment = user && comments.some((comment) => comment.userId === user.id);
@@ -23,6 +24,11 @@ const PostMenu: React.FC<PostMenuProps> = ({ id, likedBy, comments }) => {
 
   return (
     <div className='flex items-center justify-between gap-2'>
+      {isError && (
+        <Alert type='error'>
+          An error occurred while {isExistLike ? 'removing the like' : 'liking a'} post
+        </Alert>
+      )}
       <div className='flex items-center gap-2'>
         <button onClick={onClickLike} disabled={isLoading} className='flex items-center gap-2'>
           <svg

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import Alert from '@/components/ui/Alert';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import { useAppSelector } from '@/hooks/reduxHooks';
-import FileService from '@/services/file.service';
 import { useCreatePostMutation } from '@/services/post.service';
+import { isErrorWithMessage } from '@/types/responses.types';
 import { Tag } from '@/types/tag.types';
 
 import SearchTag from './SearchTag';
@@ -25,47 +26,48 @@ const CreatePost: React.FC = React.memo(() => {
   } = useForm<ICreatePost>();
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [imgURL, setImgURL] = useState<string | null>(null);
+  const [isMessageError, SetMessageError] = useState<string | null>(null);
 
   const { accessToken } = useAppSelector((state) => state.user);
 
-  const [createPost, { isLoading }] = useCreatePostMutation();
-
-  const changeFileHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const formData = new FormData();
-      const file = event.target.files[0];
-      formData.append('image', file);
-
-      const data = await FileService.sendFile({ body: formData }).then((response) =>
-        response.json()
-      );
-
-      setImgURL(data.imgURL);
-    }
-  };
+  const [createPost, { isLoading, isError, isSuccess }] = useCreatePostMutation();
 
   const onClickAddTag = (tag: Tag) => {
     const existTag = selectedTags.some((selectedTag) => selectedTag.id === tag.id);
     if (!existTag) {
       setSelectedTags((prev) => [...prev, tag]);
     } else {
-      // TODO алерт про уже наличие такого тега
+      SetMessageError('you cant add duplicate tags to a post');
     }
   };
   const onClickRemoveTag = (tag: Tag) => {
     setSelectedTags((prev) => prev.filter((prevTag) => prevTag.id !== tag.id));
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ICreatePost) => {
     const tags = selectedTags.map((tag) => tag.name).join(',');
-    await createPost({ accessToken, ...data, tags, img: imgURL });
+    if (accessToken) {
+      const response = await createPost({ accessToken, ...data, tags, img: imgURL });
 
+      if (isErrorWithMessage(response)) {
+        SetMessageError(response.error.data.message);
+      }
+    } else {
+      SetMessageError('you are not authorized to post');
+    }
+
+    setSelectedTags([]);
     setImgURL(null);
     reset();
   };
 
   return (
     <Card className='flex flex-col gap-2'>
+      {(isError || isMessageError) && (
+        <Alert type='error'>{isMessageError || 'error creating post'}</Alert>
+      )}
+      {isSuccess && <Alert type='success'>post successfully created</Alert>}
+
       {imgURL && (
         <div className='h-96 cursor-pointer bg-black'>
           <img src={imgURL} alt='preview' className='mx-auto h-full object-cover' />
@@ -80,7 +82,7 @@ const CreatePost: React.FC = React.memo(() => {
           onSubmit={handleSubmit(onSubmit)}
           className='flex w-full flex-row justify-end gap-2'
         >
-          <UploadPhoto className='mt-[6px] flex items-start' onChangeFile={changeFileHandler}>
+          <UploadPhoto className='mt-[6px] flex items-start' onChangeFile={setImgURL}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'

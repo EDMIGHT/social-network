@@ -9,7 +9,6 @@ import Typography from '@/components/ui/Typography';
 import { useAppDispatch } from '@/hooks/reduxHooks';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { IAuthQuery, useRegisterMutation } from '@/services/auth.service';
-import FileService from '@/services/file.service';
 import { setUserData } from '@/store/slices/user.slice';
 
 import UploadPhoto from './UploadPhoto';
@@ -43,20 +42,6 @@ const SignUpForm: FC = () => {
 
   const [registerReq, { isLoading }] = useRegisterMutation();
 
-  const changeFileHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const formData = new FormData();
-      const file = event.target.files[0];
-      formData.append('image', file);
-
-      const data = await FileService.sendFile({ body: formData }).then((response) =>
-        response.json()
-      );
-
-      setImgURL(data.imgURL);
-    }
-  };
-
   const onSubmit: SubmitHandler<ISignUpForm> = async (data) => {
     const response = (await registerReq({
       ...data,
@@ -82,10 +67,7 @@ const SignUpForm: FC = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
       <div className='flex items-center justify-center'>
-        <UploadPhoto
-          onChangeFile={changeFileHandler}
-          className='h-[100px] w-[100px] hover:opacity-75'
-        >
+        <UploadPhoto onChangeFile={setImgURL} className='h-[100px] w-[100px] hover:opacity-75'>
           <Thumbnail imgURL={ImgSRC} alt='me' />
         </UploadPhoto>
       </div>

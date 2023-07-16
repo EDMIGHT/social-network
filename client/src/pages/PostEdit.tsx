@@ -3,9 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import PostAuthor from '@/components/sections/PostAuthor';
 import PostEditForm from '@/components/sections/PostEditForm';
+import PostNotFound from '@/components/sections/PostNotFound';
 import Card from '@/components/ui/Card';
 import { useGetPostQuery } from '@/services/post.service';
-import { isBadResponse } from '@/types/responses.types';
 
 const PostEdit: FC = () => {
   const { id } = useParams();
@@ -29,9 +29,6 @@ const PostEdit: FC = () => {
     return () => document.body.removeEventListener('click', onClickBody);
   }, []);
 
-  if (isError && isBadResponse(data)) {
-    return <div>{data.message}</div>;
-  }
   if (isSuccess) {
     const { createdAt, updatedAt, user } = data;
     return (
@@ -55,6 +52,10 @@ const PostEdit: FC = () => {
         </Card>
       </div>
     );
+  }
+
+  if (isError) {
+    return <PostNotFound />;
   }
 
   return <div>loading</div>;

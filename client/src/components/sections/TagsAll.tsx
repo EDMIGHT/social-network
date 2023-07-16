@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 
+import Alert from '@/components/ui/Alert';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Typography from '@/components/ui/Typography';
@@ -19,13 +20,14 @@ const TagsAll: FC = () => {
 
   const [localText, onChangeInput, setLocalText] = useInputDebounce({
     callback: setSearchName,
+    reqWhenLocalEmpty: true,
   });
 
   const dispatch = useAppDispatch();
   const { tags } = useAppSelector((state) => state.options);
   const [filteredTags, setFilteredTags] = useState<typeof tags>([]);
 
-  const { data, isSuccess } = useGetAllTagsQuery({
+  const { data, isSuccess, isError } = useGetAllTagsQuery({
     page: currentPage,
     name: searchName,
     order: orderReq,
@@ -49,6 +51,7 @@ const TagsAll: FC = () => {
 
   return (
     <div>
+      {isError && <Alert type='error'>error getting all tags</Alert>}
       <div className='flex justify-between gap-2 px-2'>
         <Typography component='h2' variant='title-2' className='text-primary'>
           all tags

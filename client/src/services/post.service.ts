@@ -32,15 +32,14 @@ const postApi = api.injectEndpoints({
         const loginQuery = login ? `/${login}` : '';
         return `posts/all${loginQuery}?page=${page}&limit=${limit}&sort=${sort}&order=${order}${tagQuery}`;
       },
-      providesTags: (result, error, arg) =>
+      providesTags: (result) =>
         result
           ? [...result.posts.map(({ id }) => ({ type: 'post' as const, id })), 'post']
           : ['post'],
     }),
     getPost: builder.query<IResponsePost, string>({
       query: (id) => `posts/${id}`,
-      providesTags: (result, error, arg) =>
-        result ? [{ type: 'post', id: result.id }] : ['post'],
+      providesTags: (result) => (result ? [{ type: 'post', id: result.id }] : ['post']),
     }),
     createPost: builder.mutation<Post, ICreatePostQuery>({
       query: ({ accessToken, ...body }) => ({
@@ -51,8 +50,6 @@ const postApi = api.injectEndpoints({
         method: 'POST',
         body,
       }),
-      // invalidatesTags: (result, error, arg) =>
-      //   result ? [{ type: 'post', id: result.id }] : ['post'],
       invalidatesTags: ['post'],
     }),
     deletePost: builder.mutation<null, IDeletePostQuery>({

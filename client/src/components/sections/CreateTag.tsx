@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+import Alert from '@/components/ui/Alert';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useAppSelector } from '@/hooks/reduxHooks';
+import { IAuthQuery } from '@/services/auth.service';
 import { useCreateTagMutation } from '@/services/tags.service';
 import { Tag } from '@/types/tag.types';
 
@@ -16,7 +18,9 @@ interface ICreateTagForm {
   name: string;
 }
 
-const CreateTag: React.FC<CreateTagProps> = ({ name = '', callback }) => {
+const CreateTag: FC<CreateTagProps> = ({ name = '', callback }) => {
+  const [isMessageError, SetMessageError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -29,7 +33,7 @@ const CreateTag: React.FC<CreateTagProps> = ({ name = '', callback }) => {
 
   const { accessToken } = useAppSelector((state) => state.user);
 
-  const [createTag, { data: createdTag, isSuccess }] = useCreateTagMutation();
+  const [createTag, { data: createdTag, isSuccess, isError }] = useCreateTagMutation();
 
   useEffect(() => {
     if (isSuccess && createdTag) {
@@ -39,15 +43,20 @@ const CreateTag: React.FC<CreateTagProps> = ({ name = '', callback }) => {
 
   const onSubmit = handleSubmit(async ({ name: nameFromForm }) => {
     if (accessToken) {
-      await createTag({
+      const response = (await createTag({
         accessToken,
         name: nameFromForm,
-      });
+      })) as IAuthQuery;
+
+      if (response.error?.data.message) {
+        SetMessageError(response.error.data.message);
+      }
     }
   });
 
   return (
     <form onSubmit={onSubmit} className='flex flex-col gap-2'>
+      {isError && <Alert type='error'>{isMessageError || 'error creating tag'}</Alert>}
       <Input
         name='name'
         id='tag-name'

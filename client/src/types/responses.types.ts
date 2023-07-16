@@ -6,7 +6,11 @@ import { Tag } from './tag.types';
 import { IJoinedUser, IUserWithData } from './user.types';
 
 export interface IBadResponse {
-  message: string;
+  error: {
+    data: {
+      message: string;
+    };
+  };
 }
 
 export interface IResponsePostsPagination extends IPagination {
@@ -49,4 +53,12 @@ export const isBadResponse = (arg: unknown): arg is IBadResponse => {
     return 'message' in arg;
   }
   return false;
+};
+
+export const isErrorWithMessage = (response: any): response is IBadResponse => {
+  return (
+    response?.error !== undefined &&
+    response.error.data !== undefined &&
+    response.error.data.message !== undefined
+  );
 };
