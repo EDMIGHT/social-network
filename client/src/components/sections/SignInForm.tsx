@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Typography from '@/components/ui/Typography';
+import { useAppDispatch } from '@/hooks/reduxHooks';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { ILoginQuery, useLoginMutation } from '@/services/auth.service';
+import { IAuthQuery, useLoginMutation } from '@/services/auth.service';
 import { setUserData } from '@/store/slices/user.slice';
 
-export interface ILoginForm {
+export interface ISignInForm {
   login: string;
   password: string;
 }
 
-const LoginForm: React.FC = () => {
-  const dispatch = useDispatch();
+const SignInForm: React.FC = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [setLocalStorage] = useLocalStorage();
   const [isLoginError, SetLoginError] = useState<string | null>(null);
@@ -25,12 +25,12 @@ const LoginForm: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ILoginForm>();
+  } = useForm<ISignInForm>();
 
   const [login, { isLoading }] = useLoginMutation();
 
-  const onSubmit: SubmitHandler<ILoginForm> = async (data) => {
-    const response = (await login(data)) as ILoginQuery; // ? idk как типизировать ответ ртк правильно
+  const onSubmit: SubmitHandler<ISignInForm> = async (data) => {
+    const response = (await login(data)) as IAuthQuery; // ? idk как типизировать ответ ртк правильно
 
     if (response.error?.data.message) {
       SetLoginError(response.error.data.message);
@@ -53,6 +53,7 @@ const LoginForm: React.FC = () => {
       <Input
         placeholder='enter login...'
         name='login'
+        required
         optionals={{
           ...register('login', {
             required: 'login is a required field',
@@ -69,6 +70,7 @@ const LoginForm: React.FC = () => {
       <Input
         placeholder='enter password...'
         name='password'
+        required
         optionals={{
           ...register('password', {
             required: 'password is a required field',
@@ -91,11 +93,16 @@ const LoginForm: React.FC = () => {
           {isLoginError}
         </Typography>
       )}
-      <Button type='submit' variant='activity' className='hover:contrast-125'>
+      <Button
+        disabled={isLoading}
+        type='submit'
+        variant='activity'
+        className='hover:contrast-125'
+      >
         sign In
       </Button>
     </form>
   );
 };
 
-export default LoginForm;
+export default SignInForm;

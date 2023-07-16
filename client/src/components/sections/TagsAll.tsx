@@ -1,10 +1,10 @@
-import debounce from 'lodash.debounce';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Typography from '@/components/ui/Typography';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
+import { useInputDebounce } from '@/hooks/useInputDebounce';
 import { useGetAllTagsQuery } from '@/services/tags.service';
 import { addTag } from '@/store/slices/options.slice';
 import { Tag } from '@/types/tag.types';
@@ -14,9 +14,12 @@ import Tags from './Tags';
 
 const TagsAll: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [localText, setLocalText] = useState('');
   const [searchName, setSearchName] = useState('');
   const [orderReq, setOrderReq] = useState<'asc' | 'desc'>('asc');
+
+  const [localText, onChangeInput, setLocalText] = useInputDebounce({
+    callback: setSearchName,
+  });
 
   const dispatch = useAppDispatch();
   const { tags } = useAppSelector((state) => state.options);
@@ -35,22 +38,10 @@ const TagsAll: FC = () => {
     setFilteredTags(filter);
   }, [data, tags]);
 
-  const debounceUpdateSearchValue = useCallback(
-    debounce((inputText: string) => {
-      setCurrentPage(1);
-      setSearchName(inputText);
-    }, 200),
-    []
-  );
-
   const onClickAllTag = (tag: Tag) => {
     setSearchName('');
-
+    setLocalText('');
     dispatch(addTag(tag));
-  };
-  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLocalText(event.target.value);
-    debounceUpdateSearchValue(event.target.value);
   };
   const onClickSortChanger = () => {
     setOrderReq((prev) => (prev === 'asc' ? 'desc' : 'asc'));
@@ -101,31 +92,33 @@ const TagsAll: FC = () => {
         </button>
       </div>
 
-      {isSuccess && (
-        <Card className='flex flex-col gap-2'>
-          <Input
-            name='name'
-            id='tags-name'
-            placeholder='write name tag..'
-            value={localText}
-            onChange={onChangeInput}
-          />
-          <Tags
-            onClick={onClickAllTag}
-            data={filteredTags}
-            emptyText='there are no tags in the database'
-            className='p-0'
-            classNameTag='flex-1'
-          />
-          {data && data.totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={data?.totalPages || 1}
+      <Card className='flex flex-col gap-2'>
+        <Input
+          name='name'
+          id='tags-name'
+          placeholder='write name tag..'
+          value={localText}
+          onChange={onChangeInput}
+        />
+        {isSuccess && (
+          <>
+            <Tags
+              onClick={onClickAllTag}
+              data={filteredTags}
+              emptyText='there are no tags in the database'
+              className='p-0'
+              classNameTag='flex-1'
             />
-          )}
-        </Card>
-      )}
+            {data && data.totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={data?.totalPages || 1}
+              />
+            )}
+          </>
+        )}
+      </Card>
     </div>
   );
 };

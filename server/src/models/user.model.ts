@@ -22,9 +22,25 @@ interface ISearchUsersArg extends IPagination {
 
 class UserModel implements IUserModel {
   public async createUser(data: RegisterUser): Promise<User> {
-    return prisma.user.create({ data }); // FIX попробовать найти метод exclude, чтоб убрать при возращении свойство password
+    return prisma.user.create({
+      data,
+      include: {
+        following: {
+          select: {
+            id: true,
+            login: true,
+            name: true,
+            img: true,
+          },
+        },
+      },
+    });
   }
-  public async searchUsersByLogin({ login, limit, page }: ISearchUsersArg) {
+  public async searchUsersByLogin({
+    login,
+    limit,
+    page,
+  }: ISearchUsersArg): Promise<(ResponseUser | null)[]> {
     const offset = (page - 1) * limit;
 
     const existedUser = await prisma.user.findMany({
@@ -39,7 +55,7 @@ class UserModel implements IUserModel {
 
     return existedUser.map((user) => createResponseUser(user));
   }
-  public async getTotalSearchedUsers(login: string) {
+  public async getTotalSearchedUsers(login: string): Promise<number> {
     return prisma.user.count({
       where: {
         login: {

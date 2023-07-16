@@ -120,7 +120,7 @@ const Header: React.FC = () => {
                 sign in
               </Button>
             </Link>
-            <Link to='/signIn'>
+            <Link to='/signUp'>
               <Button variant='highlight' className='w-full hover:contrast-125'>
                 sign up
               </Button>

@@ -13,7 +13,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ imgURL, alt, className }) => {
     <img
       src={imgURL}
       alt={alt}
-      className={cn('h-full w-full rounded object-contain', className)}
+      className={cn('h-full w-full rounded object-cover', className)}
     />
   );
 };

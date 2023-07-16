@@ -17,7 +17,7 @@ export const api = createApi({
   reducerPath: 'api',
   tagTypes: ['post', 'comment', 'user', 'tag'],
   baseQuery,
-  // ! зарефакторить, когда можно будет оставлять endpoints пустым
+  // TODO зарефакторить, когда можно будет оставлять endpoints пустым
   endpoints: (builder) => ({
     instance: builder.query({
       query: () => '/',

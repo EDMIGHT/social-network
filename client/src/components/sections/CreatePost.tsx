@@ -31,13 +31,13 @@ const CreatePost: React.FC = React.memo(() => {
   const [createPost, { isLoading }] = useCreatePostMutation();
 
   const changeFileHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0] && accessToken) {
+    if (event.target.files && event.target.files[0]) {
       const formData = new FormData();
       const file = event.target.files[0];
       formData.append('image', file);
 
-      const data = await FileService.sendFile({ accessToken, body: formData }).then(
-        (response) => response.json()
+      const data = await FileService.sendFile({ body: formData }).then((response) =>
+        response.json()
       );
 
       setImgURL(data.imgURL);

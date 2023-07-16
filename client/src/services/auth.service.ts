@@ -1,9 +1,10 @@
-import { ILoginForm } from '@/components/sections/LoginForm';
+import { ISignInForm } from '@/components/sections/SignInForm';
+import { ISignUpForm } from '@/components/sections/SignUpForm';
 import { IResponseAuth, IResponseUser } from '@/types/responses.types';
 
 import { api } from './api';
 
-export interface ILoginQuery {
+export interface IAuthQuery {
   data?: IResponseAuth;
   error?: {
     data: {
@@ -15,8 +16,11 @@ export interface ILoginQuery {
 
 export const authApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    login: builder.mutation<ILoginQuery, ILoginForm>({
+    login: builder.mutation<IAuthQuery, ISignInForm>({
       query: ({ ...body }) => ({ url: 'auth/login', method: 'POST', body }),
+    }),
+    register: builder.mutation<IAuthQuery, ISignUpForm>({
+      query: ({ ...body }) => ({ url: 'auth/register', method: 'POST', body }),
     }),
     authMe: builder.query<IResponseUser, string>({
       query: (accessToken) => ({
@@ -26,10 +30,11 @@ export const authApi = api.injectEndpoints({
         },
       }),
     }),
-    token: builder.mutation<ILoginQuery, string>({
+    token: builder.mutation<IAuthQuery, string>({
       query: (refreshToken) => ({ url: 'auth/token', method: 'POST', refreshToken }),
     }),
   }),
 });
 
-export const { useLoginMutation, useAuthMeQuery, useTokenMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation, useAuthMeQuery, useTokenMutation } =
+  authApi;

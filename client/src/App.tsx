@@ -14,6 +14,8 @@ import PostEdit from '@/pages/PostEdit';
 import Profile from '@/pages/Profile';
 import SignIn from '@/pages/SignIn';
 
+import SignUp from './pages/SignUp';
+
 const App: FC = () => {
   useInitialization();
 
@@ -33,6 +35,7 @@ const App: FC = () => {
         <Route path='edit/:id' element={<PostEdit />} />
       </Route>
       <Route path='/signIn' element={<SignIn />} />
+      <Route path='/signUp' element={<SignUp />} />
     </Routes>
   );
 };

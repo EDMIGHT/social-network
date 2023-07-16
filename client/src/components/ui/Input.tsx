@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { ReactNode, useEffect, useRef } from 'react';
 
 import { cn } from '@/utils/cn';
 
@@ -10,12 +10,13 @@ interface InputProps {
   error?: string;
   value?: string;
   optionals?: object;
-  children?: string;
+  children?: ReactNode;
   placeholder?: string;
   className?: string;
   defaultValue?: string | undefined;
   onChange?: any;
   focus?: boolean;
+  required?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -30,6 +31,7 @@ const Input: React.FC<InputProps> = ({
   defaultValue,
   onChange,
   focus = false,
+  required = false,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -43,6 +45,7 @@ const Input: React.FC<InputProps> = ({
     <label htmlFor={name} className={cn('w-full cursor-pointer', className)}>
       <Typography component='h2' variant='title-1' className='pl-2'>
         {children}
+        {required && <span className='pl-1 font-bold text-red-700'>*</span>}
       </Typography>
       <input
         ref={inputRef}

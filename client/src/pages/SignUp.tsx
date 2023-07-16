@@ -1,28 +1,28 @@
-import React from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import SignInForm from '@/components/sections/SignInForm';
+import SignUpForm from '@/components/sections/SignUpForm';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Typography from '@/components/ui/Typography';
 
-const Login: React.FC = () => {
+const SignUp: FC = () => {
   return (
     <div className='flex h-screen w-screen flex-col items-center justify-center gap-2'>
       <Typography component='h1' variant='title-2' className='text-[2rem] text-primary'>
-        sign in
+        sign up
       </Typography>
       <Card className='flex w-[350px] flex-col gap-2'>
-        <SignInForm />
+        <SignUpForm />
         <div className='flex gap-2'>
           <Link to='/' className='w-full'>
             <Button variant='highlight' className='w-full'>
               back
             </Button>
           </Link>
-          <Link to='/signUp' className='w-full'>
+          <Link to='/signIn' className='w-full'>
             <Button variant='highlight' className='w-full'>
-              go to sign up
+              go to sign in
             </Button>
           </Link>
         </div>
@@ -31,4 +31,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default SignUp;
