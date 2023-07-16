@@ -38,7 +38,7 @@ const SearchTag: FC<SearchTagProps> = ({ onClickTag }) => {
   const foundedTags =
     isSuccess &&
     data &&
-    data.map((tag) => (
+    data.tags.map((tag) => (
       <Tag key={`tag ${tag.id}`} {...tag} onClick={onClickTagCustomization} />
     ));
 

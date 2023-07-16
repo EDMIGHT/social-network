@@ -3,10 +3,11 @@ import { Link } from 'react-router-dom';
 
 import Card from '@/components/ui/Card';
 import Typography from '@/components/ui/Typography';
+import { useAppDispatch } from '@/hooks/reduxHooks';
+import { addTag } from '@/store/slices/options.slice';
 import { IResponsePost } from '@/types/responses.types';
+import { Tag } from '@/types/tag.types';
 
-import PostAuthor from './PostAuthor';
-import PostControl from './PostControl';
 import PostHeader from './PostHeader';
 import PostMenu from './PostMenu';
 import Tags from './Tags';
@@ -24,11 +25,17 @@ const PostItem: React.FC<IResponsePost> = ({
   tags,
   likedBy,
 }) => {
+  const dispatch = useAppDispatch();
+
+  const onClickTag = (tag: Tag) => {
+    dispatch(addTag(tag));
+  };
+
   return (
     <li>
       <Card className='flex flex-col gap-2 '>
         <PostHeader id={id} createdAt={createdAt} updatedAt={updatedAt} user={user} />
-        <Tags data={tags} className='p-0' />
+        <Tags data={tags} className='p-0' onClick={onClickTag} />
         <Link to={`/post/${id}`}>
           {img && (
             <div className='h-96 cursor-pointer bg-black'>

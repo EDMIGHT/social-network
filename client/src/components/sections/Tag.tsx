@@ -7,14 +7,15 @@ export interface TagProps {
   id: string;
   name: string;
   onClick?: (tag: ITag) => void;
+  className?: string;
 }
 
-const Tag: React.FC<TagProps> = ({ id, name, onClick }) => {
+const Tag: React.FC<TagProps> = ({ id, name, onClick, className }) => {
   return (
-    <li>
+    <li className={className}>
       <Button
         variant='highlight'
-        className='p-1 transition-all hover:bg-primary'
+        className='w-full p-1 transition-all hover:bg-primary'
         onClick={() => onClick && onClick({ id, name })}
       >
         {name}

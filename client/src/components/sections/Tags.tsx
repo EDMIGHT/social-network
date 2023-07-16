@@ -12,13 +12,16 @@ export interface TagsProps extends Pick<TagProps, 'onClick'> {
   data: ITag[] | undefined;
   emptyText?: string;
   className?: string;
+  classNameTag?: string;
 }
 
-const Tags: React.FC<TagsProps> = ({ onClick, data, emptyText, className }) => {
+const Tags: React.FC<TagsProps> = ({ onClick, data, emptyText, className, classNameTag }) => {
   const [parent] = useAutoAnimate();
 
   const tagElements = data?.length ? (
-    data.map(({ name, id }) => <Tag key={id} id={id} name={name} onClick={onClick} />)
+    data.map(({ name, id }) => (
+      <Tag key={id} id={id} name={name} onClick={onClick} className={classNameTag} />
+    ))
   ) : (
     <li>
       {emptyText && (

@@ -17,17 +17,19 @@ interface IGetAllTags extends IPaginationArg {
 export const tagsApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getAllTags: builder.query<IResponseTagsWithPagination, IGetAllTags>({
-      query: ({ page = 1, limit = 5, name, order = 'asc', sort = 'name' }) =>
+      query: ({ page = 1, limit = 40, name, order = 'asc', sort = 'name' }) =>
         `tags?page=${page}&limit=${limit}&sort=${sort}&order=${order}&name=${name}`,
       providesTags: (result) =>
         result
           ? [...result.tags.map(({ id }) => ({ type: 'tag' as const, id })), 'tag']
           : ['tag'],
     }),
-    getTagByName: builder.mutation<Tag[], string>({
+    getTagByName: builder.mutation<IResponseTagsWithPagination, string>({
       query: (name) => `tags?name=${name}`,
       invalidatesTags: (result) =>
-        result ? [...result.map(({ id }) => ({ type: 'tag' as const, id })), 'tag'] : ['tag'],
+        result
+          ? [...result.tags.map(({ id }) => ({ type: 'tag' as const, id })), 'tag']
+          : ['tag'],
     }),
     createTag: builder.mutation<Tag, ICreateTagArg>({
       query: ({ name, accessToken }) => ({
