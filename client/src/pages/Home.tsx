@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import CreatePost from '@/components/sections/CreatePost';
 import Pagination from '@/components/sections/Pagination';
 import Posts from '@/components/sections/Posts';
+import PostSkeletons from '@/components/sections/PostSkeletons';
+import Alert from '@/components/ui/Alert';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetAllPostsQuery } from '@/services/post.service';
 import formatTagsForQuery from '@/utils/formatTagsForQuery';
@@ -23,11 +25,9 @@ const Home: React.FC = () => {
     page: currentPage,
   });
 
-  if (isLoading) return <div>loading</div>;
-  if (isError) return <div>error</div>;
-
-  return (
-    <div className='flex flex-col gap-2'>
+  const loadingOrErrorElements = (isError || isLoading) && <PostSkeletons />;
+  const successElements = isSuccess && (
+    <>
       {user && <CreatePost />}
       <Posts posts={data?.posts} />
       {data && data.totalPages > 1 && (
@@ -37,6 +37,14 @@ const Home: React.FC = () => {
           totalPages={data.totalPages}
         />
       )}
+    </>
+  );
+
+  return (
+    <div className='flex flex-col gap-2'>
+      {isError && <Alert type='error'>error getting posts</Alert>}
+      {loadingOrErrorElements}
+      {successElements}
     </div>
   );
 };

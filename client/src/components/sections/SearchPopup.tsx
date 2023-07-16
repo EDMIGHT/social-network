@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
 
+import Alert from '@/components/ui/Alert';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Overlay from '@/components/ui/Overlay';
@@ -7,17 +8,26 @@ import { useInputDebounce } from '@/hooks/useInputDebounce';
 import { useSearchUserByLoginMutation } from '@/services/users.service';
 
 import Users from './Users';
+import UserSkeletons from './UserSkeletons';
 
 interface ISearchPopupProps {
   onClickUser?: any;
 }
 
 const SearchPopup = forwardRef<HTMLDivElement, ISearchPopupProps>(({ onClickUser }, ref) => {
-  const [searchUsers, { data, isSuccess }] = useSearchUserByLoginMutation();
+  const [searchUsers, { data, isSuccess, isLoading, isError }] =
+    useSearchUserByLoginMutation();
 
   const [localText, onChangeInput] = useInputDebounce({
     callback: (login) => searchUsers({ login }),
   });
+
+  const loadingOrErrorElements = (isError || isLoading) && <UserSkeletons count={3} />;
+  const successElements = localText.length > 0 && isSuccess && data && (
+    <Card className='max-h-[300px] overflow-auto'>
+      <Users users={data.users} onClickUser={onClickUser} />
+    </Card>
+  );
 
   return (
     <>
@@ -33,11 +43,9 @@ const SearchPopup = forwardRef<HTMLDivElement, ISearchPopupProps>(({ onClickUser
             focus
           />
         </Card>
-        {localText.length > 0 && isSuccess && data && data.users.length > 0 && (
-          <Card className='max-h-[300px] overflow-auto'>
-            <Users users={data.users} onClickUser={onClickUser} />
-          </Card>
-        )}
+        {isError && <Alert type='error'>user search error</Alert>}
+        {loadingOrErrorElements}
+        {successElements}
       </div>
     </>
   );

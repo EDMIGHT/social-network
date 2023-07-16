@@ -2,16 +2,16 @@ import React from 'react';
 
 import Card from '@/components/ui/Card';
 import Typography from '@/components/ui/Typography';
+import { cn } from '@/utils/cn';
 
-interface PostsEmptyProps {
+interface UsersEmptyProps {
   text?: string;
+  className?: string;
 }
 
-const PostsEmpty: React.FC<PostsEmptyProps> = ({
-  text = 'no posts found (check selected tags)',
-}) => {
+const UsersEmpty: React.FC<UsersEmptyProps> = ({ text = 'no users found', className }) => {
   return (
-    <Card className='flex h-[50vh] flex-col items-center justify-center'>
+    <Card className={cn('flex h-full flex-col items-center justify-center', className)}>
       <Typography component='h2' variant='title-2'>
         {text}
       </Typography>
@@ -20,4 +20,4 @@ const PostsEmpty: React.FC<PostsEmptyProps> = ({
   );
 };
 
-export default PostsEmpty;
+export default UsersEmpty;

@@ -13,6 +13,10 @@ export interface IBadResponse {
   };
 }
 
+export interface IBadData {
+  message: string;
+}
+
 export interface IResponsePostsPagination extends IPagination {
   posts: IResponsePost[];
 }
@@ -48,7 +52,7 @@ export interface IResponseTagsWithPagination extends IPagination {
   tags: Tag[];
 }
 
-export const isBadResponse = (arg: unknown): arg is IBadResponse => {
+export const isBadData = (arg: unknown): arg is IBadData => {
   if (arg && typeof arg === 'object') {
     return 'message' in arg;
   }

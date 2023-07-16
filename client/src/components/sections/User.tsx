@@ -51,8 +51,12 @@ const User: FC<IUserProps> = ({ id, img, login, name, onClickUser }) => {
       )}
 
       <Card className='flex items-center justify-between gap-2'>
-        <Link to={`/${login}`} onClick={onClickUser} className='flex gap-2 hover:opacity-80'>
-          <div className='w-20'>
+        <Link
+          to={`/profile/${login}`}
+          onClick={onClickUser}
+          className='flex gap-2 hover:opacity-80'
+        >
+          <div className='h-20 w-20'>
             <Thumbnail imgURL={img} alt={login} />
           </div>
           <div className='flex flex-col justify-center'>

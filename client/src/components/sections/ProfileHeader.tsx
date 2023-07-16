@@ -1,6 +1,7 @@
 import { FC, useEffect } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 
+import Alert from '@/components/ui/Alert';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Thumbnail from '@/components/ui/Thumbnail';
@@ -10,6 +11,9 @@ import { useGetProfileQuery, useToggleFollowMutation } from '@/services/users.se
 import { setUser } from '@/store/slices/user.slice';
 import { cn } from '@/utils/cn';
 
+import ProfileHeaderSkeleton from './ProfileHeaderSkeleton';
+import ProfileNotFound from './ProfileNotFound';
+
 const ProfileHeader: FC = () => {
   const { login: urlLogin } = useParams();
   const dispatch = useAppDispatch();
@@ -18,11 +22,17 @@ const ProfileHeader: FC = () => {
   const {
     data,
     isLoading: isLoadingProfile,
-    isError,
+    isSuccess: isSuccessProfile,
+    isError: isErrorProfile,
   } = useGetProfileQuery(urlLogin as string);
   const [
     toggleFollow,
-    { isLoading: isLoadingFollow, isSuccess: isSuccessFollow, data: dataFollow },
+    {
+      isLoading: isLoadingFollow,
+      isSuccess: isSuccessFollow,
+      isError: isErrorFollow,
+      data: dataFollow,
+    },
   ] = useToggleFollowMutation();
 
   useEffect(() => {
@@ -31,9 +41,7 @@ const ProfileHeader: FC = () => {
     }
   }, [isSuccessFollow]);
 
-  if (isLoadingProfile) return <div>loading</div>;
-  if (isError) return <div>error</div>;
-  if (!data) return <div>not found</div>;
+  if (!data) return <ProfileNotFound />;
 
   const onClickFollow = async () => {
     if (user && accessToken && urlLogin) {
@@ -45,7 +53,10 @@ const ProfileHeader: FC = () => {
   // eslint-disable-next-line no-underscore-dangle
   const { createdPosts, followers, following, likedPosts } = data._count;
 
-  return (
+  const loadingOrErrorElements = (isErrorProfile || isLoadingProfile) && (
+    <ProfileHeaderSkeleton />
+  );
+  const successElements = isSuccessProfile && (
     <Card className='flex w-full gap-2'>
       <div className='max-h-[160px] w-[220px]'>
         <Thumbnail imgURL={img} alt={login} />
@@ -81,7 +92,7 @@ const ProfileHeader: FC = () => {
 
         <div className='flex justify-around'>
           <NavLink
-            to={`/${login}`}
+            to=''
             end
             className={({ isActive }) =>
               cn(
@@ -207,6 +218,18 @@ const ProfileHeader: FC = () => {
         </div>
       </div>
     </Card>
+  );
+
+  return (
+    <>
+      {isErrorProfile && <Alert type='error'>error getting profile</Alert>}
+      {isErrorFollow && (
+        <Alert type='error'>error when subscribing or unsubscribing from a user</Alert>
+      )}
+
+      {loadingOrErrorElements}
+      {successElements}
+    </>
   );
 };
 

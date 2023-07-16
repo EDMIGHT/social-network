@@ -12,6 +12,7 @@ import { Tag } from '@/types/tag.types';
 
 import Pagination from './Pagination';
 import Tags from './Tags';
+import TagSkeletons from './TagSkeletons';
 
 const TagsAll: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,7 +28,7 @@ const TagsAll: FC = () => {
   const { tags } = useAppSelector((state) => state.options);
   const [filteredTags, setFilteredTags] = useState<typeof tags>([]);
 
-  const { data, isSuccess, isError } = useGetAllTagsQuery({
+  const { data, isSuccess, isError, isLoading } = useGetAllTagsQuery({
     page: currentPage,
     name: searchName,
     order: orderReq,
@@ -48,6 +49,26 @@ const TagsAll: FC = () => {
   const onClickSortChanger = () => {
     setOrderReq((prev) => (prev === 'asc' ? 'desc' : 'asc'));
   };
+
+  const loadingOrErrorTags = (isError || isLoading) && <TagSkeletons />;
+  const successTags = isSuccess && (
+    <>
+      <Tags
+        onClick={onClickAllTag}
+        data={filteredTags}
+        emptyText='there are no tags in the database'
+        className='p-0'
+        classNameTag='flex-1'
+      />
+      {data && data.totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={data?.totalPages || 1}
+        />
+      )}
+    </>
+  );
 
   return (
     <div>
@@ -103,24 +124,8 @@ const TagsAll: FC = () => {
           value={localText}
           onChange={onChangeInput}
         />
-        {isSuccess && (
-          <>
-            <Tags
-              onClick={onClickAllTag}
-              data={filteredTags}
-              emptyText='there are no tags in the database'
-              className='p-0'
-              classNameTag='flex-1'
-            />
-            {data && data.totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                totalPages={data?.totalPages || 1}
-              />
-            )}
-          </>
-        )}
+        {loadingOrErrorTags}
+        {successTags}
       </Card>
     </div>
   );

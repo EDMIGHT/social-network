@@ -97,7 +97,7 @@ const Header: React.FC = () => {
             <Popup isActive={isActivePopup}>
               <ul className={clsx('cursor-pointer', !isActivePopup && 'hidden')}>
                 <li className='block w-full p-2 hover:text-white'>
-                  <Link to={`/${user.login}`} onClick={onClickPopupItem}>
+                  <Link to={`/profile/${user.login}`} onClick={onClickPopupItem}>
                     <Typography component='span' variant='title-2'>
                       profile
                     </Typography>
