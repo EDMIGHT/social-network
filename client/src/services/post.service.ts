@@ -86,6 +86,17 @@ const postApi = api.injectEndpoints({
       invalidatesTags: (result, error, arg) =>
         result ? [{ type: 'post', id: arg.id }, 'user'] : ['post', 'user'],
     }),
+    increaseViewPost: builder.mutation({
+      query: ({ accessToken, id }) => ({
+        url: `posts/view/${id}`,
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+        method: 'POST',
+      }),
+      invalidatesTags: (result, error, arg) =>
+        result ? [{ type: 'post', id: arg.id }] : ['post'],
+    }),
   }),
 });
 
@@ -96,4 +107,5 @@ export const {
   useDeletePostMutation,
   useUpdatePostMutation,
   useLikePostMutation,
+  useIncreaseViewPostMutation,
 } = postApi;

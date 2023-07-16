@@ -6,20 +6,31 @@ import CreateComment from '@/components/sections/CreateComment';
 import PostContent from '@/components/sections/PostContent';
 import PostSkeleton from '@/components/sections/PostSkeleton';
 import { useAppSelector } from '@/hooks/reduxHooks';
-import { useGetPostQuery } from '@/services/post.service';
+import { useGetPostQuery, useIncreaseViewPostMutation } from '@/services/post.service';
 
 const Post: FC = () => {
+  const isViewed = useRef(false);
   const { id } = useParams();
   const postRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
-  const { user: localUser } = useAppSelector((state) => state.user);
+  const { user, accessToken } = useAppSelector((state) => state.user);
 
   const { data, isSuccess, isError, isLoading } = useGetPostQuery(id as string);
+  const [increaseView] = useIncreaseViewPostMutation();
 
   const onClickClose = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    if (!isViewed.current && id && accessToken) {
+      isViewed.current = true;
+      increaseView({
+        id,
+        accessToken,
+      });
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
     const onClickBody = (e: MouseEvent) => {
@@ -37,7 +48,7 @@ const Post: FC = () => {
     <>
       <PostContent data={data} />
       <div className='flex w-[400px] flex-1 flex-col gap-2'>
-        {localUser && <CreateComment id={data.id} />}
+        {user && <CreateComment id={data.id} />}
         <Comments id={data.id} />
       </div>
     </>

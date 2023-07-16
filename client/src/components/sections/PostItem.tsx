@@ -47,7 +47,7 @@ const PostItem: React.FC<IResponsePost> = ({
           </Typography>
         </Link>
 
-        <PostMenu id={id} likedBy={likedBy} comments={comments} />
+        <PostMenu id={id} likedBy={likedBy} comments={comments} viewsCount={viewsCount} />
       </Card>
     </li>
   );

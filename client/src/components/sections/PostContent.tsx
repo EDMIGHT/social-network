@@ -23,6 +23,7 @@ const PostContent: React.FC<PostContentProps> = ({ data }) => {
     likedBy,
     comments,
     tags,
+    viewsCount,
   } = data;
 
   return (
@@ -37,7 +38,12 @@ const PostContent: React.FC<PostContentProps> = ({ data }) => {
       <Typography component='p' variant='text'>
         {text}
       </Typography>
-      <PostMenu id={responseId} comments={comments} likedBy={likedBy} />
+      <PostMenu
+        id={responseId}
+        comments={comments}
+        likedBy={likedBy}
+        viewsCount={viewsCount}
+      />
     </Card>
   );
 };

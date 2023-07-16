@@ -6,9 +6,9 @@ import { useLikePostMutation } from '@/services/post.service';
 import { IResponsePost } from '@/types/responses.types';
 import { cn } from '@/utils/cn';
 
-type PostMenuProps = Pick<IResponsePost, 'id' | 'likedBy' | 'comments'>;
+type PostMenuProps = Pick<IResponsePost, 'id' | 'likedBy' | 'comments' | 'viewsCount'>;
 
-const PostMenu: FC<PostMenuProps> = ({ id, likedBy, comments }) => {
+const PostMenu: FC<PostMenuProps> = ({ id, likedBy, comments, viewsCount }) => {
   const { user, accessToken } = useAppSelector((state) => state.user);
 
   const [likePost, { isLoading, isError }] = useLikePostMutation();
@@ -86,7 +86,7 @@ const PostMenu: FC<PostMenuProps> = ({ id, likedBy, comments }) => {
             d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'
           />
         </svg>
-        <span>{0}</span>
+        <span>{viewsCount}</span>
       </div>
     </div>
   );
