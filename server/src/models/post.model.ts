@@ -342,6 +342,25 @@ class PostModel {
       },
     });
   }
+  public increaseCountView(id: string): Promise<PostWithData> {
+    return prisma.post.update({
+      where: { id },
+      data: { viewsCount: { increment: 1 } },
+      include: {
+        tags: true,
+        comments: true,
+        user: {
+          select: {
+            id: true,
+            login: true,
+            name: true,
+            img: true,
+          },
+        },
+        likedBy: { select: { id: true, img: true, name: true, login: true } },
+      },
+    });
+  }
 }
 
 export default new PostModel();

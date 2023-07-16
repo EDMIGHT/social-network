@@ -216,3 +216,29 @@ export const toggleLikePost = async (
     });
   }
 };
+
+export const increaseView = async (
+  request: Request,
+  response: Response
+): Promise<Response> => {
+  const { id } = request.params;
+
+  try {
+    const existedPost = await postModel.getById(id);
+
+    if (!existedPost) {
+      return customResponse.notFound(response, {
+        message: `post with id = ${id} does not exist`,
+      });
+    }
+
+    const updatedPost = await postModel.increaseCountView(id);
+
+    return customResponse.ok(response, updatedPost);
+  } catch (error) {
+    console.error(error);
+    return customResponse.serverError(response, {
+      message: `error when adding view post with id ${id}`,
+    });
+  }
+};

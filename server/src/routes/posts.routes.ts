@@ -6,6 +6,7 @@ import {
   getAllPosts,
   getPost,
   getPosts,
+  increaseView,
   toggleLikePost,
   updatePost,
 } from '@/controllers/posts.controllers';
@@ -559,6 +560,8 @@ router.get('/:id', getPost);
 router.post('/', authentication, createPostValidators, validationHandler, createPost);
 
 router.post('/like/:id', authentication, toggleLikePost);
+
+router.post('/view/:id', authentication, increaseView);
 
 /**
  * @openapi
