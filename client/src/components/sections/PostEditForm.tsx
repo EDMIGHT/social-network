@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import Alert from '@/components/ui/Alert';
 import Button from '@/components/ui/Button';
 import Textarea from '@/components/ui/Textarea';
 import { useAppSelector } from '@/hooks/reduxHooks';
@@ -10,7 +11,6 @@ import { ICreateCommentForm } from '@/types/comment.types';
 import { IResponsePost, isErrorWithMessage } from '@/types/responses.types';
 import { Tag } from '@/types/tag.types';
 
-import Alert from '../ui/Alert';
 import TagsControl from './TagsControl';
 import UploadPhoto from './UploadPhoto';
 
@@ -19,7 +19,7 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
   const { accessToken } = useAppSelector((state) => state.user);
   const [localImg, setLocalImg] = useState(img);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
-  const [isMessageError, SetMessageError] = useState<string | null>(null);
+  const [messageError, setMessageError] = useState<string | null>(null);
 
   const [updatePost, { isLoading, isSuccess, isError }] = useUpdatePostMutation();
 
@@ -57,18 +57,18 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
       });
 
       if (isErrorWithMessage(response)) {
-        SetMessageError(response.error.data.message);
+        setMessageError(response.error.data.message);
       }
     } else {
-      SetMessageError('you are not authorized to post');
+      setMessageError('you are not authorized to post');
     }
   });
 
   return (
     <>
       <TagsControl selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
-      {(isError || isMessageError) && (
-        <Alert type='error'>{isMessageError || 'post update error'}</Alert>
+      {(isError || messageError) && (
+        <Alert type='error'>{messageError || 'post update error'}</Alert>
       )}
       <form onSubmit={onSubmit} className='flex flex-col gap-2'>
         {localImg ? (

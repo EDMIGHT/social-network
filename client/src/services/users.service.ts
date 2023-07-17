@@ -1,3 +1,4 @@
+import { IUpdateUserForm } from '@/components/sections/ProfileHeaderForm';
 import { IResponsePostsPagination, IResponseProfile } from '@/types/responses.types';
 import {
   IFollowersWithPagination,
@@ -5,11 +6,10 @@ import {
   IJoinedUsersWithPagination,
 } from '@/types/user.types';
 
-import { api, IPaginationArg } from './api';
+import { api, IAuthentication, IPaginationArg } from './api';
 import { IPostQuery } from './post.service';
 
-interface IToggleLikeArg {
-  accessToken: string;
+interface IToggleLikeArg extends IAuthentication {
   login: string;
 }
 
@@ -70,6 +70,21 @@ const profileApi = api.injectEndpoints({
       query: ({ login, page = 1, limit = 10 }) =>
         `users?login=${login}&page=${page}&limit=${limit}`,
     }),
+    updateProfile: builder.mutation<IResponseProfile, IUpdateUserForm & IAuthentication>({
+      query: ({ email, img, name, accessToken }) => ({
+        url: 'users',
+        method: 'PATCH',
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+        body: {
+          email,
+          img,
+          name,
+        },
+      }),
+      invalidatesTags: ['user'],
+    }),
   }),
 });
 
@@ -80,4 +95,5 @@ export const {
   useGetFollowersQuery,
   useToggleFollowMutation,
   useSearchUserByLoginMutation,
+  useUpdateProfileMutation,
 } = profileApi;

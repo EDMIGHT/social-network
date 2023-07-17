@@ -1,21 +1,19 @@
 import { ICommentWithUser, ICreateCommentForm } from '@/types/comment.types';
 import { IResponseCommentsByUser } from '@/types/responses.types';
 
-import { api, IPaginationArg } from './api';
+import { api, IAuthentication, IPaginationArg } from './api';
 
 interface IGetCommentsForPostArg extends IPaginationArg {
   id: string;
 }
 
-interface ICreateCommentArg extends ICreateCommentForm {
+interface ICreateCommentArg extends ICreateCommentForm, IAuthentication {
   id: string;
-  accessToken: string;
 }
 
-interface IDeleteCommentArg {
+interface IDeleteCommentArg extends IAuthentication {
   postId: string;
   commentId: string;
-  accessToken: string;
 }
 
 const commentApi = api.injectEndpoints({

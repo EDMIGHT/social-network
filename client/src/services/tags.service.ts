@@ -1,11 +1,10 @@
 import { IResponseTagsWithPagination } from '@/types/responses.types';
 import { Tag } from '@/types/tag.types';
 
-import { api, IPaginationArg } from './api';
+import { api, IAuthentication, IPaginationArg } from './api';
 
-interface ICreateTagArg {
+interface ICreateTagArg extends IAuthentication {
   name: string;
-  accessToken: string;
 }
 
 interface IGetAllTags extends IPaginationArg {

@@ -1,7 +1,7 @@
 import { Post } from '@/types/post.types';
 import { IResponsePost, IResponsePostsPagination } from '@/types/responses.types';
 
-import { api, IPaginationArg } from './api';
+import { api, IAuthentication, IPaginationArg } from './api';
 
 type SortPost = 'title' | 'createdAt' | 'updatedAt' | 'viewsCount';
 
@@ -12,16 +12,14 @@ export interface IPostQuery extends IPaginationArg {
   order?: 'asc' | 'desc';
 }
 
-export interface ICreatePostQuery {
-  accessToken: string;
+export interface ICreatePostQuery extends IAuthentication {
   text: string;
   tags?: string;
   img: string | null;
 }
 
-export interface IDeletePostQuery {
+export interface IDeletePostQuery extends IAuthentication {
   id: string;
-  accessToken: string;
 }
 
 const postApi = api.injectEndpoints({

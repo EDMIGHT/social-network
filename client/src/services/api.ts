@@ -13,6 +13,10 @@ export interface IPaginationArg {
   limit?: number;
 }
 
+export interface IAuthentication {
+  accessToken: string;
+}
+
 export const api = createApi({
   reducerPath: 'api',
   tagTypes: ['post', 'comment', 'user', 'tag'],
