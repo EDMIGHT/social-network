@@ -49,7 +49,7 @@ const Post: FC = () => {
       <PostContent data={data} onClickClose={onClickClose} />
       <div className='flex w-full flex-1 flex-col gap-2'>
         {user && <CreateComment id={data.id} />}
-        <Comments id={data.id} />
+        <Comments id={data.id} authorId={data.userId} />
       </div>
     </>
   );

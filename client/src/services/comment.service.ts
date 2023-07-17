@@ -12,6 +12,12 @@ interface ICreateCommentArg extends ICreateCommentForm {
   accessToken: string;
 }
 
+interface IDeleteCommentArg {
+  postId: string;
+  commentId: string;
+  accessToken: string;
+}
+
 const commentApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getComments: builder.query<IResponseCommentsByUser, IGetCommentsForPostArg>({
@@ -46,7 +52,24 @@ const commentApi = api.injectEndpoints({
             ]
           : ['comment', { type: 'post', id: arg.id }],
     }),
+    deleteComment: builder.mutation<null, IDeleteCommentArg>({
+      query: ({ postId, commentId, accessToken }) => ({
+        url: `comments/${postId}/${commentId}`,
+        method: 'DELETE',
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      }),
+      invalidatesTags: (result, error, arg) =>
+        result
+          ? [
+              { type: 'comment', id: arg.commentId },
+              { type: 'post', id: arg.postId },
+            ]
+          : ['comment', { type: 'post', id: arg.postId }],
+    }),
   }),
 });
 
-export const { useGetCommentsQuery, useCreateCommentMutation } = commentApi;
+export const { useGetCommentsQuery, useCreateCommentMutation, useDeleteCommentMutation } =
+  commentApi;

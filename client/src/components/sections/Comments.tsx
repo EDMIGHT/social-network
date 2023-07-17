@@ -10,9 +10,10 @@ import Pagination from './Pagination';
 
 interface ICommentsProps {
   id: string;
+  authorId: string;
 }
 
-const Comments: FC<ICommentsProps> = ({ id }) => {
+const Comments: FC<ICommentsProps> = ({ id, authorId }) => {
   const [parent] = useAutoAnimate();
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -22,7 +23,10 @@ const Comments: FC<ICommentsProps> = ({ id }) => {
   });
 
   const elementsComments =
-    data && data.comments.map((comment) => <Comment key={comment.id} {...comment} />);
+    data &&
+    data.comments.map((comment) => (
+      <Comment key={comment.id} authorId={authorId} {...comment} />
+    ));
 
   const loadingElements = (isLoading || isError) && <CommentSkeletons />;
   const successElements = isSuccess && (
