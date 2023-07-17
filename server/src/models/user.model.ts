@@ -19,6 +19,10 @@ interface IGetFollow extends IPagination {
 interface ISearchUsersArg extends IPagination {
   login: string;
 }
+interface IUpdateUserArg {
+  id: string;
+  data: Partial<Pick<User, 'img' | 'name' | 'email'>>;
+}
 
 class UserModel implements IUserModel {
   public async createUser(data: RegisterUser): Promise<User> {
@@ -193,6 +197,17 @@ class UserModel implements IUserModel {
     });
 
     return user?.following.length ?? 0;
+  }
+  public async updateUserById({ id, data }: IUpdateUserArg): Promise<UserWithFollow> {
+    return prisma.user.update({
+      where: { id },
+      data: { ...data },
+      include: {
+        likedPosts: { select: { id: true } },
+        followers: { select: { login: true } },
+        following: { select: { login: true } },
+      },
+    });
   }
 }
 

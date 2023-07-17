@@ -176,3 +176,24 @@ export const toggleFollowUser = async (
     });
   }
 };
+
+export const updateUser = async (request: Request, response: Response): Promise<Response> => {
+  const { name, img, email } = request.body;
+  try {
+    const updatedUser = await userModel.updateUserById({
+      id: request.user.id,
+      data: {
+        name,
+        email,
+        img,
+      },
+    });
+
+    return customResponse.ok(response, updatedUser);
+  } catch (error) {
+    console.error(error);
+    return customResponse.serverError(response, {
+      message: 'error while updating user on server side',
+    });
+  }
+};
