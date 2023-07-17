@@ -25,7 +25,7 @@ const Alert: FC<AlertProps> = ({ type = 'success', children }) => {
     ? createPortal(
         <div
           className={cn(
-            'fixed bottom-10 left-1/2 z-20 p-3 rounded transition-all',
+            'fixed bottom-10 left-1/2 -translate-x-1/2 z-20 p-3 rounded transition-all',
             type === 'success' && 'bg-green-600',
             type === 'error' && 'bg-red-700'
           )}

@@ -64,10 +64,10 @@
 
   /* buttons */
   .activity {
-    @apply bg-primary;
+    @apply bg-primary hover:bg-accent;
   }
   .highlight {
-    @apply bg-accent;
+    @apply bg-accent hover:bg-primary;
   }
 }
 

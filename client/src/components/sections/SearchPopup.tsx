@@ -32,7 +32,7 @@ const SearchPopup = forwardRef<HTMLDivElement, ISearchPopupProps>(({ onClickUser
   return (
     <>
       <Overlay ref={ref} />
-      <div className='fixed left-[50vw] top-[25vh] flex w-[500px] -translate-x-1/2 flex-col gap-2'>
+      <div className='fixed left-1/2 top-1/3 flex w-[90vw] -translate-x-1/2 flex-col gap-2 sm:w-[500px]'>
         <Card>
           <Input
             name='text'

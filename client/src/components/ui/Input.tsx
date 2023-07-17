@@ -42,7 +42,7 @@ const Input: React.FC<InputProps> = ({
   }, [focus]);
 
   return (
-    <label htmlFor={name} className={cn('w-full cursor-pointer', className)}>
+    <label htmlFor={id ?? name} className={cn('w-full cursor-pointer', className)}>
       <Typography component='h2' variant='title-1' className='pl-2'>
         {children}
         {required && <span className='pl-1 font-bold text-red-700'>*</span>}

@@ -159,7 +159,6 @@ export const toggleFollowUser = async (
       });
     }
     const checkExist = existedUser.following.some((user) => user.login === login);
-    console.log(existedUser);
 
     let updatedUser;
 

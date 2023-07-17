@@ -4,7 +4,8 @@ import { FC, useState } from 'react';
 import Card from '@/components/ui/Card';
 import { useGetCommentsQuery } from '@/services/comment.service';
 
-import PostItemComment from './Comment';
+import Comment from './Comment';
+import CommentSkeletons from './CommentSkeletons';
 import Pagination from './Pagination';
 
 interface ICommentsProps {
@@ -15,15 +16,17 @@ const Comments: FC<ICommentsProps> = ({ id }) => {
   const [parent] = useAutoAnimate();
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data, isSuccess } = useGetCommentsQuery({ id, page: currentPage });
+  const { data, isSuccess, isLoading, isError } = useGetCommentsQuery({
+    id,
+    page: currentPage,
+  });
 
   const elementsComments =
-    isSuccess &&
-    data &&
-    data.comments.map((comment) => <PostItemComment key={comment.id} {...comment} />);
+    data && data.comments.map((comment) => <Comment key={comment.id} {...comment} />);
 
-  return (
-    <div className='flex flex-col gap-2'>
+  const loadingElements = (isLoading || isError) && <CommentSkeletons />;
+  const successElements = isSuccess && (
+    <>
       <Card>
         {data && data.comments.length > 0 ? (
           <ul ref={parent} className='flex flex-col gap-2'>
@@ -40,6 +43,13 @@ const Comments: FC<ICommentsProps> = ({ id }) => {
           totalPages={data.totalPages}
         />
       )}
+    </>
+  );
+
+  return (
+    <div className='flex flex-col gap-2'>
+      {loadingElements}
+      {successElements}
     </div>
   );
 };

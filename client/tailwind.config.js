@@ -5,7 +5,8 @@ export default {
   theme: {
     extend: {
       gridTemplateColumns: {
-        layout: '1fr 3fr 1fr',
+        'layout-lg': '1fr 3fr 1fr',
+        'layout-md': '3fr 1fr',
       },
       colors: {
         background: 'var(--background)',

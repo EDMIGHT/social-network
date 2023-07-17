@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { cn } from '@/utils/cn';
+
 interface ButtonProps {
   children: string;
   variant?: 'activity' | 'highlight' | 'alert' | 'warn';
@@ -23,7 +25,11 @@ const Button: React.FC<ButtonProps> = ({
     <button
       type={type ?? 'button'}
       onClick={onClickHandler}
-      className={`whitespace-nowrap rounded p-2 text-center ${variant} ${className} disabled:bg-muted`}
+      className={cn(
+        variant,
+        className,
+        'whitespace-nowrap rounded p-2 text-center disabled:bg-muted'
+      )}
       disabled={disabled}
     >
       {children}

@@ -1,4 +1,3 @@
-import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -9,6 +8,7 @@ import Typography from '@/components/ui/Typography';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import useLogout from '@/hooks/useLogout';
 import useTheme from '@/hooks/useTheme';
+import { cn } from '@/utils/cn';
 
 import Search from './Search';
 
@@ -95,15 +95,38 @@ const Header: React.FC = () => {
               <Thumbnail imgURL={user.img} alt='me' />
             </button>
             <Popup isActive={isActivePopup}>
-              <ul className={clsx('cursor-pointer', !isActivePopup && 'hidden')}>
-                <li className='block w-full p-2 hover:text-white'>
-                  <Link to={`/profile/${user.login}`} onClick={onClickPopupItem}>
+              <ul
+                className={cn(
+                  'cursor-pointer flex flex-col gap-2 p-2 justify-center items-center',
+                  !isActivePopup && 'hidden'
+                )}
+              >
+                <li className='w-full text-center hover:text-white lg:hidden'>
+                  <Link to='/' onClick={onClickPopupItem} className='block'>
+                    <Typography component='span' variant='title-2'>
+                      home
+                    </Typography>
+                  </Link>
+                </li>
+                <li className='w-full text-center hover:text-white'>
+                  <Link
+                    to={`/profile/${user.login}`}
+                    onClick={onClickPopupItem}
+                    className='block'
+                  >
                     <Typography component='span' variant='title-2'>
                       profile
                     </Typography>
                   </Link>
                 </li>
-                <li className='p-2 hover:text-white'>
+                <li className='w-full text-center hover:text-white lg:hidden'>
+                  <Link to='/messages' onClick={onClickPopupItem} className='block'>
+                    <Typography component='span' variant='title-2'>
+                      messages
+                    </Typography>
+                  </Link>
+                </li>
+                <li className='w-full text-center hover:text-white'>
                   <button onClick={onClickLogout}>
                     <Typography component='span' variant='title-2'>
                       logout

@@ -15,7 +15,7 @@ const Tag: React.FC<TagProps> = ({ id, name, onClick, className }) => {
     <li className={className}>
       <Button
         variant='highlight'
-        className='w-full p-1 transition-all hover:bg-primary'
+        className='w-full p-1 transition-all'
         onClick={() => onClick && onClick({ id, name })}
       >
         {name}
