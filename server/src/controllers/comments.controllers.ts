@@ -64,3 +64,45 @@ export const createComment = async (
     });
   }
 };
+
+export const deleteComment = async (
+  request: Request,
+  response: Response
+): Promise<Response> => {
+  const { postId, commentId } = request.params;
+  const { id: authorId } = request.user;
+
+  try {
+    const post = await postModel.getById(postId);
+
+    if (!post) {
+      return customResponse.notFound(response, {
+        message: `post with id = ${postId} was not found`,
+      });
+    }
+
+    const comment = await commentModel.getById(commentId);
+
+    if (!comment) {
+      return customResponse.notFound(response, {
+        message: `comment with id = ${commentId} was not found`,
+      });
+    }
+
+    if (post.user.id === authorId || comment.userId === authorId) {
+      await commentModel.deleteById(commentId);
+
+      return customResponse.ok(response, {
+        message: 'comment has been successfully deleted',
+      });
+    }
+
+    return customResponse.conflict(response, {
+      message: `You do not have permission to delete a comment with id = ${commentId}`,
+    });
+  } catch (error) {
+    return customResponse.serverError(response, {
+      message: 'error when deleting comment on server side',
+    });
+  }
+};

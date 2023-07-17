@@ -1,3 +1,5 @@
+import { Comment } from '@prisma/client';
+
 import prisma from '@/db/prisma';
 import { CommentsWithUser } from '@/types/comment.types';
 import { IPagination } from '@/types/response.types';
@@ -15,6 +17,14 @@ interface ICreateCommentArg {
 }
 
 class CommentModel {
+  public getById(id: string): Promise<CommentsWithUser | null> {
+    return prisma.comment.findFirst({
+      where: { id },
+      include: {
+        user: { select: { id: true, login: true, name: true, img: true } },
+      },
+    });
+  }
   public getAllByPostId({
     postId,
     page,
@@ -36,7 +46,7 @@ class CommentModel {
       },
     });
   }
-  public getTotalCommentByPost(id: string) {
+  public getTotalCommentByPost(id: string): Promise<number> {
     return prisma.comment.count({
       where: { postId: id },
     });
@@ -51,6 +61,11 @@ class CommentModel {
       include: {
         user: { select: { id: true, login: true, name: true, img: true } },
       },
+    });
+  }
+  public deleteById(id: string): Promise<Comment> {
+    return prisma.comment.delete({
+      where: { id },
     });
   }
 }
