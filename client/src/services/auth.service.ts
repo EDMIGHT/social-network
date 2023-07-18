@@ -22,7 +22,7 @@ export const authApi = api.injectEndpoints({
     register: builder.mutation<IAuthQuery, ISignUpForm>({
       query: ({ ...body }) => ({ url: 'auth/register', method: 'POST', body }),
     }),
-    authMe: builder.query<IResponseUser, string>({
+    authMe: builder.mutation<IResponseUser, string>({
       query: (accessToken) => ({
         url: 'auth/me',
         headers: {
@@ -36,5 +36,5 @@ export const authApi = api.injectEndpoints({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useAuthMeQuery, useTokenMutation } =
+export const { useLoginMutation, useRegisterMutation, useAuthMeMutation, useTokenMutation } =
   authApi;

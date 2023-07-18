@@ -1,34 +1,31 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { useAuthMeQuery } from '@/services/auth.service';
-import { setUser, setUserData } from '@/store/slices/user.slice';
+import { useAuthMeMutation } from '@/services/auth.service';
+import { setUserData } from '@/store/slices/user.slice';
 
 import { useAppDispatch } from './reduxHooks';
 import useLocalStorage from './useLocalStorage';
 
 const useAuthentication = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const [setLocalStorage, getLocalStorage] = useLocalStorage();
 
   const accessToken = (getLocalStorage('accessToken') || '') as string;
   const refreshToken = (getLocalStorage('refreshToken') || '') as string;
 
-  const { data, isSuccess, isError } = useAuthMeQuery(accessToken);
+  const [authMe, { data, isSuccess, isError }] = useAuthMeMutation();
+
+  useEffect(() => {
+    if (accessToken) {
+      authMe(accessToken);
+    }
+  }, [accessToken]);
 
   useEffect(() => {
     if (isSuccess && data) {
-      dispatch(setUser(data));
       dispatch(setUserData({ user: data, accessToken, refreshToken }));
     }
   }, [isSuccess, data]);
-
-  useEffect(() => {
-    if (isError) {
-      // navigate('/signIn');
-    }
-  }, [isError]);
 };
 
 export default useAuthentication;

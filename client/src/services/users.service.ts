@@ -83,7 +83,7 @@ const profileApi = api.injectEndpoints({
           name,
         },
       }),
-      invalidatesTags: ['user'],
+      invalidatesTags: ['user', 'post'],
     }),
   }),
 });

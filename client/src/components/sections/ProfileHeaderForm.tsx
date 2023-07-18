@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
 
 import Alert from '@/components/ui/Alert';
 import Button from '@/components/ui/Button';
@@ -33,14 +32,15 @@ const ProfileHeaderForm: FC<ProfileHeaderFormProps> = ({ data, onClickCancel }) 
   const [localImg, setLocalImg] = useState<string | null>(img);
   const [messageError, setMessageError] = useState<string | null>(null);
 
-  const [updateProfile, { isLoading, isError, isSuccess }] = useUpdateProfileMutation();
+  const [updateProfile, { isLoading, isError, isSuccess, data: updatedData }] =
+    useUpdateProfileMutation();
 
   useEffect(() => {
-    if (isSuccess) {
-      dispatch(setUser(data));
+    if (isSuccess && updatedData) {
+      dispatch(setUser(updatedData));
       onClickCancel();
     }
-  }, [isSuccess]);
+  }, [isSuccess, updatedData]);
 
   const onSubmit = handleSubmit(async (formData) => {
     if (accessToken) {
@@ -64,7 +64,7 @@ const ProfileHeaderForm: FC<ProfileHeaderFormProps> = ({ data, onClickCancel }) 
         <Alert type='error'>{messageError || 'error while updating user'}</Alert>
       )}
       <div className='flex gap-2'>
-        <UploadPhoto onChangeFile={setLocalImg} className='h-36 w-48'>
+        <UploadPhoto onChangeFile={setLocalImg} className='h-36 w-48 hover:opacity-80'>
           <Thumbnail imgURL={localImg as string} alt={login} />
         </UploadPhoto>
         <div className='flex w-full flex-col gap-2'>

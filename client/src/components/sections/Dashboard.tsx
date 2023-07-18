@@ -6,7 +6,7 @@ import Menu from './Menu';
 import UserInfo from './UserInfo';
 
 const Dashboard: React.FC = () => {
-  const user = useAppSelector((state) => state.user.user);
+  const { user } = useAppSelector((state) => state.user);
 
   return (
     <aside className='hidden flex-col gap-2 lg:flex'>

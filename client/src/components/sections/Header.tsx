@@ -13,7 +13,7 @@ import { cn } from '@/utils/cn';
 import Search from './Search';
 
 const Header: React.FC = () => {
-  const user = useAppSelector((state) => state.user.user);
+  const { user } = useAppSelector((state) => state.user);
   const logout = useLogout();
 
   const [theme, toggleTheme] = useTheme();

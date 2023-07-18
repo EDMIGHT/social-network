@@ -48,7 +48,7 @@ const ProfileHeaderInfo: FC<ProfileHeaderInfoProps> = ({ data }) => {
 
       <div className='flex w-full flex-col gap-2'>
         <div className='flex gap-2'>
-          <div className='h-36 w-48'>
+          <div className='h-32 w-48 md:h-36'>
             <Thumbnail imgURL={img} alt={login} />
           </div>
 
