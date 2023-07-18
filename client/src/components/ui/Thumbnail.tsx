@@ -14,6 +14,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({ imgURL, alt, className }) => {
       src={imgURL}
       alt={alt}
       className={cn('h-full w-full rounded object-cover', className)}
+      loading='lazy'
     />
   );
 };

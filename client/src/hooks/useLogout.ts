@@ -5,10 +5,11 @@ import useLocalStorage from './useLocalStorage';
 
 const useLogout = () => {
   const dispatch = useAppDispatch();
-  const [setLocalStorage, getLocalStorage, clearLocalStorage] = useLocalStorage();
+  const [setLocalStorage, getLocalStorage, removeLocalStorage] = useLocalStorage();
 
   const clear = () => {
-    clearLocalStorage();
+    removeLocalStorage('accessToken');
+    removeLocalStorage('refreshToken');
     dispatch(setUserData(null));
   };
   return clear;
