@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 
-import User from '@/models/user.model';
 import userModel from '@/models/user.model';
 import tokenService from '@/services/token.service';
 import { isLoginUser, isRegisterUser } from '@/types/user.types';
@@ -17,7 +16,7 @@ export const registerUser = async (
     if (isRegisterUser(request.body)) {
       const registeringUser = request.body;
 
-      const user = await User.getUserByLogin(registeringUser.login);
+      const user = await userModel.getUserByLogin(registeringUser.login);
 
       if (user) {
         return customResponse.conflict(response, {
@@ -25,7 +24,7 @@ export const registerUser = async (
         });
       } else {
         const hashedPassword = await bcrypt.hash(registeringUser.password as string, 10);
-        const user = await User.createUser({
+        const user = await userModel.createUser({
           ...registeringUser,
           password: hashedPassword,
         });
@@ -67,7 +66,7 @@ export const loginUser = async (request: Request, response: Response): Promise<R
     if (isLoginUser(request.body)) {
       const loggingUser = request.body;
 
-      const user = await User.getUserByLogin(loggingUser.login);
+      const user = await userModel.getUserByLogin(loggingUser.login);
 
       if (!user) {
         return customResponse.unauthorized(response, {

@@ -32,6 +32,9 @@ const CreatePost: React.FC = React.memo(() => {
 
   const [createPost, { isLoading, isError, isSuccess }] = useCreatePostMutation();
 
+  const onClickDeleteImg = () => {
+    setImgURL(null);
+  };
   const onClickAddTag = (tag: Tag) => {
     const existTag = selectedTags.some((selectedTag) => selectedTag.id === tag.id);
     if (!existTag) {
@@ -69,8 +72,20 @@ const CreatePost: React.FC = React.memo(() => {
       {isSuccess && <Alert type='success'>post successfully created</Alert>}
 
       {imgURL && (
-        <div className='h-96 cursor-pointer bg-black'>
+        <div className='relative h-96 cursor-pointer bg-black'>
           <img src={imgURL} alt='preview' className='mx-auto h-full object-cover' />
+          <button onClick={onClickDeleteImg} className='absolute right-1 top-1'>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              className='h-6 w-6 hover:stroke-primary focus:stroke-primary'
+            >
+              <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
+            </svg>
+          </button>
         </div>
       )}
       <SearchTag onClickTag={onClickAddTag} />
