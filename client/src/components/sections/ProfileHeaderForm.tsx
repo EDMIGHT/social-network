@@ -75,10 +75,6 @@ const ProfileHeaderForm: FC<ProfileHeaderFormProps> = ({ data, onClickCancel }) 
             defaultValue={name || undefined}
             optionals={{
               ...register('name', {
-                minLength: {
-                  value: 2,
-                  message: 'minimum name length is 2 character',
-                },
                 maxLength: {
                   value: 100,
                   message: 'maximum name length is 100 characters',
@@ -96,10 +92,6 @@ const ProfileHeaderForm: FC<ProfileHeaderFormProps> = ({ data, onClickCancel }) 
             defaultValue={email || undefined}
             optionals={{
               ...register('email', {
-                minLength: {
-                  value: 5,
-                  message: 'minimum email length is 5 character',
-                },
                 maxLength: {
                   value: 100,
                   message: 'maximum email length is 100 characters',

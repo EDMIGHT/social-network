@@ -17,6 +17,7 @@ interface InputProps {
   onChange?: any;
   focus?: boolean;
   required?: boolean;
+  type?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -32,6 +33,7 @@ const Input: React.FC<InputProps> = ({
   onChange,
   focus = false,
   required = false,
+  type = 'text',
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -55,6 +57,7 @@ const Input: React.FC<InputProps> = ({
         name={name}
         id={id ?? name}
         onChange={onChange}
+        type={type}
         {...optionals}
         className='w-full cursor-pointer rounded border-2 border-transparent bg-input p-2 transition-all hover:border-primary focus:border-primary focus:outline-none active:border-primary'
       />

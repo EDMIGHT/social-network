@@ -6,7 +6,6 @@ import { useGetFollowingQuery } from '@/services/users.service';
 
 import Pagination from './Pagination';
 import Users from './Users';
-import UsersEmpty from './UsersEmpty';
 import UserSkeletons from './UserSkeletons';
 
 const UserFollowing: FC = () => {

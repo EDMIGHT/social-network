@@ -9,6 +9,7 @@ import { useAppDispatch } from '@/hooks/reduxHooks';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { IAuthQuery, useLoginMutation } from '@/services/auth.service';
 import { setUserData } from '@/store/slices/user.slice';
+import { isErrorWithMessage } from '@/types/responses.types';
 
 export interface ISignInForm {
   login: string;
@@ -30,9 +31,9 @@ const SignInForm: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation();
 
   const onSubmit: SubmitHandler<ISignInForm> = async (data) => {
-    const response = (await login(data)) as IAuthQuery; // ? idk как типизировать ответ ртк правильно
+    const response = (await login(data)) as IAuthQuery;
 
-    if (response.error?.data.message) {
+    if (isErrorWithMessage(response)) {
       SetLoginError(response.error.data.message);
     }
 
@@ -45,8 +46,6 @@ const SignInForm: React.FC = () => {
       navigate('/');
     }
   };
-
-  // if (isLoading) return <div>loading</div>;
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
@@ -61,6 +60,10 @@ const SignInForm: React.FC = () => {
               value: 2,
               message: 'the minimum login length is 2 characters',
             },
+            maxLength: {
+              value: 100,
+              message: 'the maximum login length is 100 characters',
+            },
           }),
         }}
         error={errors.login ? errors.login.message : undefined}
@@ -71,12 +74,17 @@ const SignInForm: React.FC = () => {
         placeholder='enter password...'
         name='password'
         required
+        type='password'
         optionals={{
           ...register('password', {
             required: 'password is a required field',
             minLength: {
               value: 5,
               message: 'the minimum password length is 5 characters',
+            },
+            maxLength: {
+              value: 100,
+              message: 'the maximum password length is 100 characters',
             },
           }),
         }}

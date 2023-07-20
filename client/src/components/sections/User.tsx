@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import Alert from '@/components/ui/Alert';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Thumbnail from '@/components/ui/Thumbnail';
@@ -11,14 +12,12 @@ import { setUser } from '@/store/slices/user.slice';
 import { isErrorWithMessage } from '@/types/responses.types';
 import { IJoinedUser } from '@/types/user.types';
 
-import Alert from '../ui/Alert';
-
 interface IUserProps extends IJoinedUser {
   onClickUser?: any;
 }
 
 const User: FC<IUserProps> = ({ id, img, login, name, onClickUser }) => {
-  const [isMessageError, SetMessageError] = useState<string | null>(null);
+  const [isMessageError, setMessageError] = useState<string | null>(null);
   const { user, accessToken } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
@@ -35,10 +34,10 @@ const User: FC<IUserProps> = ({ id, img, login, name, onClickUser }) => {
       const response = await toggleFollow({ accessToken, login });
 
       if (isErrorWithMessage(response)) {
-        SetMessageError(response.error.data.message);
+        setMessageError(response.error.data.message);
       }
     } else {
-      SetMessageError('you are not authorized to follow or unfollow a user');
+      setMessageError('you are not authorized to follow or unfollow a user');
     }
   };
 

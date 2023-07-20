@@ -10,15 +10,19 @@ import { useAppDispatch } from '@/hooks/reduxHooks';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { IAuthQuery, useRegisterMutation } from '@/services/auth.service';
 import { setUserData } from '@/store/slices/user.slice';
+import { isErrorWithMessage } from '@/types/responses.types';
 
 import UploadPhoto from './UploadPhoto';
 
 export interface ISignUpForm {
   name?: string;
+  email?: string;
   login: string;
   password: string;
   img: string;
 }
+
+const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
 const SignUpForm: FC = () => {
   const dispatch = useAppDispatch();
@@ -42,13 +46,16 @@ const SignUpForm: FC = () => {
 
   const [registerReq, { isLoading }] = useRegisterMutation();
 
-  const onSubmit: SubmitHandler<ISignUpForm> = async (data) => {
+  const onSubmit: SubmitHandler<ISignUpForm> = async ({ login, password, email, name }) => {
     const response = (await registerReq({
-      ...data,
+      login,
+      password,
+      email: email || undefined,
+      name: name || undefined,
       img: ImgSRC,
     })) as IAuthQuery; // ? idk как типизировать ответ ртк правильно
 
-    if (response.error?.data.message) {
+    if (isErrorWithMessage(response)) {
       SetLoginError(response.error.data.message);
     }
 
@@ -62,8 +69,6 @@ const SignUpForm: FC = () => {
     }
   };
 
-  // if (isLoading) return <div>loading</div>;
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
       <div className='flex items-center justify-center'>
@@ -76,15 +81,34 @@ const SignUpForm: FC = () => {
         name='name'
         optionals={{
           ...register('name', {
-            minLength: {
-              value: 2,
-              message: 'the minimum login length is 2 characters',
+            maxLength: {
+              value: 100,
+              message: 'the maximum name length is 100 characters',
             },
           }),
         }}
-        error={errors.login ? errors.login.message : undefined}
+        error={errors.name ? errors.name.message : undefined}
       >
         name
+      </Input>
+      <Input
+        placeholder='enter email...'
+        name='email'
+        optionals={{
+          ...register('email', {
+            maxLength: {
+              value: 100,
+              message: 'the maximum email length is 100 characters',
+            },
+            pattern: {
+              value: emailRegex,
+              message: 'you entered the wrong email',
+            },
+          }),
+        }}
+        error={errors.email ? errors.email.message : undefined}
+      >
+        email
       </Input>
       <Input
         placeholder='enter login...'
@@ -97,6 +121,10 @@ const SignUpForm: FC = () => {
               value: 2,
               message: 'the minimum login length is 2 characters',
             },
+            maxLength: {
+              value: 100,
+              message: 'the maximum login length is 100 characters',
+            },
           }),
         }}
         error={errors.login ? errors.login.message : undefined}
@@ -107,12 +135,17 @@ const SignUpForm: FC = () => {
         placeholder='enter password...'
         name='password'
         required
+        type='password'
         optionals={{
           ...register('password', {
             required: 'password is a required field',
             minLength: {
               value: 5,
               message: 'the minimum password length is 5 characters',
+            },
+            maxLength: {
+              value: 100,
+              message: 'the maximum password length is 100 characters',
             },
           }),
         }}

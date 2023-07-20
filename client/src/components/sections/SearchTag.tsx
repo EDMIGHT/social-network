@@ -52,7 +52,7 @@ const SearchTag: FC<SearchTagProps> = ({ onClickTag }) => {
         id='tag-name'
       />
       {localText && foundedTags && (
-        <ul className='absolute top-12 z-20 flex w-full gap-2  rounded bg-black p-3'>
+        <ul className='absolute top-12 z-20 flex w-full gap-2  rounded bg-background p-3'>
           {foundedTags}
           <li>
             {isActiveCreateTag ? (
