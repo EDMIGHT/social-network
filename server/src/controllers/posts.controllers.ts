@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 
 import postModel from '@/models/post.model';
 import tagModel from '@/models/tag.model';
+import cloudinary from '@/utils/cloudinary';
 import customResponse from '@/utils/helpers/customResponse';
+import { ROOT_FOLDER_CLOUDINARY } from '@/utils/utils';
 
 export const getAllPosts = async (request: Request, response: Response): Promise<Response> => {
   try {
@@ -93,22 +95,14 @@ export const getPost = async (request: Request, response: Response): Promise<Res
 };
 
 export const createPost = async (request: Request, response: Response): Promise<Response> => {
-  const { tags } = request.body;
+  const { tags, img } = request.body;
 
   try {
     const tagList = tags ? (tags as string).split(',') : [];
 
     const existedTags = await tagModel.getTagsByName(tagList);
 
-    if (existedTags?.length === tagList.length) {
-      const post = await postModel.create({
-        ...request.body,
-        tags: tagList,
-        userId: request.user.id,
-      });
-
-      return customResponse.created(response, post);
-    } else {
+    if (existedTags?.length !== tagList.length) {
       return customResponse.badRequest(response, {
         message: 'failed to create post using passed data',
         body: {
@@ -118,6 +112,19 @@ export const createPost = async (request: Request, response: Response): Promise<
         existedTags,
       });
     }
+
+    const uploadedImg = await cloudinary.uploader.upload(img, {
+      folder: `${ROOT_FOLDER_CLOUDINARY}/posts`,
+    });
+
+    const post = await postModel.create({
+      ...request.body,
+      img: uploadedImg.secure_url,
+      tags: tagList,
+      userId: request.user.id,
+    });
+
+    return customResponse.created(response, post);
   } catch (error) {
     console.log(error);
     return customResponse.serverError(response, {

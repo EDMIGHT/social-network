@@ -7,13 +7,13 @@ const options = {
       title: 'Social API',
       version: '1.0.0',
     },
+    servers: [
+      {
+        url: process.env.HOST,
+      },
+    ],
   },
-  basePath: 'api',
-  host: 'localhost:3001',
   apis: ['./src/routes/*.ts'],
-  servers: {
-    url: 'http:://localhost:3001/api',
-  },
 };
 
 const swaggerSpec = swaggerJsdoc(options);

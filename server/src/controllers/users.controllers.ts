@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 
 import postModel from '@/models/post.model';
 import userModel from '@/models/user.model';
+import cloudinary from '@/utils/cloudinary';
 import createResponseUser from '@/utils/helpers/createResponseUser';
 import customResponse from '@/utils/helpers/customResponse';
+import { ROOT_FOLDER_CLOUDINARY } from '@/utils/utils';
 
 export const searchUsers = async (request: Request, response: Response): Promise<Response> => {
   const { login, page = 1, limit = 10 } = request.query;
@@ -38,12 +40,12 @@ export const getProfile = async (request: Request, response: Response): Promise<
 
     if (existedProfile) {
       return customResponse.ok(response, createResponseUser(existedProfile));
-    } else {
-      return customResponse.notFound(response, {
-        message: 'user with this login does not exist',
-        login,
-      });
     }
+
+    return customResponse.notFound(response, {
+      message: 'user with this login does not exist',
+      login,
+    });
   } catch (error) {
     console.error(error);
     return customResponse.serverError(response, {
@@ -180,12 +182,16 @@ export const toggleFollowUser = async (
 export const updateUser = async (request: Request, response: Response): Promise<Response> => {
   const { name, img, email } = request.body;
   try {
+    const uploadedImg = await cloudinary.uploader.upload(img, {
+      folder: `${ROOT_FOLDER_CLOUDINARY}/users`,
+    });
+
     const updatedUser = await userModel.updateUserById({
       id: request.user.id,
       data: {
         name,
         email,
-        img,
+        img: uploadedImg.secure_url,
       },
     });
 

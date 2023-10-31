@@ -9,7 +9,7 @@ const router = express.Router({ mergeParams: true });
 
 /**
  * @openapi
- * auth/register:
+ * /auth/register:
  *  post:
  *    tags:
  *    - auth 🚪
@@ -91,7 +91,7 @@ router.post('/register', registerValidators, validationHandler, registerUser);
 
 /**
  * @openapi
- * auth/login:
+ * /auth/login:
  *  post:
  *    tags:
  *    - auth 🚪
@@ -175,7 +175,7 @@ router.get('/me', authentication, authMe);
 
 /**
  * @openapi
- * 'auth/token':
+ * /auth/token:
  *  post:
  *    tags:
  *    - auth 🚪

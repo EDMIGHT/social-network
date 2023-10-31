@@ -13,7 +13,7 @@ model User {
   img          String
   name         String?
   email        String?
-  password     String?
+  password     String
   createdAt    DateTime  @default(now())
   likedPosts   Post[]    @relation("liked posts")
   createdPosts Post[]    @relation("created posts")

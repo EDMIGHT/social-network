@@ -21,7 +21,7 @@ const router = express.Router({ mergeParams: true });
 
 /**
  * @openapi
- * posts/all:
+ * /posts/all:
  *  get:
  *    tags:
  *    - posts 📰
@@ -182,7 +182,7 @@ router.get('/all', getAllPosts);
 
 /**
  * @openapi
- * posts/all/:login:
+ * /posts/all/:login:
  *  get:
  *    tags:
  *    - posts 📰
@@ -350,7 +350,7 @@ router.get('/all/:login', getPosts);
 
 /**
  * @openapi
- * posts/:id:
+ * /posts/:id:
  *  get:
  *    tags:
  *    - posts 📰
@@ -442,7 +442,7 @@ router.get('/:id', getPost);
 
 /**
  * @openapi
- * posts/:
+ * /posts:
  *  post:
  *    tags:
  *    - posts 📰
@@ -565,7 +565,7 @@ router.post('/view/:id', authentication, increaseView);
 
 /**
  * @openapi
- * posts/:id:
+ * /posts/:id:
  *  delete:
  *    tags:
  *    - posts 📰
@@ -617,7 +617,7 @@ router.delete('/:id', authentication, deletePost);
 
 /**
  * @openapi
- * posts/:id:
+ * /posts/:id:
  *  patch:
  *    tags:
  *    - posts 📰

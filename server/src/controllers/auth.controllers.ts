@@ -1,9 +1,8 @@
-import bcrypt from 'bcryptjs';
 import { Request, Response } from 'express';
 
 import userModel from '@/models/user.model';
+import { PasswordService } from '@/services/password.service';
 import tokenService from '@/services/token.service';
-import { isLoginUser, isRegisterUser } from '@/types/user.types';
 import createResponseUser from '@/utils/helpers/createResponseUser';
 import customResponse from '@/utils/helpers/customResponse';
 import isTokenInvalid from '@/utils/helpers/isTokenInvalid';
@@ -13,47 +12,37 @@ export const registerUser = async (
   response: Response
 ): Promise<Response> => {
   try {
-    if (isRegisterUser(request.body)) {
-      const registeringUser = request.body;
+    const { login, password } = request.body;
 
-      const user = await userModel.getUserByLogin(registeringUser.login);
+    const existedUser = await userModel.getUserByLogin(login);
 
-      if (user) {
-        return customResponse.conflict(response, {
-          message: 'User with this login already exists',
-        });
-      } else {
-        const hashedPassword = await bcrypt.hash(registeringUser.password as string, 10);
-        const user = await userModel.createUser({
-          ...registeringUser,
-          password: hashedPassword,
-        });
-
-        const tokens = tokenService.createTokens({
-          login: user.login,
-          id: user.id,
-        });
-
-        tokenService.save({
-          userId: user.id,
-          refreshToken: tokens.refreshToken,
-        });
-
-        const responseUser = createResponseUser(user);
-
-        return customResponse.created(response, {
-          ...tokens,
-          user: responseUser,
-        });
-      }
-    } else {
-      return customResponse.badRequest(response, {
-        message: 'Invalid request body',
-        body: {
-          ...request.body,
-        },
+    if (existedUser) {
+      return customResponse.conflict(response, {
+        message: 'User with this login already exists',
       });
     }
+
+    const hashedPassword = await PasswordService.hash(password);
+    const user = await userModel.createUser({
+      ...request.body,
+      password: hashedPassword,
+      img: `https://api.dicebear.com/6.x/fun-emoji/svg?seed=${login}&backgroundColor=b6e3f4,c0aede,d1d4f9`,
+    });
+
+    const tokens = tokenService.createTokens({
+      login: user.login,
+      id: user.id,
+    });
+
+    tokenService.save({
+      userId: user.id,
+      refreshToken: tokens.refreshToken,
+    });
+
+    return customResponse.created(response, {
+      ...tokens,
+      user: createResponseUser(user),
+    });
   } catch (error) {
     return customResponse.serverError(response, {
       message: 'an error occurred on the server side while creating the user',
@@ -63,51 +52,36 @@ export const registerUser = async (
 
 export const loginUser = async (request: Request, response: Response): Promise<Response> => {
   try {
-    if (isLoginUser(request.body)) {
-      const loggingUser = request.body;
+    const { login, password } = request.body;
 
-      const user = await userModel.getUserByLogin(loggingUser.login);
+    const existedUser = await userModel.getUserByLogin(login);
 
-      if (!user) {
-        return customResponse.unauthorized(response, {
-          message: 'User with this login does not exist',
-        });
-      } else {
-        const isPasswordEqual = await bcrypt.compare(
-          loggingUser.password as string,
-          user.password as string
-        );
-
-        if (!isPasswordEqual) {
-          return customResponse.unauthorized(response, {
-            message: 'incorrect password',
-          });
-        }
-
-        const tokens = tokenService.createTokens({
-          login: user.login,
-          id: user.id,
-        });
-        await tokenService.save({
-          userId: user.id,
-          refreshToken: tokens.refreshToken,
-        });
-
-        const responseUser = createResponseUser(user);
-
-        return customResponse.created(response, {
-          ...tokens,
-          user: responseUser,
-        });
-      }
-    } else {
-      return customResponse.badRequest(response, {
-        message: 'Invalid request body',
-        body: {
-          ...request.body,
-        },
+    if (!existedUser) {
+      return customResponse.unauthorized(response, {
+        message: 'User with this login does not exist',
       });
     }
+
+    const isPasswordEqual = await PasswordService.compare(password, existedUser.password);
+    if (!isPasswordEqual) {
+      return customResponse.unauthorized(response, {
+        message: 'incorrect password',
+      });
+    }
+
+    const tokens = tokenService.createTokens({
+      login: existedUser.login,
+      id: existedUser.id,
+    });
+    await tokenService.save({
+      userId: existedUser.id,
+      refreshToken: tokens.refreshToken,
+    });
+
+    return customResponse.created(response, {
+      ...tokens,
+      user: createResponseUser(existedUser),
+    });
   } catch (error) {
     return customResponse.serverError(response, {
       message: 'an error occurred while authorizing the user on the server side',
@@ -156,11 +130,9 @@ export const updateTokens = async (
 
     const existedUser = await userModel.getUserByLogin(tokenPayload.login);
 
-    const responseUser = createResponseUser(existedUser);
-
     return customResponse.ok(response, {
       ...tokens,
-      user: responseUser,
+      user: createResponseUser(existedUser),
     });
   } catch (error) {
     console.error('update token: ', error);

@@ -9,7 +9,7 @@ const router = express.Router();
 
 /**
  * @openapi
- * tags/:
+ * /tags:
  *  get:
  *    tags:
  *    - tags 📑
@@ -90,7 +90,7 @@ router.get('/', getAllTags);
 
 /**
  * @openapi
- * tags/:
+ * /tags:
  *  post:
  *    tags:
  *    - tags 📑
@@ -163,7 +163,7 @@ router.post('/', authentication, createTagValidators, validationHandler, createT
 
 /**
  * @openapi
- * tags/:id:
+ * /tags/:id:
  *  patch:
  *    tags:
  *    - tags 📑

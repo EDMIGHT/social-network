@@ -34,20 +34,21 @@ export const getAllTags = async (request: Request, response: Response): Promise<
 export const createTag = async (request: Request, response: Response): Promise<Response> => {
   try {
     const existedTag = await tagModel.getTagByName(request.body.name);
+
     if (!existedTag) {
       const tag = await tagModel.create({
         ...request.body,
       });
 
       return customResponse.created(response, tag);
-    } else {
-      return customResponse.conflict(response, {
-        message: `tag named '${request.body.name}' already exists`,
-        body: {
-          ...request.body,
-        },
-      });
     }
+
+    return customResponse.conflict(response, {
+      message: `tag named '${request.body.name}' already exists`,
+      body: {
+        ...request.body,
+      },
+    });
   } catch (error) {
     return customResponse.serverError(response, {
       message: `an error occurred on the north side when creating a tag based on the passed body, error: ${error}`,
@@ -68,12 +69,12 @@ export const updateTag = async (request: Request, response: Response): Promise<R
     if (existedTag) {
       const newTag = await tagModel.update(id, { name });
       return customResponse.ok(response, newTag);
-    } else {
-      return customResponse.notFound(response, {
-        message: `tag with id = ${id} does not exist`,
-        id,
-      });
     }
+
+    return customResponse.notFound(response, {
+      message: `tag with id = ${id} does not exist`,
+      id,
+    });
   } catch (error) {
     console.error(error);
     return customResponse.serverError(response, {

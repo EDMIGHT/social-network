@@ -16,7 +16,6 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use('/api', routes);
-app.use('/uploads', express.static('uploads'));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const main = async (): Promise<void> => {
