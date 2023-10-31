@@ -10,13 +10,29 @@ import routes from '@/routes/index';
 env.config();
 
 const PORT = process.env.PORT || 3001;
+const CLIENT_DOMAIN = process.env.CLIENT_DOMAIN;
+const NODE_ENV = process.env.NODE_ENV;
+const VERSION = process.env.npm_package_version;
+const DESCRIPTION = process.env.npm_package_description;
 
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: CLIENT_DOMAIN,
+  })
+);
 app.use('/api', routes);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.get('/', (_, res) => {
+  res.send({
+    mode: NODE_ENV,
+    version: VERSION,
+    description: DESCRIPTION,
+  });
+});
 
 const main = async (): Promise<void> => {
   app.listen(PORT, () => {
