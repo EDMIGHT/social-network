@@ -31,7 +31,6 @@ export const registerUser = async (
       : null;
 
     const hashedPassword = await PasswordService.hash(password);
-    console.log('da');
     const user = await userModel.createUser({
       ...request.body,
       password: hashedPassword,
@@ -39,7 +38,7 @@ export const registerUser = async (
         uploadedImg?.secure_url ||
         `https://api.dicebear.com/6.x/fun-emoji/svg?seed=${login}&backgroundColor=b6e3f4,c0aede,d1d4f9`,
     });
-    console.log('net');
+
     const tokens = tokenService.createTokens({
       login: user.login,
       id: user.id,
