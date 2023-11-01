@@ -23,7 +23,7 @@ class TagModel {
     return prisma.tag.findMany({
       where: {
         name: {
-          contains: name,
+          startsWith: name,
         },
       },
       skip: offset,
@@ -37,7 +37,7 @@ class TagModel {
     return prisma.tag.count({
       where: {
         name: {
-          contains: name || undefined,
+          startsWith: name,
         },
       },
     });

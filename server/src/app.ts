@@ -10,17 +10,17 @@ import routes from '@/routes/index';
 env.config();
 
 const PORT = process.env.PORT || 3001;
-const CLIENT_DOMAIN = process.env.CLIENT_DOMAIN;
+const CLIENT_HOST = process.env.CLIENT_HOST;
 const NODE_ENV = process.env.NODE_ENV;
 const VERSION = process.env.npm_package_version;
 const DESCRIPTION = process.env.npm_package_description;
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: '5mb' }));
 app.use(
   cors({
-    origin: CLIENT_DOMAIN,
+    origin: CLIENT_HOST,
   })
 );
 app.use('/api', routes);

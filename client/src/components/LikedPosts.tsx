@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Posts from '@/components/sections/Posts';
+import Posts from '@/components/Posts';
 import Alert from '@/components/ui/Alert';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetLikedPostsQuery } from '@/services/users.service';

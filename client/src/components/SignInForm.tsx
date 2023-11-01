@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import PasswordInput from '@/components/PasswordInput';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Typography from '@/components/ui/Typography';
@@ -70,11 +71,7 @@ const SignInForm: React.FC = () => {
       >
         login
       </Input>
-      <Input
-        placeholder='enter password...'
-        name='password'
-        required
-        type='password'
+      <PasswordInput
         optionals={{
           ...register('password', {
             required: 'password is a required field',
@@ -91,7 +88,7 @@ const SignInForm: React.FC = () => {
         error={errors.password ? errors.password.message : undefined}
       >
         password
-      </Input>
+      </PasswordInput>
       {isLoginError && (
         <Typography
           component='span'

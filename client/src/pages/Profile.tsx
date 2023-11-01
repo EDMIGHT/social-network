@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-import ProfileHeader from '@/components/sections/ProfileHeader';
+import ProfileHeader from '@/components/ProfileHeader';
 
 const Profile: React.FC = () => {
   return (

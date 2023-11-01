@@ -1,10 +1,10 @@
 import { FC, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Comments from '@/components/sections/Comments';
-import CreateComment from '@/components/sections/CreateComment';
-import PostContent from '@/components/sections/PostContent';
-import PostSkeleton from '@/components/sections/PostSkeleton';
+import Comments from '@/components/Comments';
+import CreateComment from '@/components/CreateComment';
+import PostContent from '@/components/PostContent';
+import PostSkeleton from '@/components/PostSkeleton';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetPostQuery, useIncreaseViewPostMutation } from '@/services/post.service';
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import CreatePost from '@/components/sections/CreatePost';
-import Pagination from '@/components/sections/Pagination';
-import Posts from '@/components/sections/Posts';
-import PostSkeletons from '@/components/sections/PostSkeletons';
+import CreatePost from '@/components/CreatePost';
+import Pagination from '@/components/Pagination';
+import Posts from '@/components/Posts';
+import PostSkeletons from '@/components/PostSkeletons';
 import Alert from '@/components/ui/Alert';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetAllPostsQuery } from '@/services/post.service';

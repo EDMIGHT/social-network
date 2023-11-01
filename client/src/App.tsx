@@ -6,10 +6,10 @@ import { useInitialization } from '@/hooks/useInitialization';
 
 import PrivateRoute from './PrivateRoute';
 
-const LikedPosts = lazy(() => import('@/components/sections/LikedPosts'));
-const UserFollowers = lazy(() => import('@/components/sections/UserFollowers'));
-const UserFollowing = lazy(() => import('@/components/sections/UserFollowing'));
-const UserPosts = lazy(() => import('@/components/sections/UserPosts'));
+const LikedPosts = lazy(() => import('@/components/LikedPosts'));
+const UserFollowers = lazy(() => import('@/components/UserFollowers'));
+const UserFollowing = lazy(() => import('@/components/UserFollowing'));
+const UserPosts = lazy(() => import('@/components/UserPosts'));
 const MainLayout = lazy(() => import('@/layouts/MainLayout'));
 const PageLayout = lazy(() => import('@/layouts/PageLayout'));
 const SignIn = lazy(() => import('@/pages/SignIn'));

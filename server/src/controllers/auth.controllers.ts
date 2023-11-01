@@ -3,16 +3,18 @@ import { Request, Response } from 'express';
 import userModel from '@/models/user.model';
 import { PasswordService } from '@/services/password.service';
 import tokenService from '@/services/token.service';
+import cloudinary from '@/utils/cloudinary';
 import createResponseUser from '@/utils/helpers/createResponseUser';
 import customResponse from '@/utils/helpers/customResponse';
 import isTokenInvalid from '@/utils/helpers/isTokenInvalid';
+import { ROOT_FOLDER_CLOUDINARY } from '@/utils/utils';
 
 export const registerUser = async (
   request: Request,
   response: Response
 ): Promise<Response> => {
   try {
-    const { login, password } = request.body;
+    const { login, password, img } = request.body;
 
     const existedUser = await userModel.getUserByLogin(login);
 
@@ -22,13 +24,22 @@ export const registerUser = async (
       });
     }
 
+    const uploadedImg = img
+      ? await cloudinary.uploader.upload(img, {
+          folder: `${ROOT_FOLDER_CLOUDINARY}/users`,
+        })
+      : null;
+
     const hashedPassword = await PasswordService.hash(password);
+    console.log('da');
     const user = await userModel.createUser({
       ...request.body,
       password: hashedPassword,
-      img: `https://api.dicebear.com/6.x/fun-emoji/svg?seed=${login}&backgroundColor=b6e3f4,c0aede,d1d4f9`,
+      img:
+        uploadedImg?.secure_url ||
+        `https://api.dicebear.com/6.x/fun-emoji/svg?seed=${login}&backgroundColor=b6e3f4,c0aede,d1d4f9`,
     });
-
+    console.log('net');
     const tokens = tokenService.createTokens({
       login: user.login,
       id: user.id,

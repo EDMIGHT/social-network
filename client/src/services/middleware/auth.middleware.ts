@@ -16,7 +16,6 @@ const authMiddleware: Middleware = (store) => (next) => async (action) => {
     const refreshToken = getLocal('refreshToken');
 
     if (refreshToken) {
-      // попытка получить новый токен
       const refreshResult = (await baseQuery(
         {
           url: '/auth/token',
@@ -28,11 +27,9 @@ const authMiddleware: Middleware = (store) => (next) => async (action) => {
       )) as { data: RefreshResult };
 
       if (refreshResult.data) {
-        // сохранение нового токена
         setLocal('accessToken', refreshResult.data.accessToken);
         setLocal('refreshToken', refreshResult.data.refreshToken);
 
-        // повторный запрос с новым access токеном
         const response = store.dispatch(action.meta.arg);
 
         if (response.meta.requestStatus === 'fulfilled') {
@@ -40,7 +37,6 @@ const authMiddleware: Middleware = (store) => (next) => async (action) => {
         }
       }
     }
-    // ! найти способ как доставать ошибку до того, как toolkit её сьест
   }
 
   return next(action);

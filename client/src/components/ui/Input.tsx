@@ -1,8 +1,7 @@
 import React, { ReactNode, useEffect, useRef } from 'react';
 
+import Typography from '@/components/ui/Typography';
 import { cn } from '@/utils/cn';
-
-import Typography from './Typography';
 
 interface InputProps {
   id?: string;
@@ -14,7 +13,7 @@ interface InputProps {
   placeholder?: string;
   className?: string;
   defaultValue?: string | undefined;
-  onChange?: any;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
   focus?: boolean;
   required?: boolean;
   type?: string;

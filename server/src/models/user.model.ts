@@ -25,9 +25,15 @@ interface IUpdateUserArg {
 }
 
 class UserModel implements IUserModel {
-  public async createUser(data: RegisterUser): Promise<User> {
+  public async createUser({ img, login, password, email, name }: RegisterUser): Promise<User> {
     return prisma.user.create({
-      data,
+      data: {
+        img,
+        login,
+        password,
+        email,
+        name,
+      },
       include: {
         following: {
           select: {
@@ -52,7 +58,7 @@ class UserModel implements IUserModel {
       take: limit,
       where: {
         login: {
-          contains: login,
+          startsWith: login,
         },
       },
     });
@@ -63,7 +69,7 @@ class UserModel implements IUserModel {
     return prisma.user.count({
       where: {
         login: {
-          contains: login,
+          startsWith: login,
         },
       },
     });

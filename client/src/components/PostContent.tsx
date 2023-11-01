@@ -3,10 +3,10 @@ import React from 'react';
 import Card from '@/components/ui/Card';
 import { IResponsePost } from '@/types/responses.types';
 
-import Typography from '../ui/Typography';
 import PostHeader from './PostHeader';
 import PostMenu from './PostMenu';
 import Tags from './Tags';
+import Typography from './ui/Typography';
 
 interface PostContentProps {
   onClickClose: () => void;

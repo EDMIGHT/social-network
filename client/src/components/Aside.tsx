@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
+import TagsAll from '@/components/TagsAll';
+import TagsSelected from '@/components/TagsSelected';
+import Button from '@/components/ui/Button';
 import { cn } from '@/utils/cn';
-
-import Button from '../ui/Button';
-import TagsAll from './TagsAll';
-import TagsSelected from './TagsSelected';
 
 const Aside: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);

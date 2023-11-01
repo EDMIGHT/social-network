@@ -20,19 +20,14 @@ export const registerValidators = [
     .withMessage('The minimum password length is 5 characters')
     .isLength({ max: 100 })
     .withMessage('The maximum password length is 100 characters'),
-  check('img')
-    .isString()
-    .withMessage('img must be a string')
-    .trim()
-    .isLength({ max: 190 })
-    .withMessage('The maximum img length is 190 characters'),
+  check('img').isString().withMessage('img must be a string').trim(),
   check('email')
     .optional()
+    .isLength({ max: 100 })
+    .withMessage('The maximum email length is 100 characters')
     .trim()
     .isEmail()
-    .withMessage('Incorrect email format')
-    .isLength({ max: 100 })
-    .withMessage('The maximum email length is 100 characters'),
+    .withMessage('Incorrect email format'),
 ];
 
 export const loginValidators = [

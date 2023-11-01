@@ -1,5 +1,5 @@
-import { ISignInForm } from '@/components/sections/SignInForm';
-import { ISignUpForm } from '@/components/sections/SignUpForm';
+import { ISignInForm } from '@/components/SignInForm';
+import { ISignUpForm } from '@/components/SignUpForm';
 import { IResponseAuth, IResponseUser } from '@/types/responses.types';
 
 import { api } from './api';

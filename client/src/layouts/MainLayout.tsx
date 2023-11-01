@@ -1,9 +1,9 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-import Aside from '@/components/sections/Aside';
-import Dashboard from '@/components/sections/Dashboard';
-import Header from '@/components/sections/Header';
+import Aside from '@/components/Aside';
+import Dashboard from '@/components/Dashboard';
+import Header from '@/components/Header';
 
 const MainLayout: React.FC = () => {
   return (

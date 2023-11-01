@@ -1,35 +1,38 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import PasswordInput from '@/components/PasswordInput';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Thumbnail from '@/components/ui/Thumbnail';
 import Typography from '@/components/ui/Typography';
+import UploadPhoto from '@/components/UploadPhoto';
 import { useAppDispatch } from '@/hooks/reduxHooks';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { IAuthQuery, useRegisterMutation } from '@/services/auth.service';
 import { setUserData } from '@/store/slices/user.slice';
 import { isErrorWithMessage } from '@/types/responses.types';
-
-import UploadPhoto from './UploadPhoto';
+import { generateImgByLogin } from '@/utils/generateImgByLogin';
 
 export interface ISignUpForm {
   name?: string;
   email?: string;
   login: string;
   password: string;
-  img: string;
+  img: string | null;
 }
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+const defaultImg = generateImgByLogin();
 
 const SignUpForm: FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [setLocalStorage] = useLocalStorage();
-  const [isLoginError, SetLoginError] = useState<string | null>(null);
-  const [imgURL, setImgURL] = useState<string | null>(null);
+  const [errorMessage, SetErrorMessage] = useState<string | null>(null);
+  const [imgURL, setImgURL] = useState<string>(defaultImg);
+  const [uploadedImgURL, setUploadedImgURL] = useState<string | null>(null);
 
   const {
     register,
@@ -38,11 +41,20 @@ const SignUpForm: FC = () => {
     formState: { errors },
   } = useForm<ISignUpForm>();
 
-  const loginValue = watch('login') || 'test';
+  const loginValue = watch('login');
 
-  const ImgSRC =
-    imgURL ||
-    `https://api.dicebear.com/6.x/fun-emoji/svg?seed=${loginValue}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (!uploadedImgURL) {
+        const newImgURL = generateImgByLogin(loginValue);
+        setImgURL(newImgURL);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [loginValue, uploadedImgURL]);
 
   const [registerReq, { isLoading }] = useRegisterMutation();
 
@@ -52,11 +64,11 @@ const SignUpForm: FC = () => {
       password,
       email: email || undefined,
       name: name || undefined,
-      img: ImgSRC,
-    })) as IAuthQuery; // ? idk как типизировать ответ ртк правильно
+      img: uploadedImgURL,
+    })) as IAuthQuery;
 
     if (isErrorWithMessage(response)) {
-      SetLoginError(response.error.data.message);
+      SetErrorMessage(response.error.data.message);
     }
 
     if (response.data) {
@@ -72,8 +84,42 @@ const SignUpForm: FC = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-2'>
       <div className='flex items-center justify-center'>
-        <UploadPhoto onChangeFile={setImgURL} className='h-[100px] w-[100px] hover:opacity-75'>
-          <Thumbnail imgURL={ImgSRC} alt='me' />
+        <UploadPhoto
+          onChangeFile={(uploadedImg) => {
+            if (uploadedImg) {
+              setUploadedImgURL(uploadedImg);
+            } else {
+              SetErrorMessage('Failed to convert image');
+            }
+          }}
+          className='h-[100px] w-[100px]'
+        >
+          <div className='group relative'>
+            <Thumbnail
+              imgURL={uploadedImgURL || imgURL}
+              alt='me'
+              className=' transition group-hover:brightness-75'
+            />
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='#fff'
+              className='absolute left-1/2 top-1/2 z-20 h-10 w-10 -translate-x-1/2 -translate-y-1/2 opacity-0  transition-all group-hover:opacity-100'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z'
+              />
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z'
+              />
+            </svg>
+          </div>
         </UploadPhoto>
       </div>
       <Input
@@ -131,7 +177,26 @@ const SignUpForm: FC = () => {
       >
         login
       </Input>
-      <Input
+      <PasswordInput
+        required
+        optionals={{
+          ...register('password', {
+            required: 'password is a required field',
+            minLength: {
+              value: 5,
+              message: 'the minimum password length is 5 characters',
+            },
+            maxLength: {
+              value: 100,
+              message: 'the maximum password length is 100 characters',
+            },
+          }),
+        }}
+        error={errors.password ? errors.password.message : undefined}
+      >
+        password
+      </PasswordInput>
+      {/* <Input
         placeholder='enter password...'
         name='password'
         required
@@ -152,14 +217,14 @@ const SignUpForm: FC = () => {
         error={errors.password ? errors.password.message : undefined}
       >
         password
-      </Input>
-      {isLoginError && (
+      </Input> */}
+      {errorMessage && (
         <Typography
           component='span'
           variant='title-3'
           className='pl-2 text-center font-bold text-red-700'
         >
-          {isLoginError}
+          {errorMessage}
         </Typography>
       )}
       <Button
