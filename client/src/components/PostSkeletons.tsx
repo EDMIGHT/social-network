@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import Card from '@/components/ui/Card';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 interface PostSkeletonsProps {
   count?: number;
@@ -15,11 +16,11 @@ const PostSkeletons: FC<PostSkeletonsProps> = ({ count = 5 }) => {
         <li key={i}>
           <Card className='flex flex-col gap-2 '>
             <div className='flex gap-2'>
-              <div className='h-16 w-20 bg-muted' />
-              <div className='h-16 w-36 bg-muted' />
+              <Skeleton className='h-16 w-20' />
+              <Skeleton className='h-16 w-36' />
             </div>
-            <div className='h-96 bg-muted' />
-            <div className='h-10 bg-muted' />
+            <Skeleton className='h-96' />
+            <Skeleton className='h-10' />
           </Card>
         </li>
       ))}

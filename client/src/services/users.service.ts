@@ -1,4 +1,4 @@
-import { IUpdateUserForm } from '@/components/ProfileHeaderForm';
+import { IUpdateUserForm } from '@/components/form/ProfileHeaderForm';
 import { IResponsePostsPagination, IResponseProfile } from '@/types/responses.types';
 import {
   IFollowersWithPagination,
@@ -6,10 +6,10 @@ import {
   IJoinedUsersWithPagination,
 } from '@/types/user.types';
 
-import { api, IAuthentication, IPaginationArg } from './api';
+import { api, IPaginationArg } from './api';
 import { IPostQuery } from './post.service';
 
-interface IToggleLikeArg extends IAuthentication {
+interface IToggleLikeArg {
   login: string;
 }
 
@@ -55,13 +55,10 @@ const profileApi = api.injectEndpoints({
           : ['user'],
     }),
     toggleFollow: builder.mutation({
-      query: ({ accessToken, login }: IToggleLikeArg) => {
+      query: ({ login }: IToggleLikeArg) => {
         return {
           url: `users/follow/${login}`,
           method: 'POST',
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-          },
         };
       },
       invalidatesTags: ['user'],
@@ -70,13 +67,10 @@ const profileApi = api.injectEndpoints({
       query: ({ login, page = 1, limit = 10 }) =>
         `users?login=${login}&page=${page}&limit=${limit}`,
     }),
-    updateProfile: builder.mutation<IResponseProfile, IUpdateUserForm & IAuthentication>({
-      query: ({ email, img, name, accessToken }) => ({
+    updateProfile: builder.mutation<IResponseProfile, IUpdateUserForm>({
+      query: ({ email, img, name }) => ({
         url: 'users',
         method: 'PATCH',
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
         body: {
           email,
           img,

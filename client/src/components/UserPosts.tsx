@@ -6,7 +6,7 @@ import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetAllPostsQuery } from '@/services/post.service';
 import formatTagsForQuery from '@/utils/formatTagsForQuery';
 
-import CreatePost from './CreatePost';
+import CreatePost from './form/CreatePost';
 import Pagination from './Pagination';
 import Posts from './Posts';
 import PostSkeletons from './PostSkeletons';

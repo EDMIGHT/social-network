@@ -20,7 +20,6 @@ const Comment: React.FC<CommentProps> = ({ user, text, createdAt, authorId, id, 
   const onClickDelete = () => {
     if (accessToken) {
       deleteComment({
-        accessToken,
         commentId: id,
         postId,
       });

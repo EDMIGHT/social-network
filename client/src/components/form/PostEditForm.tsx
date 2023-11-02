@@ -2,22 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
+import TagsControl from '@/components/TagsControl';
 import Alert from '@/components/ui/Alert';
 import Button from '@/components/ui/Button';
 import Textarea from '@/components/ui/Textarea';
+import UploadPhoto from '@/components/UploadPhoto';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useUpdatePostMutation } from '@/services/post.service';
 import { ICreateCommentForm } from '@/types/comment.types';
 import { IResponsePost, isErrorWithMessage } from '@/types/responses.types';
 import { Tag } from '@/types/tag.types';
 
-import TagsControl from './TagsControl';
-import UploadPhoto from './UploadPhoto';
-
 const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }) => {
   const navigate = useNavigate();
   const { accessToken } = useAppSelector((state) => state.user);
-  const [localImg, setLocalImg] = useState(img);
+  const [localImg, setLocalImg] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
   const [messageError, setMessageError] = useState<string | null>(null);
 
@@ -28,31 +27,31 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<ICreateCommentForm>();
+  } = useForm<ICreateCommentForm>({
+    defaultValues: {
+      text: '',
+    },
+  });
 
   const onClickDeleteImg = () => {
     setLocalImg(null);
-  };
-  const onClickCancel = () => {
-    navigate(-1);
   };
 
   useEffect(() => {
     if (isSuccess) {
       setLocalImg(null);
       reset();
-      onClickCancel();
+      navigate(-1);
     }
-  }, [isSuccess]);
+  }, [isSuccess, navigate, reset]);
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async ({ text }) => {
     if (accessToken) {
       const tagsQuery = selectedTags.map((tag) => tag.name).join(',');
       const response = await updatePost({
-        accessToken,
         id,
-        ...data,
-        img: localImg,
+        text: text || undefined,
+        img: localImg || undefined,
         tags: tagsQuery,
       });
 
@@ -71,7 +70,7 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
         <Alert type='error'>{messageError || 'post update error'}</Alert>
       )}
       <form onSubmit={onSubmit} className='flex flex-col gap-2'>
-        {localImg ? (
+        {img ? (
           <div className='relative h-[60vh] cursor-pointer bg-black'>
             <div className='absolute right-2 top-2 flex gap-2'>
               <UploadPhoto onChangeFile={setLocalImg}>
@@ -107,7 +106,11 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
                 </svg>
               </button>
             </div>
-            <img src={localImg} alt='post-img' className='mx-auto h-full object-cover' />
+            <img
+              src={localImg || img}
+              alt='post-img'
+              className='mx-auto h-full object-cover'
+            />
           </div>
         ) : (
           <UploadPhoto
@@ -122,7 +125,7 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
           name='text'
           id='text-post'
           placeholder='write text here..'
-          defaultValue={PostTest || undefined}
+          defaultValue={PostTest || ''}
           optionals={{
             ...register('text', {
               maxLength: {
@@ -137,7 +140,12 @@ const PostEditForm: React.FC<IResponsePost> = ({ id, text: PostTest, img, tags }
           <Button type='submit' className='w-40' disabled={isLoading}>
             update
           </Button>
-          <Button onClick={onClickCancel} type='button' variant='highlight' className='w-40'>
+          <Button
+            onClick={() => navigate(-1)}
+            type='button'
+            variant='highlight'
+            className='w-40'
+          >
             cancel
           </Button>
         </div>

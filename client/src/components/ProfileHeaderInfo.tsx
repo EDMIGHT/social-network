@@ -32,7 +32,7 @@ const ProfileHeaderInfo: FC<ProfileHeaderInfoProps> = ({ data }) => {
 
   const onClickFollow = async () => {
     if (user && accessToken && urlLogin) {
-      await toggleFollow({ accessToken, login: urlLogin });
+      await toggleFollow({ login: urlLogin });
     }
   };
 

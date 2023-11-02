@@ -14,5 +14,5 @@ export type ICommentWithUser = Comment & {
 };
 
 export interface ICreateCommentForm {
-  text: string;
+  text?: string;
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import CreatePost from '@/components/CreatePost';
+import CreatePost from '@/components/form/CreatePost';
 import Pagination from '@/components/Pagination';
 import Posts from '@/components/Posts';
 import PostSkeletons from '@/components/PostSkeletons';

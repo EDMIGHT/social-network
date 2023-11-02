@@ -17,8 +17,8 @@ const PostMenu: FC<PostMenuProps> = ({ id, likedBy, comments, viewsCount }) => {
   const isExistComment = user && comments.some((comment) => comment.userId === user.id);
 
   const onClickLike = () => {
-    if (user) {
-      likePost({ accessToken, id });
+    if (accessToken) {
+      likePost({ id });
     }
   };
 

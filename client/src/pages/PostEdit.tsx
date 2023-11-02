@@ -2,7 +2,7 @@ import { FC, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import PostAuthor from '@/components/PostAuthor';
-import PostEditForm from '@/components/PostEditForm';
+import PostEditForm from '@/components/form/PostEditForm';
 import PostNotFound from '@/components/PostNotFound';
 import Card from '@/components/ui/Card';
 import { useGetPostQuery } from '@/services/post.service';

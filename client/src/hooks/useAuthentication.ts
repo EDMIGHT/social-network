@@ -1,31 +1,29 @@
 import { useEffect } from 'react';
 
+import { useAppDispatch } from '@/hooks/reduxHooks';
 import { useAuthMeMutation } from '@/services/auth.service';
-import { setUserData } from '@/store/slices/user.slice';
-
-import { useAppDispatch } from './reduxHooks';
-import useLocalStorage from './useLocalStorage';
+import { setUser, setUserData } from '@/store/slices/user.slice';
 
 const useAuthentication = () => {
   const dispatch = useAppDispatch();
-  const [setLocalStorage, getLocalStorage] = useLocalStorage();
-
-  const accessToken = (getLocalStorage('accessToken') || '') as string;
-  const refreshToken = (getLocalStorage('refreshToken') || '') as string;
 
   const [authMe, { data, isSuccess }] = useAuthMeMutation();
 
   useEffect(() => {
-    if (accessToken) {
-      authMe(accessToken);
+    const accessToken = localStorage.getItem('accessToken');
+    const refreshToken = localStorage.getItem('refreshToken');
+
+    if (accessToken || refreshToken) {
+      dispatch(setUserData({ user: null, accessToken, refreshToken }));
+      authMe(null);
     }
-  }, [accessToken]);
+  }, [authMe, dispatch]);
 
   useEffect(() => {
     if (isSuccess && data) {
-      dispatch(setUserData({ user: data, accessToken, refreshToken }));
+      dispatch(setUser(data));
     }
-  }, [isSuccess, data]);
+  }, [isSuccess, data, dispatch]);
 };
 
 export default useAuthentication;

@@ -1,5 +1,5 @@
-import { ISignInForm } from '@/components/SignInForm';
-import { ISignUpForm } from '@/components/SignUpForm';
+import { ISignInForm } from '@/components/form/SignInForm';
+import { ISignUpForm } from '@/components/form/SignUpForm';
 import { IResponseAuth, IResponseUser } from '@/types/responses.types';
 
 import { api } from './api';
@@ -22,12 +22,9 @@ export const authApi = api.injectEndpoints({
     register: builder.mutation<IAuthQuery, ISignUpForm>({
       query: ({ ...body }) => ({ url: 'auth/register', method: 'POST', body }),
     }),
-    authMe: builder.mutation<IResponseUser, string>({
-      query: (accessToken) => ({
+    authMe: builder.mutation<IResponseUser, null>({
+      query: () => ({
         url: 'auth/me',
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
       }),
     }),
     token: builder.mutation<IAuthQuery, string>({

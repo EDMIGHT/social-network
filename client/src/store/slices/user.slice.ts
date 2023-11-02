@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { IResponseAuth, IResponseUser } from '@/types/responses.types';
+import { IResponseUser } from '@/types/responses.types';
 
 export interface IUserSlice {
   user: IResponseUser | null;
@@ -18,7 +18,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUserData: (state, action: PayloadAction<IResponseAuth | null>) => {
+    setUserData: (state, action: PayloadAction<IUserSlice | null>) => {
       const { user, accessToken, refreshToken } = action.payload || {};
       state.user = user || null;
       state.accessToken = accessToken || null;

@@ -20,7 +20,7 @@ export interface ISignUpForm {
   email?: string;
   login: string;
   password: string;
-  img: string | null;
+  img?: string;
 }
 
 const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
@@ -39,7 +39,14 @@ const SignUpForm: FC = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<ISignUpForm>();
+  } = useForm<ISignUpForm>({
+    defaultValues: {
+      email: '',
+      login: '',
+      name: '',
+      password: '',
+    },
+  });
 
   const loginValue = watch('login');
 
@@ -64,7 +71,7 @@ const SignUpForm: FC = () => {
       password,
       email: email || undefined,
       name: name || undefined,
-      img: uploadedImgURL,
+      img: uploadedImgURL || undefined,
     })) as IAuthQuery;
 
     if (isErrorWithMessage(response)) {

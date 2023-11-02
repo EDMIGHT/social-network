@@ -44,7 +44,6 @@ const CreateTag: FC<CreateTagProps> = ({ name = '', callback }) => {
   const onSubmit = handleSubmit(async ({ name: nameFromForm }) => {
     if (accessToken) {
       const response = (await createTag({
-        accessToken,
         name: nameFromForm,
       })) as IAuthQuery;
 

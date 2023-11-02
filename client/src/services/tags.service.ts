@@ -1,9 +1,9 @@
 import { IResponseTagsWithPagination } from '@/types/responses.types';
 import { Tag } from '@/types/tag.types';
 
-import { api, IAuthentication, IPaginationArg } from './api';
+import { api, IPaginationArg } from './api';
 
-interface ICreateTagArg extends IAuthentication {
+interface ICreateTagArg {
   name: string;
 }
 
@@ -31,12 +31,9 @@ export const tagsApi = api.injectEndpoints({
           : ['tag'],
     }),
     createTag: builder.mutation<Tag, ICreateTagArg>({
-      query: ({ name, accessToken }) => ({
+      query: ({ name }) => ({
         url: 'tags',
         method: 'POST',
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
         body: {
           name,
         },

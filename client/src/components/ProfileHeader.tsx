@@ -6,7 +6,7 @@ import Card from '@/components/ui/Card';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetProfileQuery } from '@/services/users.service';
 
-import ProfileHeaderForm from './ProfileHeaderForm';
+import ProfileHeaderForm from './form/ProfileHeaderForm';
 import ProfileHeaderInfo from './ProfileHeaderInfo';
 import ProfileHeaderSkeleton from './ProfileHeaderSkeleton';
 import ProfileNotFound from './ProfileNotFound';

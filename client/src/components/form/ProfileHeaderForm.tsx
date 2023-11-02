@@ -5,12 +5,11 @@ import Alert from '@/components/ui/Alert';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Thumbnail from '@/components/ui/Thumbnail';
+import UploadPhoto from '@/components/UploadPhoto';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { useUpdateProfileMutation } from '@/services/users.service';
 import { setUser } from '@/store/slices/user.slice';
 import { IResponseProfile, isErrorWithMessage } from '@/types/responses.types';
-
-import UploadPhoto from './UploadPhoto';
 
 interface ProfileHeaderFormProps {
   data: IResponseProfile;
@@ -45,7 +44,6 @@ const ProfileHeaderForm: FC<ProfileHeaderFormProps> = ({ data, onClickCancel }) 
   const onSubmit = handleSubmit(async (formData) => {
     if (accessToken) {
       const response = await updateProfile({
-        accessToken,
         ...formData,
         img: localImg as string,
       });

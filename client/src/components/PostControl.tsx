@@ -26,7 +26,7 @@ const PostControl: React.FC<PostControlProps> = ({ id }) => {
   };
   const onClickDelete = async () => {
     if (accessToken) {
-      const response = await deletePost({ id, accessToken });
+      const response = await deletePost({ id });
 
       if (isErrorWithMessage(response)) {
         SetMessageError(response.error.data.message);

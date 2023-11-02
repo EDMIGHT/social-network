@@ -27,7 +27,12 @@ const SignInForm: React.FC = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ISignInForm>();
+  } = useForm<ISignInForm>({
+    defaultValues: {
+      login: '',
+      password: '',
+    },
+  });
 
   const [login, { isLoading }] = useLoginMutation();
 

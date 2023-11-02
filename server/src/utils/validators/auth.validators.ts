@@ -20,7 +20,7 @@ export const registerValidators = [
     .withMessage('The minimum password length is 5 characters')
     .isLength({ max: 100 })
     .withMessage('The maximum password length is 100 characters'),
-  check('img').isString().withMessage('img must be a string').trim(),
+  check('img').optional().isString().withMessage('img must be a string').trim(),
   check('email')
     .optional()
     .isLength({ max: 100 })

@@ -13,10 +13,10 @@ import { isErrorWithMessage } from '@/types/responses.types';
 import { IJoinedUser } from '@/types/user.types';
 
 interface IUserProps extends IJoinedUser {
-  onClickUser?: any;
+  onClickUser?: () => void;
 }
 
-const User: FC<IUserProps> = ({ id, img, login, name, onClickUser }) => {
+const User: FC<IUserProps> = ({ img, login, name, onClickUser }) => {
   const [isMessageError, setMessageError] = useState<string | null>(null);
   const { user, accessToken } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
@@ -31,7 +31,7 @@ const User: FC<IUserProps> = ({ id, img, login, name, onClickUser }) => {
 
   const onClickFollow = async () => {
     if (user && accessToken && login) {
-      const response = await toggleFollow({ accessToken, login });
+      const response = await toggleFollow({ login });
 
       if (isErrorWithMessage(response)) {
         setMessageError(response.error.data.message);

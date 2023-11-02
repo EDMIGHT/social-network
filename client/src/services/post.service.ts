@@ -1,7 +1,7 @@
 import { Post } from '@/types/post.types';
 import { IResponsePost, IResponsePostsPagination } from '@/types/responses.types';
 
-import { api, IAuthentication, IPaginationArg } from './api';
+import { api, IPaginationArg } from './api';
 
 type SortPost = 'title' | 'createdAt' | 'updatedAt' | 'viewsCount';
 
@@ -12,13 +12,13 @@ export interface IPostQuery extends IPaginationArg {
   order?: 'asc' | 'desc';
 }
 
-export interface ICreatePostQuery extends IAuthentication {
-  text: string;
+export interface ICreatePostQuery {
+  text?: string;
   tags?: string;
-  img: string | null;
+  img?: string;
 }
 
-export interface IDeletePostQuery extends IAuthentication {
+export interface IDeletePostQuery {
   id: string;
 }
 
@@ -40,59 +40,44 @@ const postApi = api.injectEndpoints({
       providesTags: (result) => (result ? [{ type: 'post', id: result.id }] : ['post']),
     }),
     createPost: builder.mutation<Post, ICreatePostQuery>({
-      query: ({ accessToken, ...body }) => ({
+      query: ({ ...body }) => ({
         url: 'posts',
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
         method: 'POST',
         body,
       }),
       invalidatesTags: ['post'],
     }),
     deletePost: builder.mutation<null, IDeletePostQuery>({
-      query: ({ id, accessToken }) => ({
+      query: ({ id }) => ({
         url: `posts/${id}`,
         method: 'DELETE',
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
       }),
-      invalidatesTags: (result, error, arg) =>
+      invalidatesTags: (result, _, arg) =>
         result ? [{ type: 'post', id: arg.id }] : ['post'],
     }),
     updatePost: builder.mutation({
-      query: ({ accessToken, id, ...body }) => ({
+      query: ({ id, ...body }) => ({
         url: `posts/${id}`,
         method: 'PATCH',
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
         body,
       }),
-      invalidatesTags: (result, error, arg) =>
+      invalidatesTags: (result, _, arg) =>
         result ? [{ type: 'post', id: arg.id }] : ['post'],
     }),
     likePost: builder.mutation({
-      query: ({ accessToken, id }) => ({
+      query: ({ id }) => ({
         url: `posts/like/${id}`,
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
         method: 'POST',
       }),
-      invalidatesTags: (result, error, arg) =>
+      invalidatesTags: (result, _, arg) =>
         result ? [{ type: 'post', id: arg.id }, 'user'] : ['post', 'user'],
     }),
     increaseViewPost: builder.mutation({
-      query: ({ accessToken, id }) => ({
+      query: ({ id }) => ({
         url: `posts/view/${id}`,
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
         method: 'POST',
       }),
-      invalidatesTags: (result, error, arg) =>
+      invalidatesTags: (result, _, arg) =>
         result ? [{ type: 'post', id: arg.id }] : ['post'],
     }),
   }),

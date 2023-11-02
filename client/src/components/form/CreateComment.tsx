@@ -18,7 +18,11 @@ const CreateComment: React.FC<ICreateCommentProps> = ({ id }) => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<ICreateCommentForm>();
+  } = useForm<ICreateCommentForm>({
+    defaultValues: {
+      text: '',
+    },
+  });
 
   const [createComment, { isLoading }] = useCreateCommentMutation();
 
@@ -26,8 +30,7 @@ const CreateComment: React.FC<ICreateCommentProps> = ({ id }) => {
     if (accessToken) {
       createComment({
         id,
-        accessToken,
-        text,
+        text: text || undefined,
       });
 
       reset();

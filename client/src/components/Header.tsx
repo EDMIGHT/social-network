@@ -5,16 +5,16 @@ import Button from '@/components/ui/Button';
 import Popup from '@/components/ui/Popup';
 import Thumbnail from '@/components/ui/Thumbnail';
 import Typography from '@/components/ui/Typography';
-import { useAppSelector } from '@/hooks/reduxHooks';
-import useLogout from '@/hooks/useLogout';
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import useTheme from '@/hooks/useTheme';
+import { logOutThunk } from '@/store/actions/auth.actions';
 import { cn } from '@/utils/cn';
 
 import Search from './Search';
 
 const Header: React.FC = () => {
+  const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
-  const logout = useLogout();
 
   const [theme, toggleTheme] = useTheme();
 
@@ -32,7 +32,7 @@ const Header: React.FC = () => {
   };
   const onClickLogout = () => {
     setActivePopup(false);
-    logout();
+    dispatch(logOutThunk());
   };
 
   useEffect(() => {

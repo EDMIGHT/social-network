@@ -1,13 +1,15 @@
 import { FC } from 'react';
 
+import { Skeleton } from '@/components/ui/Skeleton';
+
 const PostSkeleton: FC = () => {
   return (
     <div className='flex gap-4'>
       <div className='flex w-[45vw] flex-col gap-2'>
-        <div className='h-[15vh] w-full bg-muted' />
-        <div className='h-[75vh] w-full bg-muted' />
+        <Skeleton className='h-[15vh] w-full' />
+        <Skeleton className='h-[75vh] w-full' />
       </div>
-      <div className='h-full w-[20vw] bg-muted' />
+      <Skeleton className='h-full w-[20vw]' />
     </div>
   );
 };

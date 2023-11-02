@@ -13,7 +13,7 @@ const main = async (): Promise<void> => {
   await prisma.tag.createMany({
     data: Array(TAG_PER_SEEDING)
       .fill(null)
-      .map(() => ({ name: faker.music.genre() })),
+      .map(() => ({ name: faker.music.genre().toLowerCase() })),
     skipDuplicates: true,
   });
 

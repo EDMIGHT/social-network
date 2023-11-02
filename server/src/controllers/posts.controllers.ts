@@ -113,13 +113,15 @@ export const createPost = async (request: Request, response: Response): Promise<
       });
     }
 
-    const uploadedImg = await cloudinary.uploader.upload(img, {
-      folder: `${ROOT_FOLDER_CLOUDINARY}/posts`,
-    });
+    const uploadedImg =
+      img &&
+      (await cloudinary.uploader.upload(img, {
+        folder: `${ROOT_FOLDER_CLOUDINARY}/posts`,
+      }));
 
     const post = await postModel.create({
       ...request.body,
-      img: uploadedImg.secure_url,
+      img: uploadedImg ? uploadedImg.secure_url : null,
       tags: tagList,
       userId: request.user.id,
     });

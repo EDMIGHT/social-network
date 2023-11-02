@@ -6,11 +6,11 @@ import { useInputDebounce } from '@/hooks/useInputDebounce';
 import { useGetTagByNameMutation } from '@/services/tags.service';
 import { Tag as ITag } from '@/types/tag.types';
 
-import CreateTag from './CreateTag';
+import CreateTag from './form/CreateTag';
 import Tag from './Tag';
 
 interface SearchTagProps {
-  onClickTag: any;
+  onClickTag: (tag: ITag) => void;
 }
 
 const SearchTag: FC<SearchTagProps> = ({ onClickTag }) => {

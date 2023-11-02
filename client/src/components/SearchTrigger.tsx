@@ -1,16 +1,12 @@
-import React from 'react';
+import { FC, HTMLAttributes } from 'react';
 
 import searchIcon from '@/assets/icons/search.svg';
 import Typography from '@/components/ui/Typography';
 import { cn } from '@/utils/cn';
 
-interface SearchProps {
-  placeholder: string;
-  className?: string;
-  onClick?: any;
-}
+type SearchProps = HTMLAttributes<HTMLButtonElement>;
 
-const SearchTrigger: React.FC<SearchProps> = ({ placeholder, className, onClick }) => {
+const SearchTrigger: FC<SearchProps> = ({ placeholder, className, onClick }) => {
   return (
     <button
       onClick={onClick}

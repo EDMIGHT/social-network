@@ -9,9 +9,9 @@ import { useCreatePostMutation } from '@/services/post.service';
 import { isErrorWithMessage } from '@/types/responses.types';
 import { Tag } from '@/types/tag.types';
 
-import SearchTag from './SearchTag';
-import Tags from './Tags';
-import UploadPhoto from './UploadPhoto';
+import SearchTag from '../SearchTag';
+import Tags from '../Tags';
+import UploadPhoto from '../UploadPhoto';
 
 export interface ICreatePost {
   text: string;
@@ -23,7 +23,11 @@ const CreatePost: React.FC = React.memo(() => {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<ICreatePost>();
+  } = useForm<ICreatePost>({
+    defaultValues: {
+      text: '',
+    },
+  });
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [imgURL, setImgURL] = useState<string | null>(null);
   const [isMessageError, SetMessageError] = useState<string | null>(null);
@@ -47,10 +51,14 @@ const CreatePost: React.FC = React.memo(() => {
     setSelectedTags((prev) => prev.filter((prevTag) => prevTag.id !== tag.id));
   };
 
-  const onSubmit = async (data: ICreatePost) => {
+  const onSubmit = async ({ text }: ICreatePost) => {
     const tags = selectedTags.map((tag) => tag.name).join(',');
     if (accessToken) {
-      const response = await createPost({ accessToken, ...data, tags, img: imgURL });
+      const response = await createPost({
+        text: text || undefined,
+        tags: tags || undefined,
+        img: imgURL || undefined,
+      });
 
       if (isErrorWithMessage(response)) {
         SetMessageError(response.error.data.message);
