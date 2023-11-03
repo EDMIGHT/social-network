@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.7.0",
+    "@hookform/resolvers": "^3.3.2",
     "@reduxjs/toolkit": "^1.9.5",
     "clsx": "^1.2.1",
     "lodash.debounce": "^4.0.8",
@@ -18,7 +19,9 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.3",
     "react-redux": "^8.0.7",
-    "react-router-dom": "^6.12.1"
+    "react-router-dom": "^6.12.1",
+    "sonner": "^1.1.0",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.7",

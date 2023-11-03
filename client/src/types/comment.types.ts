@@ -12,7 +12,3 @@ export interface Comment {
 export type ICommentWithUser = Comment & {
   user: IJoinedUser;
 };
-
-export interface ICreateCommentForm {
-  text?: string;
-}

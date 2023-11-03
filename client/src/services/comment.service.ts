@@ -1,5 +1,6 @@
-import { ICommentWithUser, ICreateCommentForm } from '@/types/comment.types';
+import { ICommentWithUser } from '@/types/comment.types';
 import { IResponseCommentsByUser } from '@/types/responses.types';
+import { ICreateCommentFields } from '@/utils/validations/comment.validations';
 
 import { api, IPaginationArg } from './api';
 
@@ -7,7 +8,7 @@ interface IGetCommentsForPostArg extends IPaginationArg {
   id: string;
 }
 
-interface ICreateCommentArg extends ICreateCommentForm {
+interface ICreateCommentArg extends ICreateCommentFields {
   id: string;
 }
 

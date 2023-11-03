@@ -2,7 +2,7 @@ import { FC, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import Comments from '@/components/Comments';
-import CreateComment from '@/components/form/CreateComment';
+import CreateCommentForm from '@/components/form/CreateCommentForm';
 import PostContent from '@/components/PostContent';
 import PostSkeleton from '@/components/PostSkeleton';
 import { useAppSelector } from '@/hooks/reduxHooks';
@@ -47,7 +47,7 @@ const Post: FC = () => {
     <>
       <PostContent data={data} onClickClose={onClickClose} />
       <div className='flex w-full flex-1 flex-col gap-2'>
-        {user && <CreateComment id={data.id} />}
+        {user && <CreateCommentForm id={data.id} />}
         <Comments id={data.id} authorId={data.userId} />
       </div>
     </>

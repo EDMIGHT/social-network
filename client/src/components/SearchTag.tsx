@@ -1,13 +1,12 @@
 import { FC, useState } from 'react';
 
+import CreateTagForm from '@/components/form/CreateTagForm';
+import Tag from '@/components/Tag';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useInputDebounce } from '@/hooks/useInputDebounce';
 import { useGetTagByNameMutation } from '@/services/tags.service';
 import { Tag as ITag } from '@/types/tag.types';
-
-import CreateTag from './form/CreateTag';
-import Tag from './Tag';
 
 interface SearchTagProps {
   onClickTag: (tag: ITag) => void;
@@ -48,20 +47,23 @@ const SearchTag: FC<SearchTagProps> = ({ onClickTag }) => {
         value={localText}
         onChange={onChangeInput}
         placeholder='enter tag name..'
-        name='name'
-        id='tag-name'
+        name='search-tag'
       />
       {localText && foundedTags && (
-        <ul className='absolute top-12 z-20 flex w-full gap-2  rounded bg-background p-3'>
-          {foundedTags}
-          <li>
-            {isActiveCreateTag ? (
-              <CreateTag name={localText} callback={onCreateTag} />
-            ) : (
-              <Button onClick={onClickCreateTag}>create your</Button>
-            )}
-          </li>
-        </ul>
+        <div className='absolute top-12 z-20 w-full rounded bg-background p-3'>
+          {isActiveCreateTag ? (
+            <CreateTagForm name={localText} callback={onCreateTag} />
+          ) : (
+            <ul className='flex gap-2'>
+              {foundedTags}
+              <li>
+                <Button type='button' onClick={onClickCreateTag}>
+                  create your
+                </Button>
+              </li>
+            </ul>
+          )}
+        </div>
       )}
     </div>
   );

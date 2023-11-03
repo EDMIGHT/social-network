@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 
+import { Icons } from '@/components/ui/Icons';
 import { cn } from '@/utils/cn';
 
-interface ButtonProps {
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children: string;
   variant?: 'activity' | 'highlight' | 'alert' | 'warn';
-  className?: string;
-  onClick?: any;
-  disabled?: boolean;
   type?: 'button' | 'submit' | 'reset';
-}
+  isLoading?: boolean;
+};
 
 const Button: React.FC<ButtonProps> = ({
   children,
@@ -17,22 +16,22 @@ const Button: React.FC<ButtonProps> = ({
   className,
   onClick,
   type = 'button',
-  disabled = false,
+  disabled,
+  isLoading = false,
 }) => {
-  const onClickHandler = typeof onClick === 'function' ? () => onClick() : undefined;
-
   return (
     <button
       type={type ?? 'button'}
-      onClick={onClickHandler}
+      onClick={onClick}
       className={cn(
         variant,
         className,
-        'whitespace-nowrap rounded p-2 text-center disabled:bg-muted'
+        'whitespace-nowrap rounded p-2 disabled:bg-muted flex items-center justify-center'
       )}
-      disabled={disabled}
+      disabled={isLoading || disabled}
     >
       {children}
+      {isLoading && <Icons.loading className='h-8 w-8 animate-spin stroke-primary' />}
     </button>
   );
 };

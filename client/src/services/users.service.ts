@@ -1,4 +1,4 @@
-import { IUpdateUserForm } from '@/components/form/ProfileHeaderForm';
+import { IUpdateUserForm } from '@/components/form/EditProfileForm';
 import { IResponsePostsPagination, IResponseProfile } from '@/types/responses.types';
 import {
   IFollowersWithPagination,

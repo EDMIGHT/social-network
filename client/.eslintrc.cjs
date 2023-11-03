@@ -14,6 +14,7 @@ module.exports = {
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module', project: './tsconfig.json' },
   plugins: ['react-refresh', 'prettier', 'simple-import-sort'],
   rules: {
+    'react/jsx-pascal-case': [2, { allowNamespace: true }],
     'react-refresh/only-export-components': 'warn',
     'react/function-component-definition': [
       2,

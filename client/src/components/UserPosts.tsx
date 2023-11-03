@@ -1,15 +1,14 @@
 import { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import CreatePostForm from '@/components/form/CreatePostForm';
+import Pagination from '@/components/Pagination';
+import Posts from '@/components/Posts';
+import PostSkeletons from '@/components/PostSkeletons';
 import Alert from '@/components/ui/Alert';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetAllPostsQuery } from '@/services/post.service';
 import formatTagsForQuery from '@/utils/formatTagsForQuery';
-
-import CreatePost from './form/CreatePost';
-import Pagination from './Pagination';
-import Posts from './Posts';
-import PostSkeletons from './PostSkeletons';
 
 const UserPosts: FC = () => {
   const { login } = useParams();
@@ -29,7 +28,7 @@ const UserPosts: FC = () => {
   const loadingOrErrorElements = (isError || isLoading) && <PostSkeletons />;
   const successElements = isSuccess && (
     <div className='flex flex-col gap-2'>
-      {user && user.login === login && <CreatePost />}
+      {user && user.login === login && <CreatePostForm />}
       <Posts posts={data?.posts} />
       {data && data.totalPages > 1 && (
         <Pagination

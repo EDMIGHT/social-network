@@ -1,9 +1,9 @@
 import { FC } from 'react';
+import { toast } from 'sonner';
 
+import SearchTag from '@/components/SearchTag';
+import Tags from '@/components/Tags';
 import { Tag } from '@/types/tag.types';
-
-import SearchTag from './SearchTag';
-import Tags from './Tags';
 
 interface ITagsControlProps {
   selectedTags: Tag[];
@@ -16,7 +16,9 @@ const TagsControl: FC<ITagsControlProps> = ({ selectedTags, setSelectedTags }) =
     if (!existTag) {
       setSelectedTags((prev) => [...prev, tag]);
     } else {
-      // TODO алерт про уже наличие такого тега
+      toast.error('Conflict', {
+        description: 'You cant add duplicate tags to a post',
+      });
     }
   };
   const onClickRemoveTag = (tag: Tag) => {

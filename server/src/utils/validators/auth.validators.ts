@@ -23,11 +23,11 @@ export const registerValidators = [
   check('img').optional().isString().withMessage('img must be a string').trim(),
   check('email')
     .optional()
-    .isLength({ max: 100 })
-    .withMessage('The maximum email length is 100 characters')
     .trim()
     .isEmail()
-    .withMessage('Incorrect email format'),
+    .withMessage('Incorrect email format')
+    .isLength({ max: 100 })
+    .withMessage('The maximum email length is 100 characters'),
 ];
 
 export const loginValidators = [

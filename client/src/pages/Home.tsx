@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import CreatePost from '@/components/form/CreatePost';
+import CreatePostForm from '@/components/form/CreatePostForm';
 import Pagination from '@/components/Pagination';
 import Posts from '@/components/Posts';
 import PostSkeletons from '@/components/PostSkeletons';
@@ -28,7 +28,7 @@ const Home: React.FC = () => {
   const loadingOrErrorElements = (isError || isLoading) && <PostSkeletons />;
   const successElements = isSuccess && (
     <>
-      {user && <CreatePost />}
+      {user && <CreatePostForm />}
       <Posts posts={data?.posts} />
       {data && data.totalPages > 1 && (
         <Pagination

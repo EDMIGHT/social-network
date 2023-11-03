@@ -182,16 +182,18 @@ export const toggleFollowUser = async (
 export const updateUser = async (request: Request, response: Response): Promise<Response> => {
   const { name, img, email } = request.body;
   try {
-    const uploadedImg = await cloudinary.uploader.upload(img, {
-      folder: `${ROOT_FOLDER_CLOUDINARY}/users`,
-    });
+    const uploadedImg =
+      img &&
+      (await cloudinary.uploader.upload(img, {
+        folder: `${ROOT_FOLDER_CLOUDINARY}/users`,
+      }));
 
     const updatedUser = await userModel.updateUserById({
       id: request.user.id,
       data: {
         name,
         email,
-        img: uploadedImg.secure_url,
+        img: uploadedImg ? uploadedImg.secure_url : undefined,
       },
     });
 

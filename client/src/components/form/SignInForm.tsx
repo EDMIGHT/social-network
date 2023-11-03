@@ -1,33 +1,32 @@
-import React, { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import PasswordInput from '@/components/PasswordInput';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
-import Typography from '@/components/ui/Typography';
 import { useAppDispatch } from '@/hooks/reduxHooks';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { IAuthQuery, useLoginMutation } from '@/services/auth.service';
+import { useLoginMutation } from '@/services/auth.service';
 import { setUserData } from '@/store/slices/user.slice';
-import { isErrorWithMessage } from '@/types/responses.types';
-
-export interface ISignInForm {
-  login: string;
-  password: string;
-}
+import { isErrorWithMessage, isInvalidResponseWithDetails } from '@/types/responses.types';
+import { ISignInFields, signInValidation } from '@/utils/validations/auth.validations';
 
 const SignInForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [setLocalStorage] = useLocalStorage();
-  const [isLoginError, SetLoginError] = useState<string | null>(null);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ISignInForm>({
+    setError,
+    watch,
+  } = useForm<ISignInFields>({
+    resolver: zodResolver(signInValidation),
     defaultValues: {
       login: '',
       password: '',
@@ -36,20 +35,42 @@ const SignInForm: React.FC = () => {
 
   const [login, { isLoading }] = useLoginMutation();
 
-  const onSubmit: SubmitHandler<ISignInForm> = async (data) => {
-    const response = (await login(data)) as IAuthQuery;
+  const onSubmit: SubmitHandler<ISignInFields> = async (data) => {
+    try {
+      const response = await login(data).unwrap();
 
-    if (isErrorWithMessage(response)) {
-      SetLoginError(response.error.data.message);
-    }
+      dispatch(setUserData(response));
 
-    if (response.data) {
-      dispatch(setUserData(response.data));
-
-      setLocalStorage('accessToken', response.data.accessToken);
-      setLocalStorage('refreshToken', response.data.refreshToken);
+      setLocalStorage('accessToken', response.accessToken);
+      setLocalStorage('refreshToken', response.refreshToken);
 
       navigate('/');
+    } catch (error) {
+      if (isInvalidResponseWithDetails(error)) {
+        const { details } = error.data;
+        const allFields = watch();
+
+        details.forEach((detail) => {
+          if (Object.prototype.hasOwnProperty.call(allFields, detail.path)) {
+            setError(detail.path as keyof ISignInFields, {
+              type: 'server',
+              message: detail.msg,
+            });
+          } else {
+            toast.error('Validation error not from form', {
+              description: detail.msg,
+            });
+          }
+        });
+      } else if (isErrorWithMessage(error)) {
+        toast.error('Validation error', {
+          description: error.message,
+        });
+      } else {
+        toast.error('Validation error', {
+          description: 'A validation error occurred that was not caused by the serve',
+        });
+      }
     }
   };
 
@@ -60,17 +81,7 @@ const SignInForm: React.FC = () => {
         name='login'
         required
         optionals={{
-          ...register('login', {
-            required: 'login is a required field',
-            minLength: {
-              value: 2,
-              message: 'the minimum login length is 2 characters',
-            },
-            maxLength: {
-              value: 100,
-              message: 'the maximum login length is 100 characters',
-            },
-          }),
+          ...register('login'),
         }}
         error={errors.login ? errors.login.message : undefined}
       >
@@ -78,33 +89,14 @@ const SignInForm: React.FC = () => {
       </Input>
       <PasswordInput
         optionals={{
-          ...register('password', {
-            required: 'password is a required field',
-            minLength: {
-              value: 5,
-              message: 'the minimum password length is 5 characters',
-            },
-            maxLength: {
-              value: 100,
-              message: 'the maximum password length is 100 characters',
-            },
-          }),
+          ...register('password'),
         }}
         error={errors.password ? errors.password.message : undefined}
       >
         password
       </PasswordInput>
-      {isLoginError && (
-        <Typography
-          component='span'
-          variant='title-3'
-          className='pl-2 text-center font-bold text-red-700'
-        >
-          {isLoginError}
-        </Typography>
-      )}
       <Button
-        disabled={isLoading}
+        isLoading={isLoading}
         type='submit'
         variant='activity'
         className='hover:contrast-125'

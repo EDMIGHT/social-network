@@ -52,6 +52,23 @@ export interface IResponseTagsWithPagination extends IPagination {
   tags: Tag[];
 }
 
+export interface IInvalidResponse {
+  data: {
+    message: string;
+    details: [
+      {
+        type: string;
+        value: string | number;
+        msg: string;
+        path: string;
+        location: string;
+      }
+    ];
+    body: unknown;
+  };
+  status: number;
+}
+
 export const isBadData = (arg: unknown): arg is IBadData => {
   if (arg && typeof arg === 'object') {
     return 'message' in arg;
@@ -59,10 +76,19 @@ export const isBadData = (arg: unknown): arg is IBadData => {
   return false;
 };
 
-export const isErrorWithMessage = (response: any): response is IBadResponse => {
+export const isErrorWithMessage = (error: unknown): error is { message: string } => {
   return (
-    response?.error !== undefined &&
-    response.error.data !== undefined &&
-    response.error.data.message !== undefined
+    typeof error === 'object' &&
+    error != null &&
+    'message' in error &&
+    typeof error.message === 'string'
   );
 };
+
+export const isInvalidResponseWithDetails = (obj: unknown): obj is IInvalidResponse =>
+  obj !== null &&
+  typeof obj === 'object' &&
+  'data' in obj &&
+  typeof obj.data === 'object' &&
+  obj.data !== null &&
+  'details' in obj.data;

@@ -1,8 +1,8 @@
 import { FC, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import EditPostForm from '@/components/form/EditPostForm';
 import PostAuthor from '@/components/PostAuthor';
-import PostEditForm from '@/components/form/PostEditForm';
 import PostNotFound from '@/components/PostNotFound';
 import Card from '@/components/ui/Card';
 import { useGetPostQuery } from '@/services/post.service';
@@ -63,7 +63,7 @@ const PostEdit: FC = () => {
           </button>
           <PostAuthor user={user} createdAt={createdAt} updatedAt={updatedAt} />
 
-          <PostEditForm {...data} />
+          <EditPostForm {...data} />
         </Card>
       </div>
     );
