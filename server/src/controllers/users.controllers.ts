@@ -5,7 +5,8 @@ import userModel from '@/models/user.model';
 import cloudinary from '@/utils/cloudinary';
 import createResponseUser from '@/utils/helpers/createResponseUser';
 import customResponse from '@/utils/helpers/customResponse';
-import { ROOT_FOLDER_CLOUDINARY } from '@/utils/utils';
+
+const ROOT_FOLDER_CLOUDINARY = process.env.ROOT_FOLDER_CLOUDINARY;
 
 export const searchUsers = async (request: Request, response: Response): Promise<Response> => {
   const { login, page = 1, limit = 10 } = request.query;

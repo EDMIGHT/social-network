@@ -4,7 +4,8 @@ import postModel from '@/models/post.model';
 import tagModel from '@/models/tag.model';
 import cloudinary from '@/utils/cloudinary';
 import customResponse from '@/utils/helpers/customResponse';
-import { ROOT_FOLDER_CLOUDINARY } from '@/utils/utils';
+
+const ROOT_FOLDER_CLOUDINARY = process.env.ROOT_FOLDER_CLOUDINARY;
 
 export const getAllPosts = async (request: Request, response: Response): Promise<Response> => {
   try {

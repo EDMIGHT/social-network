@@ -7,7 +7,8 @@ import cloudinary from '@/utils/cloudinary';
 import createResponseUser from '@/utils/helpers/createResponseUser';
 import customResponse from '@/utils/helpers/customResponse';
 import isTokenInvalid from '@/utils/helpers/isTokenInvalid';
-import { ROOT_FOLDER_CLOUDINARY } from '@/utils/utils';
+
+const ROOT_FOLDER_CLOUDINARY = process.env.ROOT_FOLDER_CLOUDINARY;
 
 export const registerUser = async (
   request: Request,
