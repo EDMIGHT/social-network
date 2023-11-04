@@ -1,18 +1,95 @@
+# [social](https://social-latyshev.vercel.app/)
+
+This application is a personal project in which I aimed to create a social network with its basic features implemented, while using new tools that were unfamiliar to me during the development process.
+
+[![social](./resources/screenshots/preview.webp)](https://social-latyshev.vercel.app/)
+
 ## Tech Stack
 
-- [TypeScript](https://www.typescriptlang.org/)
-- [React](https://react.dev/)
-- [Redux Toolkit](https://redux-toolkit.js.org/)
-- [Tailwindcss](https://tailwindcss.com/)
-- [NodeJS](https://nodejs.org/en)
-- [ExpressJS](https://expressjs.com/)
-- [MySQL](https://www.mysql.com/)
-- [Prisma](https://www.prisma.io/)
-- [JSON Web Tokens](https://jwt.io/)
-- [Jest](https://jestjs.io/)
-- [Swagger](https://swagger.io/)
+- **Client Framework:** [React](https://react.dev/)
+- **Server Framework:** [Express.js](https://expressjs.com/)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com)
+- **ORM:** [Prisma](https://www.prisma.io/)
+- **State Management:** [Redux Toolkit](https://redux-toolkit.js.org/)
 
-## Implemented features
+## Features to be implemented
+
+- [x] Authentication flow using **[JWT tokens](https://jwt.io/)** with **[RTK Query](https://redux-toolkit.js.org/rtk-query/overview)**
+- [x] Client validation with **[Zod](https://zod.dev/)**
+- [x] Generating API documentation using **[Swagger](https://swagger.io/)**
+- [x] Using the **[airbnb](https://www.npmjs.com/package/eslint-config-airbnb)** config for eslint on the client
+- [x] A little API testing with **[Jest](https://jestjs.io/)**
+
+## Running Locally
+
+1. Clone the repository
+
+   ```bash
+   git clone https://github.com/EDMIGHT/social.git
+   ```
+
+2. Install dependencies to server folder **(relative to root)**
+
+   ```bash
+   cd server
+   yarn
+   ```
+
+3. Copy the `.env.example` to `.env` and update the variables **(server folder)**.
+
+   ```bash
+   cp .env.example .env
+   ```
+
+4. Push the database schema **(server folder)**.
+
+   ```bash
+   yarn push
+   ```
+
+5. **(optional)** Filling the database **(server folder)**.
+
+   ```bash
+   yarn seed
+   ```
+
+6. Start the development server **(server folder)**
+
+   ```bash
+   yarn dev
+   ```
+
+7. Install dependencies to client folder **(relative to root)**
+
+   ```bash
+   cd client
+   yarn
+   ```
+
+8. Copy the `.env.example` to `.env` and update the variables **(client folder)**.
+
+   ```bash
+   cp .env.example .env
+   ```
+
+9. Start the development server **(client folder)**
+
+   ```bash
+   yarn dev
+   ```
+
+## How do I deploy this?
+
+- **The client part is hosted on:** [Vercel](https://vercel.com/docs/deployments/overview)
+- **The server part is hosted on:** [Microsoft Azure](https://azure.microsoft.com/en-us)
+- **The database is hosted on:** [Vercel](https://vercel.com/docs/storage/vercel-postgres)
+- **Media files are hosted on:** [Cloudinary](https://cloudinary.com/documentation/node_integration)
+
+## License
+
+Licensed under the MIT License. Check the [LICENSE](./LICENSE.md) file for details.
+
+## More about applications
 
 - [Post feed (Home page)](#post-feed-home-page)
 - [Filtering posts by tags](#filtering-posts-by-tags)
@@ -26,50 +103,6 @@
 - [User search](#user-search)
 - [Sign In / Sign up](#sign-in--sign-up)
 - [Theme switcher](#theme-switcher)
-
-## Installation
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/EDMIGHT/social
-```
-
-### 2. Install dependencies to server folder (relative to root)
-
-```bash
-cd server
-yarn / npm install
-```
-
-### 3. Install dependencies in the client folder (relative to root)
-
-```bash
-cd client
-yarn / npm install
-```
-
-### 4. Create a `.env` file in the server folder
-
-Create a `.env` file in the server folder and add the environment variables as shown in the `.env.example` file.
-
-### 5. Create a `.env` file in the client folder
-
-Create a `.env` file in the client folder and add the environment variables as shown in the `.env.example` file.
-
-### 6. Run the server (relative to root)
-
-```bash
-cd server
-yarn dev / npm run dev
-```
-
-### 7. Run the client (relative to root)
-
-```bash
-cd client
-yarn dev / npm run dev
-```
 
 ## Project demo
 
@@ -96,7 +129,7 @@ To provide a more convenient design, the filtering of posts by tags in mobile ad
 ![home-mobile-1](./resources/screenshots/home_mobile_1.jpg)
 ![home-mobile-2](./resources/screenshots/home_mobile_2.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### Filtering posts by tags
 
@@ -121,7 +154,7 @@ Opposite the name of the section of all tags there is a button "name" when press
 ![filter-sort-1](./resources/screenshots/filter_sort_1.jpg)
 ![filter-sort-2](./resources/screenshots/filter_sort_2.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### Post and work with it
 
@@ -148,7 +181,7 @@ To control the author of his posts, a button was created that is displayed only 
 
 ![post-control](./resources/screenshots/post_control.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### Post creation
 
@@ -187,7 +220,7 @@ The user can upload their ONE image for this post, and this feature can be activ
 
 ![post-create-success](./resources/screenshots/post_create_success.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### Post update
 
@@ -226,7 +259,7 @@ Comparing the title of posts that have been modified and that have not been modi
 
 ![post-update-mobile](./resources/screenshots/post_edit_mobile.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### Post page
 
@@ -244,7 +277,7 @@ Clicking on a post in the feed opens that post's page, where we still have the p
 
 ![post-page-mobile](./resources/screenshots/post_page_mobile.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### Post comments and working with them
 
@@ -266,7 +299,7 @@ The screenshot below shows the list of comments when viewed on behalf of the aut
 The screenshot below shows a list of comments when viewed on behalf of the author of the comment (latyshev), where we have the opportunity to delete comments only by the comment created by him and no one else (button with a cross next to the comments)
 ![comment-delete-2](./resources/screenshots/comment_delete_2.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### Profile
 
@@ -296,7 +329,7 @@ These are two similar profile tabs, the difference being that the following tab 
 
 ![profile-followers](./resources/screenshots/profile_followers.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### Profile update
 
@@ -324,7 +357,7 @@ After profile update
 
 ![profile-update-mobile](./resources/screenshots/profile_edit_mobile.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### User follow/unfollow
 
@@ -332,7 +365,7 @@ following or unfollowing to a user is carried out from the corresponding button 
 
 ![user-follow](./resources/screenshots/user_follow.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### User search
 
@@ -357,7 +390,7 @@ If during the search no users were found matching the entered value, a correspon
 
 ![user-search-mobile](./resources/screenshots/user_search_mobile.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### Sign In / Sign Up
 
@@ -399,7 +432,7 @@ In case of a successful login or registration, we can log out of our account usi
 
 ![logout](./resources/screenshots/logout.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
 
 ### Theme switcher
 
@@ -432,4 +465,4 @@ Sign In:
 Sign Up:
 ![signUp-light](./resources/screenshots/signUp_light.jpg)
 
-[Back to contents ⬆](#implemented-features)
+[Back to contents ⬆](#more-about-applications)
