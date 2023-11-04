@@ -18,7 +18,6 @@ const PostItem: React.FC<IResponsePost> = ({
   img,
   text,
   updatedAt,
-  userId,
   viewsCount,
   user,
   comments,

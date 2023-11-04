@@ -19,6 +19,38 @@ export const Icons = {
       />
     </svg>
   ),
+  arrowRight: (props: SVGProps<SVGSVGElement>) => (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      fill='none'
+      viewBox='0 0 24 24'
+      strokeWidth='1.5'
+      stroke='currentColor'
+      {...props}
+    >
+      <path
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        d='M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75'
+      />
+    </svg>
+  ),
+  arrowLeft: (props: SVGProps<SVGSVGElement>) => (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      fill='none'
+      viewBox='0 0 24 24'
+      strokeWidth='1.5'
+      stroke='currentColor'
+      {...props}
+    >
+      <path
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        d='M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75'
+      />
+    </svg>
+  ),
   camera: (props: SVGProps<SVGSVGElement>) => (
     <svg
       xmlns='http://www.w3.org/2000/svg'
@@ -137,6 +169,22 @@ export const Icons = {
         strokeLinecap='round'
         strokeLinejoin='round'
         d='M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5'
+      />
+    </svg>
+  ),
+  more: (props: SVGProps<SVGSVGElement>) => (
+    <svg
+      xmlns='http://www.w3.org/2000/svg'
+      fill='none'
+      viewBox='0 0 24 24'
+      strokeWidth='1.5'
+      stroke='currentColor'
+      {...props}
+    >
+      <path
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        d='M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
       />
     </svg>
   ),

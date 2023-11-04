@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
-import Pagination from '@/components/Pagination';
+import SimplePagination from '@/components/SimplePagination';
 import TagSkeletons from '@/components/skeletons/TagSkeletons';
 import Tags from '@/components/Tags';
 import Card from '@/components/ui/Card';
@@ -70,7 +70,7 @@ const TagsAll: FC = () => {
         classNameTag='flex-1'
       />
       {data && data.totalPages > 1 && (
-        <Pagination
+        <SimplePagination
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={data?.totalPages || 1}

@@ -7,8 +7,8 @@ import useTheme from './useTheme';
 export const useInitialization = () => {
   useAuthentication();
 
-  const [setLocal, getLocal] = useLocalStorage();
-  const [currentTheme, toggleTheme, setTheme] = useTheme();
+  const [, getLocal] = useLocalStorage();
+  const [, , setTheme] = useTheme();
 
   useEffect(() => {
     const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;

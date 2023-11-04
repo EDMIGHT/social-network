@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "vite --host",
     "build": "tsc && vite build",
-    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format:write": "prettier --write \"**/*.{js,jsx}\" --cache",
+    "format:check": "prettier --check \"**/*.{js,jsx}\" --cache",
     "preview": "vite preview"
   },
   "dependencies": {

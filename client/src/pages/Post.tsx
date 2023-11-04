@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Comments from '@/components/Comments';
 import CreateCommentForm from '@/components/form/CreateCommentForm';
 import PostContent from '@/components/PostContent';
+import PostNotFound from '@/components/PostNotFound';
 import PagePostSkeleton from '@/components/skeletons/PagePostSkeleton';
 import { Icons } from '@/components/ui/Icons';
 import { useAppSelector } from '@/hooks/reduxHooks';
@@ -43,7 +44,7 @@ const Post: FC = () => {
     return () => document.body.removeEventListener('click', onClickBody);
   }, []);
 
-  const loadingOrErrorElements = (isError || isLoading) && <PagePostSkeleton />;
+  const loadingOrErrorElements = isLoading && <PagePostSkeleton />;
   const successElement = isSuccess && data && (
     <>
       <PostContent data={data} onClickClose={onClickClose} />
@@ -53,6 +54,10 @@ const Post: FC = () => {
       </div>
     </>
   );
+
+  if (isError) {
+    return <PostNotFound />;
+  }
 
   return (
     <div ref={postRef} className='flex flex-col gap-2 lg:flex-row'>

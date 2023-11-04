@@ -1,12 +1,11 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import { FC, useState } from 'react';
 
+import Comment from '@/components/Comment';
+import Pagination from '@/components/Pagination';
+import CommentSkeletons from '@/components/skeletons/CommentSkeletons';
 import Card from '@/components/ui/Card';
 import { useGetCommentsQuery } from '@/services/comment.service';
-
-import Comment from './Comment';
-import CommentSkeletons from './skeletons/CommentSkeletons';
-import Pagination from './Pagination';
 
 interface ICommentsProps {
   id: string;

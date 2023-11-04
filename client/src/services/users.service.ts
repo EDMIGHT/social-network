@@ -1,10 +1,10 @@
-import { IUpdateUserForm } from '@/components/form/EditProfileForm';
 import { IResponsePostsPagination, IResponseProfile } from '@/types/responses.types';
 import {
   IFollowersWithPagination,
   IFollowingWithPagination,
   IJoinedUsersWithPagination,
 } from '@/types/user.types';
+import { IEditProfileFields } from '@/utils/validations/profile.validations';
 
 import { api, IPaginationArg } from './api';
 import { IPostQuery } from './post.service';
@@ -67,7 +67,7 @@ const profileApi = api.injectEndpoints({
       query: ({ login, page = 1, limit = 10 }) =>
         `users?login=${login}&page=${page}&limit=${limit}`,
     }),
-    updateProfile: builder.mutation<IResponseProfile, IUpdateUserForm>({
+    updateProfile: builder.mutation<IResponseProfile, IEditProfileFields>({
       query: ({ email, img, name }) => ({
         url: 'users',
         method: 'PATCH',
