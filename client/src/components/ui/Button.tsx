@@ -26,12 +26,12 @@ const Button: React.FC<ButtonProps> = ({
       className={cn(
         variant,
         className,
-        'whitespace-nowrap rounded p-2 disabled:bg-muted flex items-center justify-center'
+        'whitespace-nowrap rounded p-2 disabled:bg-muted flex items-center gap-2 justify-center'
       )}
       disabled={isLoading || disabled}
     >
-      {children}
-      {isLoading && <Icons.loading className='h-6 w-6 animate-spin stroke-primary pl-2' />}
+      <span>{children}</span>
+      {isLoading && <Icons.loading className='h-6 w-6 animate-spin stroke-primary' />}
     </button>
   );
 };
