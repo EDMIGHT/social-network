@@ -5,7 +5,7 @@ import Card from '@/components/ui/Card';
 import { useGetCommentsQuery } from '@/services/comment.service';
 
 import Comment from './Comment';
-import CommentSkeletons from './CommentSkeletons';
+import CommentSkeletons from './skeletons/CommentSkeletons';
 import Pagination from './Pagination';
 
 interface ICommentsProps {

@@ -1,22 +1,30 @@
-import { forwardRef } from 'react';
+import { forwardRef, useEffect } from 'react';
+import { toast } from 'sonner';
 
-import Alert from '@/components/ui/Alert';
+import UserSkeletons from '@/components/skeletons/UserSkeletons';
 import Card from '@/components/ui/Card';
 import Input from '@/components/ui/Input';
 import Overlay from '@/components/ui/Overlay';
+import { IUserProps } from '@/components/User';
+import Users from '@/components/Users';
 import { useInputDebounce } from '@/hooks/useInputDebounce';
 import { useSearchUserByLoginMutation } from '@/services/users.service';
 
-import Users from './Users';
-import UserSkeletons from './UserSkeletons';
-
 interface ISearchPopupProps {
-  onClickUser?: any;
+  onClickUser: IUserProps['onClickUser'];
 }
 
 const SearchPopup = forwardRef<HTMLDivElement, ISearchPopupProps>(({ onClickUser }, ref) => {
   const [searchUsers, { data, isSuccess, isLoading, isError }] =
     useSearchUserByLoginMutation();
+
+  useEffect(() => {
+    if (isError) {
+      toast.error('Oops, something went wrong!', {
+        description: 'Please try again later or reload the page',
+      });
+    }
+  }, [isError]);
 
   const [localText, onChangeInput] = useInputDebounce({
     callback: (login) => searchUsers({ login }),
@@ -43,7 +51,6 @@ const SearchPopup = forwardRef<HTMLDivElement, ISearchPopupProps>(({ onClickUser
             focus
           />
         </Card>
-        {isError && <Alert type='error'>user search error</Alert>}
         {loadingOrErrorElements}
         {successElements}
       </div>

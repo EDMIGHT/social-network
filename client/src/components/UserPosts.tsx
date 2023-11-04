@@ -1,11 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import CreatePostForm from '@/components/form/CreatePostForm';
 import Pagination from '@/components/Pagination';
 import Posts from '@/components/Posts';
-import PostSkeletons from '@/components/PostSkeletons';
-import Alert from '@/components/ui/Alert';
+import PostSkeletons from '@/components/skeletons/PostSkeletons';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetAllPostsQuery } from '@/services/post.service';
 import formatTagsForQuery from '@/utils/formatTagsForQuery';
@@ -25,6 +25,14 @@ const UserPosts: FC = () => {
     page: currentPage,
   });
 
+  useEffect(() => {
+    if (isError) {
+      toast.error('Oops, something went wrong!', {
+        description: 'Please try again later or reload the page',
+      });
+    }
+  }, [isError]);
+
   const loadingOrErrorElements = (isError || isLoading) && <PostSkeletons />;
   const successElements = isSuccess && (
     <div className='flex flex-col gap-2'>
@@ -42,7 +50,6 @@ const UserPosts: FC = () => {
 
   return (
     <div>
-      {isError && <Alert type='error'>error getting user posts</Alert>}
       {loadingOrErrorElements}
       {successElements}
     </div>

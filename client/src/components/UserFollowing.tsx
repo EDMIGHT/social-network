@@ -1,12 +1,11 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
-import Alert from '@/components/ui/Alert';
+import Pagination from '@/components/Pagination';
+import UserSkeletons from '@/components/skeletons/UserSkeletons';
+import Users from '@/components/Users';
 import { useGetFollowingQuery } from '@/services/users.service';
-
-import Pagination from './Pagination';
-import Users from './Users';
-import UserSkeletons from './UserSkeletons';
 
 const UserFollowing: FC = () => {
   const { login } = useParams();
@@ -16,6 +15,14 @@ const UserFollowing: FC = () => {
     login: login as string,
     page: currentPage,
   });
+
+  useEffect(() => {
+    if (isError) {
+      toast.error('Oops, something went wrong!', {
+        description: 'Please try again later or reload the page',
+      });
+    }
+  }, [isError]);
 
   const loadingOrErrorElements = (isError || isLoading) && <UserSkeletons />;
   const successElements = isSuccess && (
@@ -33,7 +40,6 @@ const UserFollowing: FC = () => {
 
   return (
     <div>
-      {isError && <Alert type='error'>error while getting users following</Alert>}
       {loadingOrErrorElements}
       {successElements}
     </div>

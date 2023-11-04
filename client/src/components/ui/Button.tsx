@@ -31,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={isLoading || disabled}
     >
       {children}
-      {isLoading && <Icons.loading className='h-8 w-8 animate-spin stroke-primary' />}
+      {isLoading && <Icons.loading className='h-6 w-6 animate-spin stroke-primary pl-2' />}
     </button>
   );
 };

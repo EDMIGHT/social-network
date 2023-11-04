@@ -4,7 +4,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import EditPostForm from '@/components/form/EditPostForm';
 import PostAuthor from '@/components/PostAuthor';
 import PostNotFound from '@/components/PostNotFound';
+import PageEditPostSkeleton from '@/components/skeletons/PageEditPostSkeleton';
 import Card from '@/components/ui/Card';
+import { Icons } from '@/components/ui/Icons';
 import { useGetPostQuery } from '@/services/post.service';
 
 const PostEdit: FC = () => {
@@ -34,32 +36,14 @@ const PostEdit: FC = () => {
     return (
       <div ref={postRef}>
         <button onClick={onClickClose} className='fixed left-3 top-3 hidden xl:block'>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth='1.5'
-            stroke='currentColor'
-            className='h-12 w-12 hover:stroke-primary focus:stroke-primary'
-          >
-            <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
-          </svg>
+          <Icons.x className='h-12 w-12 hover:stroke-primary focus:stroke-primary' />
         </button>
         <Card className='flex flex-col gap-2'>
           <button
             onClick={onClickClose}
             className='block w-fit rounded-full bg-accent xl:hidden'
           >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='1.5'
-              stroke='currentColor'
-              className='h-8 w-8 hover:stroke-primary focus:stroke-primary'
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
-            </svg>
+            <Icons.x className='h-8 w-8 hover:stroke-primary focus:stroke-primary' />
           </button>
           <PostAuthor user={user} createdAt={createdAt} updatedAt={updatedAt} />
 
@@ -73,7 +57,7 @@ const PostEdit: FC = () => {
     return <PostNotFound />;
   }
 
-  return <div>loading</div>;
+  return <PageEditPostSkeleton />;
 };
 
 export default PostEdit;

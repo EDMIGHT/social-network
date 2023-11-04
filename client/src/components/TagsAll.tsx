@@ -1,7 +1,11 @@
 import { FC, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-import Alert from '@/components/ui/Alert';
+import Pagination from '@/components/Pagination';
+import TagSkeletons from '@/components/skeletons/TagSkeletons';
+import Tags from '@/components/Tags';
 import Card from '@/components/ui/Card';
+import { Icons } from '@/components/ui/Icons';
 import Input from '@/components/ui/Input';
 import Typography from '@/components/ui/Typography';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
@@ -9,10 +13,7 @@ import { useInputDebounce } from '@/hooks/useInputDebounce';
 import { useGetAllTagsQuery } from '@/services/tags.service';
 import { addTag } from '@/store/slices/options.slice';
 import { Tag } from '@/types/tag.types';
-
-import Pagination from './Pagination';
-import Tags from './Tags';
-import TagSkeletons from './TagSkeletons';
+import { cn } from '@/utils/cn';
 
 const TagsAll: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,6 +34,14 @@ const TagsAll: FC = () => {
     name: searchName,
     order: orderReq,
   });
+
+  useEffect(() => {
+    if (isError) {
+      toast.error('Oops, something went wrong!', {
+        description: 'Please try again later or reload the page',
+      });
+    }
+  }, [isError]);
 
   useEffect(() => {
     const filter = data?.tags?.length
@@ -72,7 +81,6 @@ const TagsAll: FC = () => {
 
   return (
     <div>
-      {isError && <Alert type='error'>error getting all tags</Alert>}
       <div className='flex justify-between gap-2 px-2'>
         <Typography component='h2' variant='title-2' className='text-primary'>
           all tags
@@ -81,37 +89,9 @@ const TagsAll: FC = () => {
           onClick={onClickSortChanger}
           className='flex items-center justify-center font-bold text-primary hover:opacity-80'
         >
-          {orderReq === 'asc' ? (
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='3'
-              stroke='currentColor'
-              className='h-4 w-4'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M8.25 6.75L12 3m0 0l3.75 3.75M12 3v18'
-              />
-            </svg>
-          ) : (
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='3'
-              stroke='currentColor'
-              className='h-4 w-4'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M15.75 17.25L12 21m0 0l-3.75-3.75M12 21V3'
-              />
-            </svg>
-          )}
+          <Icons.arrowUp
+            className={cn('h-4 w-4 transition-transform', orderReq === 'desc' && 'rotate-180')}
+          />
           name
         </button>
       </div>

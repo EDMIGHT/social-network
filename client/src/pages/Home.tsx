@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import CreatePostForm from '@/components/form/CreatePostForm';
 import Pagination from '@/components/Pagination';
 import Posts from '@/components/Posts';
-import PostSkeletons from '@/components/PostSkeletons';
-import Alert from '@/components/ui/Alert';
+import PostSkeletons from '@/components/skeletons/PostSkeletons';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetAllPostsQuery } from '@/services/post.service';
 import formatTagsForQuery from '@/utils/formatTagsForQuery';
@@ -25,6 +25,14 @@ const Home: React.FC = () => {
     page: currentPage,
   });
 
+  useEffect(() => {
+    if (isError) {
+      toast.error('Oops, something went wrong!', {
+        description: 'Please try again later or reload the page',
+      });
+    }
+  }, [isError]);
+
   const loadingOrErrorElements = (isError || isLoading) && <PostSkeletons />;
   const successElements = isSuccess && (
     <>
@@ -42,7 +50,6 @@ const Home: React.FC = () => {
 
   return (
     <div className='flex flex-col gap-2'>
-      {isError && <Alert type='error'>error getting posts</Alert>}
       {loadingOrErrorElements}
       {successElements}
     </div>

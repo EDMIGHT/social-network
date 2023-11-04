@@ -1,14 +1,13 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react';
 import React from 'react';
 
+import User, { IUserProps } from '@/components/User';
+import UsersEmpty from '@/components/UsersEmpty';
 import { IJoinedUser } from '@/types/user.types';
-
-import User from './User';
-import UsersEmpty from './UsersEmpty';
 
 interface UsersProps {
   users: IJoinedUser[];
-  onClickUser?: any;
+  onClickUser?: IUserProps['onClickUser'];
 }
 
 const Users: React.FC<UsersProps> = ({ users, onClickUser }) => {

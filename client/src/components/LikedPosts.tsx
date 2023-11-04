@@ -1,14 +1,13 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
+import Pagination from '@/components/Pagination';
 import Posts from '@/components/Posts';
-import Alert from '@/components/ui/Alert';
+import PostSkeletons from '@/components/skeletons/PostSkeletons';
 import { useAppSelector } from '@/hooks/reduxHooks';
 import { useGetLikedPostsQuery } from '@/services/users.service';
 import formatTagsForQuery from '@/utils/formatTagsForQuery';
-
-import Pagination from './Pagination';
-import PostSkeletons from './PostSkeletons';
 
 const LikedPosts: FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,6 +21,14 @@ const LikedPosts: FC = () => {
     tags: tagsQuery,
     page: currentPage,
   });
+
+  useEffect(() => {
+    if (isError) {
+      toast.error('Oops, something went wrong!', {
+        description: 'Please try again later or reload the page',
+      });
+    }
+  }, [isError]);
 
   const loadingOrErrorElements = (isError || isLoading) && <PostSkeletons />;
   const successElements = isSuccess && data && (
@@ -39,7 +46,6 @@ const LikedPosts: FC = () => {
 
   return (
     <div>
-      {isError && <Alert type='error'>error getting user posts</Alert>}
       {loadingOrErrorElements}
       {successElements}
     </div>

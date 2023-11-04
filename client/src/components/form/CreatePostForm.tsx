@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
-import SearchTag from '@/components/SearchTag';
-import Tags from '@/components/Tags';
+import TagsControl from '@/components/TagsControl';
 import Card from '@/components/ui/Card';
 import { ErrorMessage } from '@/components/ui/ErrorMessage';
 import { Icons } from '@/components/ui/Icons';
@@ -39,19 +38,6 @@ const CreatePostForm: React.FC = React.memo(() => {
 
   const onClickDeleteImg = () => {
     setValue('img', undefined);
-  };
-  const onClickAddTag = (tag: Tag) => {
-    const existTag = selectedTags.some((selectedTag) => selectedTag.id === tag.id);
-    if (!existTag) {
-      setSelectedTags((prev) => [...prev, tag]);
-    } else {
-      toast.error('Duplicate error', {
-        description: 'You cant add duplicate tags to a post',
-      });
-    }
-  };
-  const onClickRemoveTag = (tag: Tag) => {
-    setSelectedTags((prev) => prev.filter((prevTag) => prevTag.id !== tag.id));
   };
 
   const onSubmit = async ({ text, img }: ICreatePostFields) => {
@@ -119,10 +105,7 @@ const CreatePostForm: React.FC = React.memo(() => {
         </div>
       )}
       {errors.img && <ErrorMessage>{errors.img.message}</ErrorMessage>}
-      <SearchTag onClickTag={onClickAddTag} />
-      {selectedTags.length > 0 && (
-        <Tags data={selectedTags} className='p-0' onClick={onClickRemoveTag} />
-      )}
+      <TagsControl selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
       {errors.tags && <ErrorMessage>{errors.tags.message}</ErrorMessage>}
       <form onSubmit={handleSubmit(onSubmit)} className='w-full space-y-2'>
         <div className='flex w-full flex-row justify-end gap-2'>

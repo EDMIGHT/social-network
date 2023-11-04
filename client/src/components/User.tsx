@@ -1,7 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
-import Alert from '@/components/ui/Alert';
 import Button from '@/components/ui/Button';
 import Card from '@/components/ui/Card';
 import Thumbnail from '@/components/ui/Thumbnail';
@@ -9,46 +9,36 @@ import Typography from '@/components/ui/Typography';
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks';
 import { useToggleFollowMutation } from '@/services/users.service';
 import { setUser } from '@/store/slices/user.slice';
-import { isErrorWithMessage } from '@/types/responses.types';
 import { IJoinedUser } from '@/types/user.types';
 
-interface IUserProps extends IJoinedUser {
-  onClickUser?: () => void;
-}
+export type IUserProps = IJoinedUser & {
+  onClickUser?: React.MouseEventHandler<HTMLAnchorElement>;
+};
 
 const User: FC<IUserProps> = ({ img, login, name, onClickUser }) => {
-  const [isMessageError, setMessageError] = useState<string | null>(null);
   const { user, accessToken } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
-  const [toggleFollow, { isLoading, isSuccess, isError, data }] = useToggleFollowMutation();
-
-  useEffect(() => {
-    if (isSuccess && data) {
-      dispatch(setUser(data));
-    }
-  }, [isSuccess]);
+  const [toggleFollow, { isLoading }] = useToggleFollowMutation();
 
   const onClickFollow = async () => {
-    if (user && accessToken && login) {
-      const response = await toggleFollow({ login });
+    if (!accessToken) {
+      toast.error('You are not authorized to follow users');
+      return;
+    }
 
-      if (isErrorWithMessage(response)) {
-        setMessageError(response.error.data.message);
-      }
-    } else {
-      setMessageError('you are not authorized to follow or unfollow a user');
+    try {
+      const response = await toggleFollow({ login }).unwrap();
+      dispatch(setUser(response));
+    } catch (error) {
+      toast.error('Oops, something went wrong!', {
+        description: 'Please try again later or reload the page',
+      });
     }
   };
 
   return (
     <li>
-      {(isError || isMessageError) && (
-        <Alert type='error'>
-          {isMessageError || 'error when subscribing or unsubscribing to a user'}
-        </Alert>
-      )}
-
       <Card className='flex items-center justify-between gap-2'>
         <Link
           to={`/profile/${login}`}

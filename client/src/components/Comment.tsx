@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
 
-import Alert from '@/components/ui/Alert';
+import { Icons } from '@/components/ui/Icons';
 import Thumbnail from '@/components/ui/Thumbnail';
 import Time from '@/components/ui/Time';
 import { useAppSelector } from '@/hooks/reduxHooks';
@@ -15,20 +16,28 @@ interface CommentProps extends ICommentWithUser {
 const Comment: React.FC<CommentProps> = ({ user, text, createdAt, authorId, id, postId }) => {
   const { user: localUser, accessToken } = useAppSelector((state) => state.user);
 
-  const [deleteComment, { isLoading, isError }] = useDeleteCommentMutation();
+  const [deleteComment, { isLoading }] = useDeleteCommentMutation();
 
-  const onClickDelete = () => {
-    if (accessToken) {
-      deleteComment({
+  const onClickDelete = async () => {
+    if (!accessToken) {
+      toast.error('You are not authorized to delete a comment');
+      return;
+    }
+
+    try {
+      await deleteComment({
         commentId: id,
         postId,
+      });
+    } catch (error) {
+      toast.error('Oops, something went wrong!', {
+        description: 'Please try again later or reload the page',
       });
     }
   };
 
   return (
     <li className='flex flex-col gap-2'>
-      {isError && <Alert type='error'>error when deleting comment</Alert>}
       <div className='flex items-center justify-between gap-2'>
         <Link to={`/profile/${user.login}`} className='flex gap-2 hover:opacity-80'>
           <Thumbnail imgURL={user.img} alt={user.login} className='h-16 w-16' />
@@ -38,24 +47,14 @@ const Comment: React.FC<CommentProps> = ({ user, text, createdAt, authorId, id, 
           </div>
         </Link>
 
-        {(localUser?.id === user.id || localUser?.id === authorId) && (
-          <button
-            disabled={isLoading}
-            onClick={onClickDelete}
-            className='h-fit w-fit rounded-full bg-accent hover:bg-primary disabled:bg-muted'
-          >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='1.5'
-              stroke='currentColor'
-              className='h-6 w-6'
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' d='M6 18L18 6M6 6l12 12' />
-            </svg>
-          </button>
-        )}
+        {(localUser?.id === user.id || localUser?.id === authorId) &&
+          (isLoading ? (
+            <Icons.loading className='h-6 w-6 animate-spin' />
+          ) : (
+            <button disabled={isLoading} onClick={onClickDelete}>
+              <Icons.trash className='h-6 w-6 stroke-accent transition-colors hover:stroke-primary disabled:stroke-muted' />
+            </button>
+          ))}
       </div>
 
       <p>{text}</p>

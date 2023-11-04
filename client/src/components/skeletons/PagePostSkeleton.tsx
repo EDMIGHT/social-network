@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { Skeleton } from '@/components/ui/Skeleton';
 
-const PostSkeleton: FC = () => {
+const PagePostSkeleton: FC = () => {
   return (
     <div className='flex gap-4'>
       <div className='flex w-[45vw] flex-col gap-2'>
@@ -14,4 +14,4 @@ const PostSkeleton: FC = () => {
   );
 };
 
-export default PostSkeleton;
+export default PagePostSkeleton;
