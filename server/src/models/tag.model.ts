@@ -23,6 +23,7 @@ class TagModel {
     return prisma.tag.findMany({
       where: {
         name: {
+          mode: 'insensitive',
           startsWith: name,
         },
       },
@@ -37,6 +38,7 @@ class TagModel {
     return prisma.tag.count({
       where: {
         name: {
+          mode: 'insensitive',
           startsWith: name,
         },
       },

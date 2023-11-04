@@ -58,6 +58,7 @@ class UserModel implements IUserModel {
       take: limit,
       where: {
         login: {
+          mode: 'insensitive',
           startsWith: login,
         },
       },
@@ -69,6 +70,7 @@ class UserModel implements IUserModel {
     return prisma.user.count({
       where: {
         login: {
+          mode: 'insensitive',
           startsWith: login,
         },
       },
