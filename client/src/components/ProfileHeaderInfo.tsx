@@ -20,7 +20,7 @@ const ProfileHeaderInfo: FC<ProfileHeaderInfoProps> = ({ data }) => {
   const dispatch = useAppDispatch();
   const { user, accessToken } = useAppSelector((state) => state.user);
 
-  const [toggleFollow, { isLoading, data: dataFollow }] = useToggleFollowMutation();
+  const [toggleFollow, { isLoading }] = useToggleFollowMutation();
 
   const onClickFollow = async () => {
     if (!accessToken) {
@@ -33,8 +33,8 @@ const ProfileHeaderInfo: FC<ProfileHeaderInfoProps> = ({ data }) => {
     }
 
     try {
-      await toggleFollow({ login: urlLogin }).unwrap();
-      dispatch(setUser(dataFollow));
+      const res = await toggleFollow({ login: urlLogin }).unwrap();
+      dispatch(setUser(res));
     } catch (error) {
       toast.error('Oops, something went wrong!', {
         description: 'Please try again later or reload the page',
